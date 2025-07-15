@@ -1,0 +1,169 @@
+<div class="bg-pattern"></div>
+<div class="signup-container">
+  <div class="row g-0">
+    <div class="col-lg-6">
+      <div class="signup-left">
+        <span class="hackathon-badge">Prochain Hackathon: 15 Nov</span>
+        <h1 class="platform-name">LearnHub</h1>
+        <p class="platform-tagline">
+          Rejoignez notre communauté d'apprentissage et participez à des hackathons innovants.
+          Accédez à des cours premium et développez vos compétences avec des experts.
+        </p>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle"></i> Catalogue de cours multimédia</li>
+          <li><i class="fas fa-check-circle"></i> Événements hackathon réguliers</li>
+          <li><i class="fas fa-check-circle"></i> Suivi de progression personnalisé</li>
+          <li><i class="fas fa-check-circle"></i> Certifications reconnues</li>
+        </ul>
+        <div>
+          <p>Déjà membre? <a routerLink="/login" style="color: white; font-weight: 600;">Connectez-vous</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="signup-right">
+        <div class="text-center mb-5">
+          <h2 class="signup-title">Créer un compte</h2>
+          <p class="signup-subtitle">Commencez votre parcours d'apprentissage en quelques étapes</p>
+        </div>
+
+        <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+          <div *ngIf="error" class="anime-alert anime-alert-danger">
+            {{ error }}
+            <button class="close-btn" (click)="error = null">×</button>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="position-relative">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" class="form-control" placeholder="Prénom"
+                       name="firstname" [(ngModel)]="firstname" required>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="position-relative">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" class="form-control" placeholder="Nom"
+                       name="lastname" [(ngModel)]="lastname" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" class="form-control" placeholder="Adresse email"
+                   name="email" [(ngModel)]="email"
+                   pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+                   #emailInput="ngModel" required>
+
+            <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="invalid-feedback">
+              <div *ngIf="emailInput.errors?.['required']" class="text-danger small">
+                <i class="fas fa-exclamation-circle me-1"></i> L'email est requis
+              </div>
+              <div *ngIf="emailInput.errors?.['pattern']" class="text-danger small">
+                <i class="fas fa-exclamation-circle me-1"></i> Format invalide (ex: exemple&#64;domaine.com)
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <i class="fas fa-phone input-icon"></i>
+            <input type="tel" class="form-control" placeholder="Téléphone Tunisien"
+                   name="phone" [(ngModel)]="phone"
+                   pattern="^(\+216|00216|0)?[2459][0-9]{7}$"
+                   #phoneInput="ngModel" required>
+
+            <div *ngIf="phoneInput.invalid && (phoneInput.dirty || phoneInput.touched)" class="invalid-feedback">
+              <div *ngIf="phoneInput.errors?.['required']" class="text-danger small">
+                <i class="fas fa-exclamation-circle me-1"></i> Le numéro de téléphone est requis
+              </div>
+              <div *ngIf="phoneInput.errors?.['pattern']" class="text-danger small">
+                <i class="fas fa-exclamation-circle me-1"></i> Format invalide (ex: 20 000 000, 50 000 000, etc.)
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="password" class="form-control" placeholder="Mot de passe"
+                   name="password" [(ngModel)]="password"
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                   #passwordInput="ngModel" required
+                   (input)="checkPasswordStrength()">
+
+            <div class="password-strength mt-2">
+              <div class="password-strength-bar" id="password-strength-bar"></div>
+            </div>
+
+            <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="invalid-feedback">
+              <div *ngIf="passwordInput.errors?.['required']" class="text-danger small">
+                <i class="fas fa-exclamation-circle me-1"></i> Le mot de passe est requis
+              </div>
+              <div *ngIf="passwordInput.errors?.['pattern']" class="text-danger small">
+                <i class="fas fa-exclamation-circle me-1"></i> Le mot de passe doit contenir:
+                <ul class="mt-1 mb-0 ps-3">
+                  <li>8 caractères minimum</li>
+                  <li>1 majuscule</li>
+                  <li>1 minuscule</li>
+                  <li>1 chiffre</li>
+                  <li>1 caractère spécial (&#64;$!%*?&)</li>
+                </ul>
+              </div>
+            </div>
+            <small class="text-muted">Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial</small>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" class="form-control" placeholder="Confirmer le mot de passe"
+                   name="confPassword" [(ngModel)]="confPassword"
+                   #confPasswordInput="ngModel" required>
+
+            <div *ngIf="(confPasswordInput.dirty || confPasswordInput.touched) && password !== confPassword"
+                 class="text-danger small mt-1">
+              <i class="fas fa-exclamation-circle me-1"></i> Les mots de passe ne correspondent pas
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="terms"
+                     name="terms" [(ngModel)]="terms" required>
+              <label class="form-check-label" for="terms">
+                J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a>
+              </label>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="newsletter"
+                     name="newsletter" [(ngModel)]="newsletter">
+              <label class="form-check-label" for="newsletter">
+                Je souhaite recevoir des informations sur les nouveaux cours et hackathons
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-signup text-white" [disabled]="signupForm.invalid">
+            <i class="fas fa-user-plus me-2"></i> S'inscrire
+          </button>
+
+          <div class="divider">
+            <span class="divider-text">OU INSCRIVEZ-VOUS AVEC</span>
+          </div>
+
+          <div class="social-signup">
+            <a href="#" class="social-btn btn-google"><i class="fab fa-google"></i></a>
+            <a href="#" class="social-btn btn-microsoft"><i class="fab fa-microsoft"></i></a>
+            <a href="#" class="social-btn btn-github"><i class="fab fa-github"></i></a>
+          </div>
+
+          <div class="extra-links">
+            <p>Vous avez déjà un compte? <a routerLink="/login">Se connecter</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

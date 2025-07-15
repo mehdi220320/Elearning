@@ -1,0 +1,263 @@
+
+
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+  width: 280px;
+  background-color: white;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 30px;
+}
+
+.header {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #4361ee;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar input {
+  padding-left: 40px;
+  border-radius: 30px;
+  border: 1px solid #e0e0e0;
+  height: 40px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h5 {
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.btn-primary {
+  background-color: #4361ee;
+  border-color: #4361ee;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #3a0ca3;
+  border-color: #3a0ca3;
+}
+
+.btn-outline-primary {
+  border-color: #4361ee;
+  color: #4361ee;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4361ee;
+  color: white;
+}
+.btn-outline-primary.dropdown-toggle[aria-expanded="true"] {
+  color: white !important;
+  background-color: #4361ee;
+}
+
+/* Ensure hover state maintains visibility */
+.btn-outline-primary.dropdown-toggle:hover {
+  color: white !important;
+}
+.table {
+  color: #212529;
+  margin-bottom: 0;
+}
+
+.table thead th {
+  border-bottom: none;
+  border-top: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  padding: 15px 20px;
+}
+
+.table tbody tr {
+  transition: all 0.3s;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+}
+
+.table td {
+  padding: 15px 20px;
+  vertical-align: middle;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+}
+
+.badge-primary {
+  background-color: rgba(67, 97, 238, 0.1);
+  color: #4361ee;
+}
+
+.badge-success {
+  background-color: rgba(76, 201, 240, 0.1);
+  color: #4cc9f0;
+}
+
+.badge-warning {
+  background-color: rgba(248, 150, 30, 0.1);
+  color: #f8961e;
+}
+
+.badge-danger {
+  background-color: rgba(247, 37, 133, 0.1);
+  color: #f72585;
+}
+
+.pagination .page-item .page-link {
+  color: #4361ee;
+  border: none;
+  margin: 0 5px;
+  border-radius: 8px;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #4361ee;
+  color: white;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 10px 0;
+}
+
+.dropdown-item {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  color: #4361ee;
+}
+
+.stats-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.stats-card .icon {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.stats-card .number {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.stats-card .title {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.stats-card.primary {
+  background: linear-gradient(135deg, #4361ee, #3a0ca3);
+}
+
+.stats-card.success {
+  background: linear-gradient(135deg, #4cc9f0, #4895ef);
+}
+
+.stats-card.warning {
+  background: linear-gradient(135deg, #ff001e, #da2c2c);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.custom_cursor{
+  cursor: url('../../../assets/arrow-cursor-outline.png'), pointer
+}

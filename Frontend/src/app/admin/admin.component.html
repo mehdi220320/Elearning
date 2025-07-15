@@ -1,0 +1,160 @@
+<!-- Sidebar -->
+<div class="sidebar" >
+  <div class="sidebar-brand">
+    <h3>Learn<span>Hub</span></h3>
+  </div>
+
+  <div class="sidebar-menu">
+    <div class="menu-title">Principal</div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/admin/dashboard" class="nav-link ">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Tableau de bord</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="menu-title">Gestion</div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-book"></i>
+          <span>Cours</span>
+        </a>
+      </li>
+      <li class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-layer-group"></i>
+          <span>Contenu pédagogique</span>
+        </a>
+        <ul class="submenu">
+          <li class="nav-item">
+            <a href="#" class="nav-link">Chapitres</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Ressources</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Médias</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/admin/users" class="nav-link">
+          <i class="fas fa-users"></i>
+          <span>Utilisateurs</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-calendar-check"></i>
+          <span>Hackathons</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Transactions</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="menu-title">Support</div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-comment-dots"></i>
+          <span>Avis</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-exclamation-circle"></i>
+          <span>Réclamations</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-question-circle"></i>
+          <span>Support</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="menu-title">Administration</div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-cog"></i>
+          <span>Paramètres</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-chart-line"></i>
+          <span>Statistiques</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-user-shield"></i>
+          <span>Administrateurs</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a (click)="logout()" style="cursor:pointer" class="nav-link">
+          <i class="fas fa-cog"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <!-- Header -->
+  <header class="header">
+    <div class="toggle-sidebar">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" class="form-control" placeholder="Rechercher...">
+    </div>
+
+    <div class="user-menu">
+      <a href="#" class="notification">
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+      </a>
+
+      <div class="user-profile dropdown">
+        <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="d-flex align-items-center">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin">
+            <div class="user-info">
+              <p class="name mb-0">Admin User</p>
+              <p class="role mb-0">Super Admin</p>
+            </div>
+            <i class="fas fa-chevron-down ms-2"></i>
+          </div>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profil</a></li>
+          <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Paramètres</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+

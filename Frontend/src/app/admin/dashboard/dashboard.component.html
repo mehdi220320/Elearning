@@ -1,0 +1,217 @@
+<div class="page-header">
+  <h4>Tableau de bord</h4>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Admin</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Tableau de bord</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- Stats Cards -->
+<div class="row">
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card primary">
+      <div class="icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <div class="number">142</div>
+      <div class="title">Cours actifs</div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card success">
+      <div class="icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="number">2,548</div>
+      <div class="title">Utilisateurs</div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card warning">
+      <div class="icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="number">8</div>
+      <div class="title">Hackathons actifs</div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card danger">
+      <div class="icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="number">12</div>
+      <div class="title">Réclamations</div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Courses -->
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <h5>Derniers cours ajoutés</h5>
+        <a href="#" class="btn btn-sm btn-primary">Voir tous</a>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Titre</th>
+              <th>Instructeur</th>
+              <th>Prix</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Programmation Web Avancée</td>
+              <td>Jean Dupont</td>
+              <td>€149</td>
+              <td><span class="badge badge-success">Actif</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Data Science Fondamentaux</td>
+              <td>Marie Lambert</td>
+              <td>€199</td>
+              <td><span class="badge badge-success">Actif</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>UI/UX Design Moderne</td>
+              <td>Sophie Martin</td>
+              <td>€129</td>
+              <td><span class="badge badge-warning">Brouillon</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Marketing Digital</td>
+              <td>Pierre Bernard</td>
+              <td>€99</td>
+              <td><span class="badge badge-success">Actif</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h5>Dernières réclamations</h5>
+        <a href="#" class="btn btn-sm btn-primary">Voir tous</a>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <div class="d-flex justify-content-between mb-1">
+            <strong>Problème de paiement</strong>
+            <small class="text-muted">Il y a 2h</small>
+          </div>
+          <p class="text-muted small mb-2">L'utilisateur signale un problème avec son paiement pour le cours "Programmation Web"...</p>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-sm btn-outline-primary">Traiter</button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between mb-1">
+            <strong>Contenu manquant</strong>
+            <small class="text-muted">Il y a 5h</small>
+          </div>
+          <p class="text-muted small mb-2">Un chapitre semble manquer dans le cours "Data Science Fondamentaux"...</p>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-sm btn-outline-primary">Traiter</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upcoming Hackathons -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Prochains Hackathons</h5>
+        <a href="#" class="btn btn-sm btn-primary">Voir tous</a>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Date</th>
+              <th>Participants</th>
+              <th>Prix</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Hackathon Éducation Digitale</td>
+              <td>15-17 Nov 2023</td>
+              <td>42</td>
+              <td>€5,000</td>
+              <td><span class="badge badge-primary">À venir</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Hackathon IA pour Tous</td>
+              <td>10-12 Déc 2023</td>
+              <td>28</td>
+              <td>€7,500</td>
+              <td><span class="badge badge-primary">À venir</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Hackathon Développement Durable</td>
+              <td>20-22 Jan 2024</td>
+              <td>15</td>
+              <td>€10,000</td>
+              <td><span class="badge badge-primary">À venir</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

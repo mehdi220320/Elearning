@@ -1,0 +1,76 @@
+<div class="bg-pattern"></div>
+<div class="login-container">
+  <div class="row g-0">
+    <div class="col-lg-6">
+      <div class="login-left">
+        <span class="hackathon-badge">Hackathon Actif!</span>
+        <h1 class="platform-name">LearnHub</h1>
+        <p class="platform-tagline">
+          Votre plateforme complète pour l'apprentissage en ligne et la participation à des hackathons innovants.
+          Progressez à votre rythme et collaborez avec une communauté dynamique.
+        </p>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle"></i> Cours payants avec contenu multimédia</li>
+          <li><i class="fas fa-check-circle"></i> Gestion simplifiée pour les administrateurs</li>
+          <li><i class="fas fa-check-circle"></i> Participation aux hackathons éducatifs</li>
+          <li><i class="fas fa-check-circle"></i> Système d'avis et de réclamations</li>
+        </ul>
+        <div class="mt-auto">
+          <p>Nouveau sur LearnHub? <a routerLink="/signup" style="color: white; font-weight: 600;">Créez un compte</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="login-right">
+        <div class="text-center mb-5">
+          <h2 class="login-title">Connexion</h2>
+          <p class="login-subtitle">Accédez à votre espace d'apprentissage et de collaboration</p>
+        </div>
+
+        <form  #ngForm="ngForm" (ngSubmit)="onSubmit()">
+          <div *ngIf="errorMessage" class="anime-alert anime-alert-danger">
+            {{ errorMessage }}
+            <button class="close-btn" (click)="errorMessage = null">×</button>
+          </div>
+          <div *ngIf="showExpiredMessage" class="anime-alert anime-alert-danger">
+            {{ ExpiredMessage }}
+            <button class="close-btn" (click)="showExpiredMessage = false">×</button>
+          </div>
+          <div class="mb-4 position-relative">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" class="form-control " placeholder="Adresse email" name="email" [(ngModel)]="email" required>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" class="form-control " placeholder="Mot de passe" name="email" [(ngModel)]="password" required>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
+            </div>
+            <a routerLink="/forgotpassword" class="text-decoration-none">Mot de passe oublié?</a>
+          </div>
+
+          <button type="submit" class="btn btn-login text-white">
+            <i class="fas fa-sign-in-alt me-2"></i> Se connecter
+          </button>
+
+          <div class="divider">
+            <span class="divider-text">OU CONTINUER AVEC</span>
+          </div>
+
+          <div class="social-login">
+            <div id="google-btn" class="social-btn btn-google" style="background-color: transparent"></div>
+          </div>
+
+          <div class="extra-links">
+            <p>Vous n'avez pas de compte? <a routerLink="/signup">S'inscrire maintenant</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

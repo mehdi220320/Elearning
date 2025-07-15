@@ -1,0 +1,172 @@
+<div class="admin-main">
+  <!-- Header -->
+  <div class="header">
+    <h2>Gestion des Utilisateurs</h2>
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Rechercher un utilisateur..."
+        [(ngModel)]="searchTerm"
+        (input)="applyFilter()">
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row">
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card" style="background-color: #000000">
+        <div class="icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="number">{{totalUsers}}</div>
+        <div class="title">Utilisateurs Totaux</div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card primary">
+        <div class="icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="number">{{monthlyGrowthPercentage}} </div>
+        <div class="title">Croissance Mensuelle </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card success">
+        <div class="icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="number">{{activeUsers}}</div>
+        <div class="title">Comptes Actifs</div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card warning">
+        <div class="icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="number">{{inactiveUsers}}</div>
+        <div class="title">Comptes Inactif</div>
+      </div>
+    </div>
+  </div>
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Liste des Utilisateurs</h5>
+      <div class="d-flex">
+        <div class="dropdown me-2">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            {{itemsPerPage}} par page
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="changeItemsPerPage(5)">5 par page</a></li>
+            <li><a class="dropdown-item" (click)="changeItemsPerPage(10)">10 par page</a></li>
+            <li><a class="dropdown-item" (click)="changeItemsPerPage(25)">25 par page</a></li>
+            <li><a class="dropdown-item" (click)="changeItemsPerPage(50)">50 par page</a></li>
+            <li><a class="dropdown-item" (click)="changeItemsPerPage(100)">100 par page</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th (click)="sort('firstname')">
+              Utilisateur
+              <i *ngIf="sortColumn === 'firstname'"
+                 class="fas fa-sort-{{sortDirection === 'asc' ? 'up' : 'down'} ms-1"></i>
+            </th>
+            <th (click)="sort('email')">
+              Email
+              <i *ngIf="sortColumn === 'email'"
+                 class="fas fa-sort-{{sortDirection === 'asc' ? 'up' : 'down'} ms-1"></i>
+            </th>
+            <th (click)="sort('createdAt')">
+              Date d'inscription
+              <i *ngIf="sortColumn === 'createdAt'"
+                 class="fas fa-sort-{{sortDirection === 'asc' ? 'up' : 'down'} ms-1"></i>
+            </th>
+            <th (click)="sort('role')">
+              Role
+              <i *ngIf="sortColumn === 'role'"
+                 class="fas fa-sort-{{sortDirection === 'asc' ? 'up' : 'down'} ms-1"></i>
+            </th>
+            <th (click)="sort('isActive')">
+              Statut
+              <i *ngIf="sortColumn === 'isActive'"
+                 class="fas fa-sort-{{sortDirection === 'asc' ? 'up' : 'down'} ms-1"></i>
+            </th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of paginatedUsers">
+            <td>
+              <div class="d-flex align-items-center">
+                <img [src]="getImage(user.picture)" class="user-avatar">
+                <div>
+                  <h6 class="mb-0">{{user.firstname}} </h6>
+                  <small class="text-muted">#{{user._id || 'id'}}</small>
+                </div>
+              </div>
+            </td>
+            <td>{{user.email}}</td>
+            <td>{{user.createdAt | date:'yyyy-MM-dd'}}</td>
+            <td>{{user.role | uppercase}}</td>
+            <td>
+              <span *ngIf="user.isActive" class="badge badge-success">Actif</span>
+              <span *ngIf="!user.isActive" class="badge badge-danger">Inactif</span>
+            </td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+<!--                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>-->
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Contacter</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" style="cursor: no-drop" *ngIf="user.isActive" (click)="isActiveUpdate(user)"><i class="fas fa-ban me-2"></i>Désactiver</a></li>
+                  <li><a class="dropdown-item text-success custom_cursor"  *ngIf="!user.isActive" (click)="isActiveUpdate(user)"><i class="fas fa-unlock me-2"></i>Activer</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredUsers.length === 0">
+            <td colspan="6" class="text-center">Aucun utilisateur trouvé</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo; Précédent</span>
+            </a>
+          </li>
+
+          <li *ngFor="let page of [].constructor(totalPages); let i = index"
+              class="page-item" [class.active]="currentPage === i + 1">
+            <a class="page-link" (click)="changePage(i + 1)">{{i + 1}}</a>
+          </li>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
+              <span aria-hidden="true">Suivant &raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
