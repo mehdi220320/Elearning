@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {User} from '../../models/User';
 import {UsersService} from '../../services/users.service';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-users',
@@ -17,8 +18,8 @@ export class UsersComponent {
   sortColumn = '';
   sortDirection = 'asc';
   monthlyGrowthPercentage: number = 0;
-
-  constructor(private userService: UsersService) {}
+  instructors:any[]=[]
+  constructor(private userService: UsersService,private sanitizer:DomSanitizer) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -82,8 +83,11 @@ export class UsersComponent {
     }
   }
 
-  getImage(picture: string | null): string {
-    return picture || '/assets/img.png';
+
+  getImage(url: string  | null): SafeUrl | string {
+    return url ?
+      this.sanitizer.bypassSecurityTrustResourceUrl(url) :
+      '/assets/img.png';
   }
 
   changeItemsPerPage(count: number) {
@@ -143,5 +147,10 @@ export class UsersComponent {
       }
     );
   }
+
+
+
+
+
 
 }

@@ -1,1 +1,114 @@
-<p>add-cour works!</p>
+<div class="course-creation-container">
+  <div class="creation-header">
+    <h2><i class="fas fa-plus-circle me-2"></i>Créer un Nouveau Cours</h2>
+    <p>Remplissez les informations ci-dessous pour publier un nouveau cours</p>
+  </div>
+
+  <div class="creation-card">
+    <form class="course-form">
+      <!-- Section Informations de Base -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-number">1</div>
+          <h3>Informations de Base</h3>
+        </div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="courseTitle">Titre du Cours*</label>
+                <input type="text" id="courseTitle" class="form-control" placeholder="Ex: Apprendre Angular de A à Z">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="courseCategory">Catégorie*</label>
+                <select id="courseCategory" class="form-control">
+                  <option value="">Sélectionnez une catégorie</option>
+                  <option value="web">Développement Web</option>
+                  <option value="mobile">Développement Mobile</option>
+                  <option value="data">Data Science</option>
+                  <option value="data">Autre</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="courseDescription">Description Courte*</label>
+            <textarea id="courseDescription" class="form-control" rows="3" placeholder="Décrivez brièvement votre cours"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Détails du Cours -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-number">2</div>
+          <h3>Détails du Cours</h3>
+        </div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="coursePrice">Prix (€)*</label>
+                <input type="number" id="coursePrice" class="form-control" placeholder="Ex: 49">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="courseLevel">Niveau*</label>
+                <select id="courseLevel" class="form-control">
+                  <option value="beginner">Débutant</option>
+                  <option value="intermediate">Intermédiaire</option>
+                  <option value="advanced">Avancé</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="courseDuration">Durée (heures)*</label>
+                <input type="number" id="courseDuration" class="form-control" placeholder="Ex: 12">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Contenu Pédagogique -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-number">3</div>
+          <h3>Contenu Pédagogique</h3>
+        </div>
+        <div class="section-body">
+          <div class="form-group">
+            <label>Image de Couverture*</label>
+            <div class="file-upload-container">
+              <input type="file" id="courseImage" accept="image/*">
+              <label for="courseImage" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Glissez-déposez une image ou cliquez pour parcourir</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="courseObjectives">Objectifs d'Apprentissage*</label>
+            <textarea id="courseObjectives" class="form-control" rows="3" placeholder="Listez les compétences que les apprenants acquerront"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Boutons de Soumission -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline-secondary">
+          <i class="fas fa-times me-2"></i>Annuler
+        </button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save me-2"></i>Enregistrer le Cours
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

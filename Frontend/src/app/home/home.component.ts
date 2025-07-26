@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../services/authServices/auth.service';
 import {SidebarService} from '../admin/services/sidebar.service';
 import {Router} from '@angular/router';
 declare var google:any;

@@ -4,7 +4,7 @@ import {LoginComponent} from './login/login.component';
 import {SignupComponent} from './signup/signup.component';
 import {LandingpageComponent} from './landingpage/landingpage.component';
 import {HomeComponent} from './home/home.component';
-import {authGuard} from './services/auth.guard';
+import {authGuard} from './services/authServices/auth.guard';
 import {ForgetpasswordComponent} from './forgetpassword/forgetpassword.component';
 
 const routes: Routes = [

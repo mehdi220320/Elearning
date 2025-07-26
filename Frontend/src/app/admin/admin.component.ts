@@ -1,6 +1,6 @@
 import {Component, HostListener} from '@angular/core';
 import {SidebarService} from './services/sidebar.service';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../services/authServices/auth.service';
 import {NavigationEnd, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 declare var google:any;

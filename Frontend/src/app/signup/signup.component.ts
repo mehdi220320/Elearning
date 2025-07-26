@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/authServices/auth.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
@@ -55,17 +55,13 @@ export class SignupComponent {
   }
 
   private formatTunisianPhone(phone: string): string {
-    // Remove all non-digit characters
     const digits = phone.replace(/\D/g, '');
 
-    // If starts with country code (216 or 00216), convert to 0 format
     if (digits.startsWith('216')) {
       return '0' + digits.substring(3);
     } else if (digits.startsWith('00216')) {
       return '0' + digits.substring(4);
     }
-
-    // Otherwise return as is (assuming it's already in 0X format)
     return digits;
   }
 
@@ -79,10 +75,8 @@ export class SignupComponent {
       return;
     }
 
-    // Reset classes
     strengthBar?.classList.remove('weak', 'fair', 'good', 'strong');
 
-    // Calculate strength
     let strength = 0;
 
     // Length check

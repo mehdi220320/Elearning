@@ -10,7 +10,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.component';
-import {authInterceptor} from './services/auth.interceptor';
+import {authInterceptor} from './services/authServices/auth.interceptor';
 
 @NgModule({
   declarations: [

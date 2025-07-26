@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {jwtDecode} from 'jwt-decode';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
+import {environment} from '../../models/environment';
 declare var google:any;
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = environment.apiUrl+'auth';
   private tokenKey = 'auth_token';
   private roleKey = 'user_role';
 

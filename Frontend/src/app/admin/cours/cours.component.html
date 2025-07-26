@@ -1,1 +1,238 @@
-<p>cours works!</p>
+<div class="courses-list-container">
+  <!-- Header avec titre et bouton -->
+  <div class="list-header">
+    <h2><i class="fas fa-book-open me-2"></i>Liste des Cours</h2>
+    <div class="header-actions">
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" class="form-control" placeholder="Rechercher un cours...">
+      </div>
+      <button class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nouveau Cours
+      </button>
+    </div>
+  </div>
+
+  <!-- Cartes de statistiques -->
+  <div class="row stats-row">
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card total-courses">
+        <div class="icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="number">142</div>
+        <div class="title">Cours Publiés</div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card active-courses">
+        <div class="icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="number">128</div>
+        <div class="title">Cours Actifs</div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card draft-courses">
+        <div class="icon">
+          <i class="fas fa-edit"></i>
+        </div>
+        <div class="number">14</div>
+        <div class="title">Brouillons</div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="stats-card popular-courses">
+        <div class="icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="number">24</div>
+        <div class="title">Cours Populaires</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte principale avec tableau -->
+  <div class="main-card">
+    <div class="card-header">
+      <h5>Tous les Cours</h5>
+      <div class="filters">
+        <select class="form-control filter-select">
+          <option>Tous les statuts</option>
+          <option>Actifs</option>
+          <option>Brouillons</option>
+          <option>Archivés</option>
+        </select>
+        <select class="form-control filter-select">
+          <option>Toutes les catégories</option>
+          <option>Développement Web</option>
+          <option>Data Science</option>
+          <option>Design UI/UX</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Titre du Cours</th>
+            <th>Instructeur</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Étudiants</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              <div class="course-info">
+                <div class="course-image">
+                  <img src="https://via.placeholder.com/60x40" alt="Angular Avancé">
+                </div>
+                <div class="course-details">
+                  <h6>Angular Avancé</h6>
+                  <small>12 chapitres • 8h de vidéo</small>
+                </div>
+              </div>
+            </td>
+            <td>Jean Dupont</td>
+            <td>Développement Web</td>
+            <td>€89</td>
+            <td>542</td>
+            <td><span class="badge badge-success">Actif</span></td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="course-info">
+                <div class="course-image">
+                  <img src="https://via.placeholder.com/60x40" alt="Data Science">
+                </div>
+                <div class="course-details">
+                  <h6>Data Science Fondamentaux</h6>
+                  <small>15 chapitres • 10h de vidéo</small>
+                </div>
+              </div>
+            </td>
+            <td>Marie Lambert</td>
+            <td>Data Science</td>
+            <td>€129</td>
+            <td>328</td>
+            <td><span class="badge badge-success">Actif</span></td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="course-info">
+                <div class="course-image">
+                  <img src="https://via.placeholder.com/60x40" alt="UI/UX Design">
+                </div>
+                <div class="course-details">
+                  <h6>UI/UX Design Moderne</h6>
+                  <small>10 chapitres • 6h de vidéo</small>
+                </div>
+              </div>
+            </td>
+            <td>Sophie Martin</td>
+            <td>Design</td>
+            <td>€99</td>
+            <td>412</td>
+            <td><span class="badge badge-success">Actif</span></td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="course-info">
+                <div class="course-image">
+                  <img src="https://via.placeholder.com/60x40" alt="Marketing Digital">
+                </div>
+                <div class="course-details">
+                  <h6>Marketing Digital</h6>
+                  <small>8 chapitres • 5h de vidéo</small>
+                </div>
+              </div>
+            </td>
+            <td>Pierre Bernard</td>
+            <td>Marketing</td>
+            <td>€79</td>
+            <td>287</td>
+            <td><span class="badge badge-warning">Brouillon</span></td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-success" href="#"><i class="fas fa-check me-2"></i>Publier</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Précédent</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Suivant</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

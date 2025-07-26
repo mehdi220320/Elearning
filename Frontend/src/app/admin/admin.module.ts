@@ -8,7 +8,8 @@ import { UsersComponent } from './users/users.component';
 import {FormsModule} from '@angular/forms';
 import { CoursComponent } from './cours/cours.component';
 import { AddCourComponent } from './cours/add-cour/add-cour.component';
-
+import { InstructorsComponent } from './instructors/instructors.component';
+import { AddInstructorComponent } from './instructors/add-instructor/add-instructor.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,9 @@ import { AddCourComponent } from './cours/add-cour/add-cour.component';
     DashboardComponent,
     UsersComponent,
     CoursComponent,
-    AddCourComponent
+    AddCourComponent,
+    InstructorsComponent,
+    AddInstructorComponent
   ],
   imports: [
     CommonModule,

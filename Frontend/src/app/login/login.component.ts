@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../services/authServices/auth.service';
 import { jwtDecode } from 'jwt-decode';
 import {environment} from '../models/environment';
 declare var google:any;
@@ -92,7 +92,6 @@ export class LoginComponent {
     google.accounts.id.renderButton(document.getElementById("google-btn"), {
       type: 'icon',
       shape: 'circle',
-      // theme: 'transparant',
       size: 'large',
       width: '100px'
     });

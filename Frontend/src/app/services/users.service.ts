@@ -3,12 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {catchError, Observable, throwError} from 'rxjs';
 import {User} from '../models/User';
+import {environment} from '../models/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = environment.apiUrl+'users';
 
   constructor(
     private http: HttpClient,
@@ -52,4 +53,6 @@ export class UsersService {
       'Server error occurred';
     return throwError(() => new Error(message));
   }
+
+
 }

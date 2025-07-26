@@ -1,0 +1,108 @@
+<div class="instructor-main">
+  <div class="admin-main">
+    <!-- Header -->
+    <div class="header">
+      <h2><i class="fas fa-chalkboard-teacher me-2"></i>Liste des Formateurs</h2>
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Rechercher un formateur..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilter()">
+      </div>
+    </div>
+
+    <!-- Instructors Table -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Tous les Formateurs</h5>
+        <button class="btn btn-primary" routerLink="/admin/addinstructor">
+          <i class="fas fa-plus me-2"></i>Ajouter un Formateur
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Formateur</th>
+              <th>Contact</th>
+              <th>Spécialité</th>
+              <th>Compétences</th>
+              <th>Réseaux</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let instructor of paginatedInstructors">
+              <td>
+                <div class="instructor-info">
+                  <img [src]="getImage(instructor.picture!.path)" class="instructor-avatar" alt="Instructor photo">
+                  <div>
+                    <div class="instructor-name">{{ instructor.firstname }} {{ instructor.lastname }}</div>
+                    <div class="instructor-email">{{ instructor.email }}</div>
+                    <div class="instructor-email">ID: {{ instructor._id }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div>{{ instructor.phone }}</div>
+                <small class="text-muted" *ngIf="instructor.Site_web"> {{ instructor.Site_web }}</small>
+              </td>
+              <td>
+                <span class="badge badge-primary">{{ instructor.speciality }}</span>
+              </td>
+              <td>
+                <div class="skills-container" *ngFor="let skill of instructor.Competences; let i=index">
+                  <span class="skill-badge" *ngIf="i<2" >{{ skill }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="social-links">
+                  <a *ngIf="instructor.GitHub" [href]="instructor.GitHub" target="_blank" class="social-link">
+                    <i class="fab fa-github"></i>
+                  </a>
+                  <a *ngIf="instructor.LinkedIn" [href]="instructor.LinkedIn" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin"></i>
+                  </a>
+                  <a *ngIf="instructor.Twitter" [href]="instructor.Twitter" target="_blank" class="social-link">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteInstructor(instructor._id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredInstructors.length === 0">
+              <td colspan="6" class="text-center">Aucun formateur trouvé</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4" *ngIf="filteredInstructors.length > itemsPerPage">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link"  (click)="previousPage()">Précédent</a>
+            </li>
+            <li *ngFor="let page of getPages()" class="page-item" [class.active]="page === currentPage">
+              <a class="page-link"  (click)="goToPage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link"  (click)="nextPage()">Suivant</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const userRoutes = require('./user/user.routes')
+const AuthRoutes = require('./auth/auth.routes')
+const categoryRoutes=require('./categories/CategoryRoutes')
+const instructorRouter=require('./instructor/InstructorRouter')
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
@@ -18,14 +22,15 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-const userRoutes = require('./user/user.routes')
-const AuthRoutes = require('./auth/auth.routes')
+
 mongoose.connect(process.env.Mongo_URL)
     .then(() => console.log("Connected to MongoDB"))
     .catch(err => console.error("MongoDB connection error:", err));
 app.use(express.json());
 app.use('/users', userRoutes);
 app.use('/auth', AuthRoutes)
+app.use('/category', categoryRoutes)
+app.use('/instructor', instructorRouter)
 
 app.listen(process.env.PORT, () => {
     console.log("Listening on port " + process.env.PORT);
