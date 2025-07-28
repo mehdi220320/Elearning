@@ -5,9 +5,9 @@
     <div class="header-actions">
       <div class="search-bar">
         <i class="fas fa-search"></i>
-        <input type="text" class="form-control" placeholder="Rechercher un cours...">
+        <input type="text" class="form-control" placeholder="Rechercher un cours..." [(ngModel)]="searchTerm" (input)="filterCourses()">
       </div>
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" routerLink="/admin/addCourse">
         <i class="fas fa-plus me-2"></i>Nouveau Cours
       </button>
     </div>
@@ -17,37 +17,29 @@
   <div class="row stats-row">
     <div class="col-md-6 col-lg-3">
       <div class="stats-card total-courses">
-        <div class="icon">
-          <i class="fas fa-book"></i>
-        </div>
-        <div class="number">142</div>
+        <div class="icon"><i class="fas fa-book"></i></div>
+        <div class="number">{{ totalCourses }}</div>
         <div class="title">Cours Publiés</div>
       </div>
     </div>
     <div class="col-md-6 col-lg-3">
       <div class="stats-card active-courses">
-        <div class="icon">
-          <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="number">128</div>
+        <div class="icon"><i class="fas fa-check-circle"></i></div>
+        <div class="number">{{ activeCourses }}</div>
         <div class="title">Cours Actifs</div>
       </div>
     </div>
     <div class="col-md-6 col-lg-3">
       <div class="stats-card draft-courses">
-        <div class="icon">
-          <i class="fas fa-edit"></i>
-        </div>
-        <div class="number">14</div>
+        <div class="icon"><i class="fas fa-edit"></i></div>
+        <div class="number">{{ draftCourses }}</div>
         <div class="title">Brouillons</div>
       </div>
     </div>
     <div class="col-md-6 col-lg-3">
       <div class="stats-card popular-courses">
-        <div class="icon">
-          <i class="fas fa-star"></i>
-        </div>
-        <div class="number">24</div>
+        <div class="icon"><i class="fas fa-star"></i></div>
+        <div class="number">{{ popularCourses }}</div>
         <div class="title">Cours Populaires</div>
       </div>
     </div>
@@ -58,20 +50,19 @@
     <div class="card-header">
       <h5>Tous les Cours</h5>
       <div class="filters">
-        <select class="form-control filter-select">
-          <option>Tous les statuts</option>
-          <option>Actifs</option>
-          <option>Brouillons</option>
-          <option>Archivés</option>
+        <select class="form-control filter-select" [(ngModel)]="selectedStatus" (change)="filterCourses()">
+          <option value="">Tous les statuts</option>
+          <option value="active">Actifs</option>
+          <option value="draft">Brouillons</option>
         </select>
-        <select class="form-control filter-select">
-          <option>Toutes les catégories</option>
-          <option>Développement Web</option>
-          <option>Data Science</option>
-          <option>Design UI/UX</option>
+
+        <select class="form-control filter-select" [(ngModel)]="selectedCategory" (change)="filterCourses()">
+          <option value="">Toutes les catégories</option>
+          <option *ngFor="let cat of categoryOptions" [value]="cat">{{ cat }}</option>
         </select>
       </div>
     </div>
+
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-hover">
@@ -81,29 +72,31 @@
             <th>Instructeur</th>
             <th>Catégorie</th>
             <th>Prix</th>
-            <th>Étudiants</th>
             <th>Statut</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
+          <tr *ngFor="let course of paginatedCourses">
             <td>
               <div class="course-info">
                 <div class="course-image">
-                  <img src="https://via.placeholder.com/60x40" alt="Angular Avancé">
+                  <img [src]="getImage(course.coverImage!.path)" width="60" height="40" alt="{{course.title}}">
                 </div>
                 <div class="course-details">
-                  <h6>Angular Avancé</h6>
-                  <small>12 chapitres • 8h de vidéo</small>
+                  <h6>{{ course.title }}</h6>
+                  <small>{{ course.duree }} • {{ course.niveau }}</small>
                 </div>
               </div>
             </td>
-            <td>Jean Dupont</td>
-            <td>Développement Web</td>
-            <td>€89</td>
-            <td>542</td>
-            <td><span class="badge badge-success">Actif</span></td>
+            <td>{{ course.formateur.firstname }} {{ course.formateur.lastname }}</td>
+            <td>{{ course.categorie.name }}</td>
+            <td>{{ course.prix | currency:'TND':'symbol':'1.0-0' }}</td>
+            <td>
+                <span class="badge" [ngClass]="{ 'badge-success': course.status, 'badge-danger': !course.status }">
+                  {{ course.status ? 'Actif' : 'Brouillon' }}
+                </span>
+            </td>
             <td>
               <div class="dropdown">
                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -112,105 +105,7 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
                   <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
-                  <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
-                </ul>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="course-info">
-                <div class="course-image">
-                  <img src="https://via.placeholder.com/60x40" alt="Data Science">
-                </div>
-                <div class="course-details">
-                  <h6>Data Science Fondamentaux</h6>
-                  <small>15 chapitres • 10h de vidéo</small>
-                </div>
-              </div>
-            </td>
-            <td>Marie Lambert</td>
-            <td>Data Science</td>
-            <td>€129</td>
-            <td>328</td>
-            <td><span class="badge badge-success">Actif</span></td>
-            <td>
-              <div class="dropdown">
-                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                  Actions
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
-                </ul>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="course-info">
-                <div class="course-image">
-                  <img src="https://via.placeholder.com/60x40" alt="UI/UX Design">
-                </div>
-                <div class="course-details">
-                  <h6>UI/UX Design Moderne</h6>
-                  <small>10 chapitres • 6h de vidéo</small>
-                </div>
-              </div>
-            </td>
-            <td>Sophie Martin</td>
-            <td>Design</td>
-            <td>€99</td>
-            <td>412</td>
-            <td><span class="badge badge-success">Actif</span></td>
-            <td>
-              <div class="dropdown">
-                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                  Actions
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
-                </ul>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="course-info">
-                <div class="course-image">
-                  <img src="https://via.placeholder.com/60x40" alt="Marketing Digital">
-                </div>
-                <div class="course-details">
-                  <h6>Marketing Digital</h6>
-                  <small>8 chapitres • 5h de vidéo</small>
-                </div>
-              </div>
-            </td>
-            <td>Pierre Bernard</td>
-            <td>Marketing</td>
-            <td>€79</td>
-            <td>287</td>
-            <td><span class="badge badge-warning">Brouillon</span></td>
-            <td>
-              <div class="dropdown">
-                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                  Actions
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Statistiques</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item text-success" href="#"><i class="fas fa-check me-2"></i>Publier</a></li>
                 </ul>
               </div>
             </td>
@@ -220,16 +115,16 @@
       </div>
 
       <!-- Pagination -->
-      <nav aria-label="Page navigation" class="mt-4">
+      <nav *ngIf="totalPages > 1" aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Précédent</a>
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" href="#" (click)="changePage(currentPage - 1)">Précédent</a>
           </li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Suivant</a>
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
+            <a class="page-link" href="#" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" href="#" (click)="changePage(currentPage + 1)">Suivant</a>
           </li>
         </ul>
       </nav>

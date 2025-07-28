@@ -5,6 +5,7 @@ const userRoutes = require('./user/user.routes')
 const AuthRoutes = require('./auth/auth.routes')
 const categoryRoutes=require('./categories/CategoryRoutes')
 const instructorRouter=require('./instructor/InstructorRouter')
+const courseRouter=require('./courses/CourseRouter')
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
@@ -31,6 +32,7 @@ app.use('/users', userRoutes);
 app.use('/auth', AuthRoutes)
 app.use('/category', categoryRoutes)
 app.use('/instructor', instructorRouter)
+app.use('/course', courseRouter)
 
 app.listen(process.env.PORT, () => {
     console.log("Listening on port " + process.env.PORT);

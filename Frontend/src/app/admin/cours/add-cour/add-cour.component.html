@@ -1,114 +1,214 @@
-<div class="course-creation-container">
-  <div class="creation-header">
-    <h2><i class="fas fa-plus-circle me-2"></i>Créer un Nouveau Cours</h2>
-    <p>Remplissez les informations ci-dessous pour publier un nouveau cours</p>
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Créer un nouveau cours</h1>
+      <a (click)="goBackOrFallback()"  class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i>
+        Retour
+      </a>
+    </div>
+
+    <div class="form-card">
+      <div class="form-header">
+        <h2 class="form-title">Informations du cours</h2>
+        <p class="form-subtitle">Renseignez les détails de base du cours</p>
+      </div>
+
+      <form id="course-form" #addcourseForm="ngForm" (ngSubmit)="onSubmit(addcourseForm)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="title" class="form-label">Titre du cours <span>*</span></label>
+            <input type="text" id="title" class="form-control" name="title" [(ngModel)]="title" required placeholder="Ex: Introduction à Python">
+          </div>
+
+          <div class="form-group">
+            <label for="price" class="form-label">Prix (€) <span>*</span></label>
+            <input type="number" id="price" class="form-control" name="prix" [(ngModel)]="prix" required min="0" step="0.01" placeholder="29.99">
+          </div>
+
+          <div class="form-group">
+            <label for="category" class="form-label">Catégorie <span>*</span></label>
+            <div class="select-with-add">
+              <select id="category" class="form-control" name="categoryId" [(ngModel)]="categoryId" required placeholder="Sélectionnez une catégorie">
+                <option >Sélectionnez une catégorie</option>
+                <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
+              </select>
+              <button type="button" class="add-btn" id="add-category-btn" title="Ajouter une nouvelle categorie" data-bs-toggle="modal" data-bs-target="#myModal">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="instructor" class="form-label">Formateur <span>*</span></label>
+            <div class="select-with-add">
+              <select id="instructor" class="form-control" name="formateurId" [(ngModel)]="formateurId" required>
+                <option value="">Sélectionnez un formateur</option>
+                <option *ngFor="let instructor of instructors" [value]="instructor._id">{{instructor.firstname+" "+instructor.lastname}}</option>
+
+              </select>
+              <button type="button" class="add-btn" id="add-instructor-btn" title="Ajouter un nouveau formateur" routerLink="/admin/addinstructor">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="short-description" class="form-label">Description courte <span>*</span></label>
+            <textarea id="short-description" class="form-control" name="description" [(ngModel)]="description" required placeholder="Une brève description qui apparaîtra sur la page d'accueil"></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="description" class="form-label">Description détaillée <span>*</span></label>
+            <textarea id="description" class="form-control" name="description_detaillee" [(ngModel)]="description_detaillee" required placeholder="Description complète du cours avec les objectifs d'apprentissage"></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Image de couverture <span>*</span></label>
+            <div class="file-upload">
+              <div class="file-upload-btn"  *ngIf="!imagePreview; else previewBlock" class="file-upload-btn" (click)="fileInput.click()" >
+                <div class="file-upload-text">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Cliquez pour télécharger</span>
+                  ou glissez-déposez une image
+                  <small>(JPEG, PNG - 16:9 recommandé)</small>
+                </div>
+                <input type="file" class="file-upload-input" accept="image/*" #fileInput type="file" id="thumbnail" (change)="onFileSelected($event)" required>
+              </div>
+            </div>
+            <ng-template #previewBlock>
+              <div class="file-preview">
+                <img [src]="imagePreview" class="thumbnail-preview" id="file-preview-img" alt="Preview">
+                <div class="file-info">
+                  <div class="file-name" id="file-name">{{fileName}}</div>
+                  <div class="file-size" id="file-size">{{fileSize}}</div>
+                </div>
+                <i class="fas fa-times file-remove" (click)="removeFile()"></i>
+              </div>
+
+            </ng-template>
+          </div>
+
+          <div class="form-group">
+            <label for="level" class="form-label">Niveau <span>*</span></label>
+            <select id="level" class="form-control" name="niveau" [(ngModel)]="niveau" required>
+              <option value="">Sélectionnez un niveau</option>
+              <option value="debutant">Débutant</option>
+              <option value="intermediaire">Intermédiaire</option>
+              <option value="avance">Avancé</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="duration" class="form-label">Durée (heures) <span>*</span></label>
+            <input type="number" id="duration" class="form-control" name="duree" [(ngModel)]="duree" required min="1" placeholder="Ex: 15">
+          </div>
+
+          <div class="form-group">
+            <label for="language" class="form-label">Langue <span>*</span></label>
+            <select id="language" class="form-control" name="langue" [(ngModel)]="langue" required>
+              <option value="francais">Français</option>
+              <option value="anglais">Anglais</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="certificate" class="form-label">Certificat</label>
+            <select id="certificate" class="form-control" name="certificat" [(ngModel)]="certificat">
+              <option value="false">Non inclus</option>
+              <option value="true">Inclus</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Chapitres du cours -->
+        <div class="chapters-section">
+          <h2 class="form-title">Chapitres du cours</h2>
+          <p class="form-subtitle">Ajoutez les différents chapitres qui composent ce cours</p>
+
+          <div class="chapter-list" id="chapter-list">
+            <!-- Les chapitres seront ajoutés ici dynamiquement -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <div class="chapter-title">Chapitre 1: Introduction</div>
+                <div class="chapter-actions">
+                  <button type="button" class="chapter-action-btn">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button type="button" class="chapter-action-btn">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="chapter-content">
+                <div class="chapter-content-type">
+                  <i class="fas fa-video"></i> Vidéo (15:30)
+                </div>
+                <div class="chapter-content-type">
+                  <i class="fas fa-file-pdf"></i> PDF (12 pages)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline add-chapter-btn" id="add-chapter-btn">
+            <i class="fas fa-plus"></i>
+            Ajouter un chapitre
+          </button>
+        </div>
+        <div class="form-group full-width">
+          <div class="error-container " *ngIf="error">
+            <div class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ error }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline">
+            <i class="fas fa-times"></i>
+            Annuler
+          </button>
+          <button *ngIf="!isLoading" type="submit" class="btn btn-primary"  [disabled]="addcourseForm.invalid">
+            <i class="fas fa-save"></i>
+            Publier le cours
+          </button>
+          <button *ngIf="isLoading" class="btn btn-outline d-flex justify-content-center my-1" style="border: none;font-family: 'Bold Italic Art';font-weight: bold" disabled>
+            <span style="margin-right: 10px">Chargement...</span>
+            <div class="spinner-border text-primary" role="status">
+            </div>
+
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
+</main>
 
-  <div class="creation-card">
-    <form class="course-form">
-      <!-- Section Informations de Base -->
-      <div class="form-section">
-        <div class="section-header">
-          <div class="section-number">1</div>
-          <h3>Informations de Base</h3>
-        </div>
-        <div class="section-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="courseTitle">Titre du Cours*</label>
-                <input type="text" id="courseTitle" class="form-control" placeholder="Ex: Apprendre Angular de A à Z">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="courseCategory">Catégorie*</label>
-                <select id="courseCategory" class="form-control">
-                  <option value="">Sélectionnez une catégorie</option>
-                  <option value="web">Développement Web</option>
-                  <option value="mobile">Développement Mobile</option>
-                  <option value="data">Data Science</option>
-                  <option value="data">Autre</option>
-                </select>
-              </div>
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label for="courseDescription">Description Courte*</label>
-            <textarea id="courseDescription" class="form-control" rows="3" placeholder="Décrivez brièvement votre cours"></textarea>
-          </div>
-        </div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Ajouter une nouvelle catégorie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
       </div>
 
-      <!-- Section Détails du Cours -->
-      <div class="form-section">
-        <div class="section-header">
-          <div class="section-number">2</div>
-          <h3>Détails du Cours</h3>
-        </div>
-        <div class="section-body">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="coursePrice">Prix (€)*</label>
-                <input type="number" id="coursePrice" class="form-control" placeholder="Ex: 49">
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="courseLevel">Niveau*</label>
-                <select id="courseLevel" class="form-control">
-                  <option value="beginner">Débutant</option>
-                  <option value="intermediate">Intermédiaire</option>
-                  <option value="advanced">Avancé</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="courseDuration">Durée (heures)*</label>
-                <input type="number" id="courseDuration" class="form-control" placeholder="Ex: 12">
-              </div>
+      <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="name" class="form-label">Titre du catégorie <span>*</span></label>
+              <input type="text" id="name" name="CategoryName" [(ngModel)]="categoryName" class="form-control" required placeholder="Ex: Business">
             </div>
           </div>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"(click)="addCategory()">Valider</button>
       </div>
 
-      <!-- Section Contenu Pédagogique -->
-      <div class="form-section">
-        <div class="section-header">
-          <div class="section-number">3</div>
-          <h3>Contenu Pédagogique</h3>
-        </div>
-        <div class="section-body">
-          <div class="form-group">
-            <label>Image de Couverture*</label>
-            <div class="file-upload-container">
-              <input type="file" id="courseImage" accept="image/*">
-              <label for="courseImage" class="file-upload-label">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <span>Glissez-déposez une image ou cliquez pour parcourir</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="courseObjectives">Objectifs d'Apprentissage*</label>
-            <textarea id="courseObjectives" class="form-control" rows="3" placeholder="Listez les compétences que les apprenants acquerront"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- Boutons de Soumission -->
-      <div class="form-actions">
-        <button type="button" class="btn btn-outline-secondary">
-          <i class="fas fa-times me-2"></i>Annuler
-        </button>
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-save me-2"></i>Enregistrer le Cours
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="page-header">
     <h1 class="page-title">Ajouter un nouveau formateur</h1>
-    <a routerLink="/admin/instructors" class="btn btn-outline">
+    <a (click)="goBackOrFallback()" class="btn btn-outline">
       <i class="fas fa-arrow-left"></i>
       Retour
     </a>
@@ -140,6 +140,8 @@
           <i class="fas fa-save"></i>
           Enregistrer le formateur
         </button>
+
+
       </div>
 
     </form>

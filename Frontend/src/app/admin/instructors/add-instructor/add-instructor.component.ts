@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {InstructorService} from '../../../services/instructor.service';
 import {Router} from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-instructor',
@@ -27,8 +28,7 @@ export class AddInstructorComponent {
   fileName: string = '';
   fileSize: string = '';
 
-  constructor(private instructorService:InstructorService,private router:Router) {
-
+  constructor(private instructorService:InstructorService,private router:Router,private location: Location) {
   }
 
   addSkill(){
@@ -161,7 +161,7 @@ export class AddInstructorComponent {
     this.instructorService.addInstructor(formData).subscribe({
       next: (response) => {
         this.isLoading = false;
-        alert("Formateur ajouté avec succès !!");
+        alert("Le formateur a été ajouté avec succès !");
         this.router.navigate(['/admin/instructors']);
       },
       error: (err) => {
@@ -193,6 +193,13 @@ export class AddInstructorComponent {
     const fileInput = document.getElementById('thumbnail') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
+    }
+  }
+  goBackOrFallback() {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/admin/instructors']);
     }
   }
 }
