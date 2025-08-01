@@ -1,0 +1,210 @@
+<div class="container">
+  <div class="form-header">
+    <div class="form-icon">
+      <i class="fas fa-plus"></i>
+    </div>
+    <h1 class="form-title">Ajouter un nouveau chapitre</h1>
+    <p class="form-subtitle">Complétez les informations pour ce chapitre</p>
+  </div>
+
+  <div class="form-card">
+    <form id="chapter-form" #addchapitreForm="ngForm" (ngSubmit)="onSubmit(addchapitreForm)">
+      <div class="form-group">
+        <label for="chapter-title" class="form-label">Titre du chapitre <span>*</span></label>
+        <input type="text" id="chapter-title" class="form-control" name="title" [(ngModel)]="title" required placeholder="Ex: Introduction à Python">
+      </div>
+      <div class="form-group">
+        <label for="cours" class="form-label">Cours <span>*</span></label>
+        <div class="select-with-add">
+          <select id="cours" class="form-control" name="coursId" [(ngModel)]="coursId" required placeholder="Sélectionnez un cours">
+            <option value="" disabled >Sélectionnez un cours</option>
+            <option *ngFor="let course of courses" [value]="course._id">{{course.title}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="chapter-description" class="form-label">Description</label>
+        <textarea id="chapter-description" class="form-control" name="description" [(ngModel)]="description"  placeholder="Décrivez le contenu de ce chapitre"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Type de contenu <span>*</span></label>
+        <div class="content-tabs">
+          <button
+            type="button"
+            class="tab-btn"
+            data-tab="video"
+            (click)="activate(0)"
+            [class.active]="active[0]">
+            Vidéo
+          </button>
+
+          <button
+            type="button"
+            class="tab-btn"
+            data-tab="pdf"
+            (click)="activate(1)"
+            [class.active]="active[1]">
+            Ressources
+          </button>
+
+          <button
+            type="button"
+            class="tab-btn"
+            data-tab="both"
+            (click)="activate(2)"
+            [class.active]="active[2]">
+            Les deux
+          </button>
+
+        </div>
+
+        <!-- Contenu Vidéo -->
+        <div class="tab-content " [class.active]="active[0]" id="video-content">
+          <div class="form-group">
+            <label for="video-url" class="form-label">Lien de la vidéo <span>*</span></label>
+            <div class="video-input-container">
+              <i class="fas fa-link"></i>
+              <input type="url" id="video-url" class="form-control video-input" name="url" [(ngModel)]="url"  [required]="active[0]"
+                     placeholder="https://example.com/video">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="video-duration" class="form-label">Durée de la vidéo</label>
+            <div class="duration-input">
+              <input type="number" id="video-duration" class="form-control" min="1" name="duree" [(ngModel)]="duree"   [required]="active[0]" placeholder="15">
+              <span class="duration-unit">minutes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenu PDF -->
+        <div class="tab-content " [class.active]="active[1]" id="pdf-content" >
+          <div class="form-group">
+            <label class="form-label">Fichier <span>*</span></label>
+            <div class="file-upload">
+              <div class="file-upload-btn">
+                <div class="file-upload-text">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>Cliquez pour télécharger</span>
+                  ou glissez-déposez un fichier "PDF DOC TXT CSV ..."
+                  <small>(Max 10MB)</small>
+                </div>
+
+                <input
+                  type="file"
+                  class="file-upload-input"
+                  id="pdf-file"
+                  [required]="active[1]"
+                  (change)="onFileSelected($event)"
+                  accept=".pdf,.txt,.doc,.docx,.csv,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv">
+
+              </div>
+            </div>
+
+            <div class="file-preview" *ngIf="selectedFile">
+              <i [ngClass]="getFileIconClass(selectedFile)" style="font-size: 2.5rem;"></i>
+              <div class="file-info">
+                <div class="file-name">{{ filename  }}</div>
+                <div class="file-size">{{ (filesize / 1024).toFixed(2) }} KB</div>
+              </div>
+              <i class="fas fa-times file-remove" (click)="removeFile()"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="page-count" class="form-label">Nombre de pages</label>
+            <input type="number" id="page-count" class="form-control" min="1" name="nbpages" [(ngModel)]="nbpages" [required]="active[1]" placeholder="Ex: 12">
+          </div>
+        </div>
+
+        <!-- Contenu Mixte (Vidéo + PDF) -->
+        <div class="tab-content" [class.active]="active[2]" id="both-content">
+          <div class="form-group">
+            <label for="both-video-url" class="form-label">Lien de la vidéo <span>*</span></label>
+            <div class="video-input-container">
+              <i class="fas fa-link"></i>
+              <input type="url" id="both-video-url" class="form-control video-input" name="url"
+                     [required]="active[2]" [(ngModel)]="url" placeholder="https://example.com/video">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="both-video-duration" class="form-label">Durée de la vidéo</label>
+            <div class="duration-input">
+              <input type="number" id="both-video-duration" class="form-control" name="duree"
+                     [required]="active[2]" [(ngModel)]="duree" min="1" placeholder="15">
+              <span class="duration-unit">minutes</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Fichier <span>*</span></label>
+            <div class="file-upload">
+              <div class="file-upload-btn">
+                <div class="file-upload-text">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>Cliquez pour télécharger</span>
+                  ou glissez-déposez un fichier "PDF DOC TXT CSV ..."
+                  <small>(Max 10MB)</small>
+                </div>
+
+                <input
+                  type="file"
+                  class="file-upload-input"
+                  id="pdf-file"
+                  [required]="active[2]"
+                  (change)="onFileSelected($event)"
+                  accept=".pdf,.txt,.doc,.docx,.csv,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv">
+
+              </div>
+            </div>
+
+            <div class="file-preview" *ngIf="selectedFile">
+              <i [ngClass]="getFileIconClass(selectedFile)" style="font-size: 2.5rem;"></i>
+              <div class="file-info">
+                <div class="file-name">{{ filename }}</div>
+                <div class="file-size">{{ (filesize / 1024).toFixed(2) }} KB</div>
+              </div>
+              <i class="fas fa-times file-remove" (click)="removeFile()"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="both-page-count" class="form-label">Nombre de pages</label>
+            <input type="number" id="both-page-count" class="form-control" min="1" name="nbpages"
+                   [required]="active[2]" [(ngModel)]="nbpages" placeholder="Ex: 12">
+
+          </div>
+        </div>
+      </div>
+      <div class="form-group full-width">
+        <div class="error-container " *ngIf="error">
+          <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="goBackOrFallback()" class="btn btn-outline">
+          <i class="fas fa-times"></i>
+          Annuler
+        </button>
+        <button *ngIf="!isLoading" type="submit" class="btn btn-primary"  [disabled]="addchapitreForm.invalid">
+          <i class="fas fa-save"></i>
+          Enregistrer le chapitre
+        </button>
+        <button *ngIf="isLoading" class="btn btn-outline d-flex justify-content-center my-1" style="border: none;font-family: 'Bold Italic Art';font-weight: bold" disabled>
+          <span style="margin-right: 10px">Chargement...</span>
+          <div class="spinner-border text-primary" role="status">
+          </div>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

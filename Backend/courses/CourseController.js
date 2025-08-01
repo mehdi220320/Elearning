@@ -15,7 +15,8 @@ class CourseController{
         } catch (e) {
             res.status(500).json({ error: e.message });
         }
-    }    static async add(req,res){
+    }
+    static async add(req,res){
         try {
             const { title, description, formateurId, categoryId, prix, description_detaillee, niveau, duree, langue, certificat } = req.body;
             const coverImageFile = req.file;
@@ -34,6 +35,19 @@ class CourseController{
                 console.error('Server error:', error);
                 res.status(500).json({ error: "Une erreur serveur s'est produite" });
             }
+        }
+    }
+    static async isArchive(req,res){
+        try {
+            const id=req.params.id
+            const updatedCourse=await CourseService.isArchive(id)
+            const { status, _id, title } = updatedCourse;
+            res.status(200).json({
+                message: 'Course status updated successfully',
+                course: { status, _id, title }
+            });
+        }catch (e) {
+            res.status(500).json({ error: e.message });
         }
     }
 }

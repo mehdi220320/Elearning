@@ -7,5 +7,6 @@ const upload = require('../middlewares/uploadMiddleware');
 router.post('/add', [adminAuthorization, checkTokenExists,upload.single('coverImage')], courseController.add);
 router.get('/all', [adminAuthorization, checkTokenExists], courseController.getAll);
 // router.delete('/delete/:id', [adminAuthorization, checkTokenExists], instructorController.deleteInstructor);
+router.put('/isArchive/:id',[adminAuthorization, checkTokenExists], courseController.isArchive);
 
 module.exports = router;

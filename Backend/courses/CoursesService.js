@@ -1,6 +1,8 @@
 const Course = require('./Course')
 const Instructor=require('../instructor/Instructor')
 const Category=require('../categories/Category')
+const mongoose = require("mongoose");
+const User = require("../user/User");
 class CoursesService{
     static async getAll(){
         try {
@@ -44,6 +46,31 @@ class CoursesService{
         }catch (e) {
             console.error('Error in getAll instructors:', e.message);
             throw e;
+        }
+    }
+    static async isArchive(id){
+        try {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return console.error( 'Invalid course ID format' );
+            }
+
+            const course = await Course.findById(id);
+
+            if (!course) {
+                return console.error( 'Course not found' );
+
+            }
+
+            course.status = course.status === undefined ? true : !course.status;
+
+            course.markModified('status');
+
+            return  await course.save();
+
+        } catch (error) {
+            console.error('Error archive course :', error);
+            throw error;
+
         }
     }
 }

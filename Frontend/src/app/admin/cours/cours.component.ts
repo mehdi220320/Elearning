@@ -98,5 +98,14 @@ export class CoursComponent implements OnInit {
   getImage(url: string | null): SafeUrl | string {
     return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : '/assets/img.png';
   }
+  isArchive(id:any){
+    this.courseService.isArchive(id).subscribe({
+      next:(res)=>{
+        console.log(res)
+        this.loadData()
+      },error:(err)=>console.error(err)
+    })
+  }
+
 }
 

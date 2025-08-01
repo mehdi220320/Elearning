@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <div class="sidebar" >
   <div class="sidebar-brand">
-    <h3>Learn<span>Hub</span></h3>
+    <h3>Kids<span>Innov</span> Admin</h3>
   </div>
 
   <div class="sidebar-menu">
@@ -23,23 +23,22 @@
           <span>Cours</span>
         </a>
       </li>
-      <li class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <li class="nav-item has-dropdown" role="button" >
+        <a class="nav-link"
+           (click)="toggleSubmenu = !toggleSubmenu"
+           [style.backgroundColor]="toggleSubmenu ? 'rgba(67, 97, 238, 0.1)' : 'transparent'"
+           [style.color]="toggleSubmenu ? '#4361ee' : '#5a5c69'">
           <i class="fas fa-layer-group"></i>
-          <span>Contenu pédagogique</span>
+          <span style=" width: 163px;">Contenu pédagogique</span>
+          <i class="fas fa-chevron-down ms-1"></i>
         </a>
-        <ul class="submenu">
-          <li class="nav-item">
-            <a href="#" class="nav-link">Chapitres</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">Ressources</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">Médias</a>
-          </li>
+        <ul class="submenu" [class.show]="toggleSubmenu">
+          <li><a class="nav-link" routerLinkActive="active" routerLink="/admin/chapters">Chapitres</a></li>
+          <li><a class="nav-link" routerLinkActive="active" routerLink="/admin/ressources">Ressources</a></li>
+          <li><a class="nav-link"routerLinkActive="active" routerLink="/admin/medias">Médias</a></li>
         </ul>
       </li>
+
       <li class="nav-item">
         <a routerLinkActive="active" routerLink="/admin/users" class="nav-link">
           <i class="fas fa-users"></i>

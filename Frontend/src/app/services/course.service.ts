@@ -16,4 +16,7 @@ export class CourseService {
   add(data:any):Observable<any>{
     return this.http.post(this.apiUrl+"add",data)
   }
+  isArchive(id:any):Observable<any>{
+    return this.http.put(this.apiUrl+"isArchive/"+id,{})
+  }
 }

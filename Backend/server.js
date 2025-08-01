@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const userRoutes = require('./user/user.routes')
 const AuthRoutes = require('./auth/auth.routes')
+const ChapitreRoutes = require('./chapitre/ChapitreRoute')
 const categoryRoutes=require('./categories/CategoryRoutes')
 const instructorRouter=require('./instructor/InstructorRouter')
 const courseRouter=require('./courses/CourseRouter')
@@ -33,6 +34,7 @@ app.use('/auth', AuthRoutes)
 app.use('/category', categoryRoutes)
 app.use('/instructor', instructorRouter)
 app.use('/course', courseRouter)
+app.use('/chapitre', ChapitreRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log("Listening on port " + process.env.PORT);

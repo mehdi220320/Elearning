@@ -36,6 +36,7 @@ export class AdminComponent {
     });
 
   }
+  toggleSubmenu: boolean = false;
 
   toggleDropdown(menuId: string, event: Event) {
     event.preventDefault();

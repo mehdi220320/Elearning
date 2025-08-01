@@ -11,6 +11,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 })
 export class UsersComponent {
   users: User[] = [];
+
   filteredUsers: User[] = [];
   currentPage = 1;
   itemsPerPage = 5;

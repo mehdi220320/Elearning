@@ -46,6 +46,7 @@
 }
 
 .sidebar-menu .nav-link {
+  cursor:pointer;
   display: flex;
   align-items: center;
   padding: 12px 25px;
@@ -80,6 +81,7 @@
 }
 
 .sidebar-menu .submenu.show {
+
   display: block;
 }
 

@@ -1,0 +1,105 @@
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header d-flex justify-content-between align-items-center">
+      <h1 class="page-title">Gestion des Chapitres</h1>
+      <a routerLink="/admin/addChapitre" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Ajouter un chapitre
+      </a>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="row mb-3">
+      <!-- Search by Chapter Title -->
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Rechercher par titre..."
+               [(ngModel)]="searchText" (input)="applyFilters()" />
+      </div>
+
+      <!-- Filter by Course -->
+      <div class="col-md-4">
+        <select class="form-control" [(ngModel)]="selectedCourse" (change)="applyFilters()">
+          <option value="">Tous les cours</option>
+          <option *ngFor="let course of courses" [value]="course._id">
+            {{ course.title }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Reset Filters -->
+      <div class="col-md-2">
+        <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
+          <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table class="chapters-table table table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Titre</th>
+          <th>Cours</th>
+          <th>Type de contenu</th>
+          <th>Durée/Pages</th>
+          <th>Date de création</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let chapter of paginatedChapters; let i = index">
+          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td>
+            <strong>{{ chapter.title }}</strong>
+            <div class="text-muted" style="font-size: 0.85rem;">
+              {{ chapter.description }}
+            </div>
+          </td>
+          <td>{{ chapter.course!.title }}</td>
+          <td>
+              <span *ngIf="chapter.file" class="content-type">
+                <i [ngClass]="getFileIconClass(chapter.file!.path)" ></i>File
+              </span>
+            <span *ngIf="chapter.url !== ''" class="content-type">
+                <i class="fas fa-video text-primary"></i> Vidéo
+              </span>
+          </td>
+          <td>
+            {{ getHoursPagesStr(chapter.nombrePage, chapter.dureeVideo) }}
+          </td>
+          <td>{{ chapter.createdAt | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit-btn" title="Modifier">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete-btn" title="Supprimer">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination d-flex justify-content-center gap-2 mt-3">
+        <button class="btn btn-light" (click)="prevPage()" [disabled]="currentPage === 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <button *ngFor="let page of totalPages"
+                class="btn"
+                [ngClass]="{ 'btn-primary': currentPage === page, 'btn-light': currentPage !== page }"
+                (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <button class="btn btn-light" (click)="nextPage()" [disabled]="currentPage === totalPages.length">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>

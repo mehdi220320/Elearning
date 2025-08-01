@@ -7,6 +7,10 @@ import {CoursComponent} from './cours/cours.component';
 import {AddCourComponent} from './cours/add-cour/add-cour.component';
 import {InstructorsComponent} from './instructors/instructors.component';
 import {AddInstructorComponent} from './instructors/add-instructor/add-instructor.component';
+import {AddChapitreComponent} from './chapitres/add-chapitre/add-chapitre.component';
+import {ChapitresComponent} from './chapitres/chapitres.component';
+import {RessourcesListComponent} from './chapitres/ressources-list/ressources-list.component';
+import {MediaListComponent} from './chapitres/media-list/media-list.component';
 
 const routes: Routes = [
   {
@@ -20,6 +24,10 @@ const routes: Routes = [
       { path: 'addCourse', component: AddCourComponent },
       { path: 'instructors', component: InstructorsComponent },
       { path: 'addinstructor', component: AddInstructorComponent },
+      { path: 'addChapitre', component: AddChapitreComponent },
+      { path: 'chapters', component: ChapitresComponent },
+      { path: 'ressources', component: RessourcesListComponent },
+      { path: 'medias', component: MediaListComponent },
     ]
   }
 ];

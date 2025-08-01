@@ -29,8 +29,8 @@
           <div class="form-group">
             <label for="category" class="form-label">Catégorie <span>*</span></label>
             <div class="select-with-add">
-              <select id="category" class="form-control" name="categoryId" [(ngModel)]="categoryId" required placeholder="Sélectionnez une catégorie">
-                <option >Sélectionnez une catégorie</option>
+              <select id="category" class="form-control" name="categoryId" [(ngModel)]="categoryId" required >
+                <option value="" disabled >Sélectionnez une catégorie</option>
                 <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
               </select>
               <button type="button" class="add-btn" id="add-category-btn" title="Ajouter une nouvelle categorie" data-bs-toggle="modal" data-bs-target="#myModal">
@@ -43,7 +43,7 @@
             <label for="instructor" class="form-label">Formateur <span>*</span></label>
             <div class="select-with-add">
               <select id="instructor" class="form-control" name="formateurId" [(ngModel)]="formateurId" required>
-                <option value="">Sélectionnez un formateur</option>
+                <option value="" disabled>Sélectionnez un formateur</option>
                 <option *ngFor="let instructor of instructors" [value]="instructor._id">{{instructor.firstname+" "+instructor.lastname}}</option>
 
               </select>
@@ -178,7 +178,6 @@
             <span style="margin-right: 10px">Chargement...</span>
             <div class="spinner-border text-primary" role="status">
             </div>
-
           </button>
         </div>
       </form>

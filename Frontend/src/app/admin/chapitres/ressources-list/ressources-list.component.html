@@ -1,0 +1,124 @@
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header d-flex justify-content-between align-items-center">
+      <h1 class="page-title">Gestion des Ressources</h1>
+
+    </div>
+
+    <!-- Filters Section -->
+    <div class="row mb-3">
+      <!-- Search by Name/Title -->
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Rechercher par nom ou titre..."
+               [(ngModel)]="searchText" (input)="applyFilters()" />
+      </div>
+
+      <!-- Filter by Course -->
+      <div class="col-md-4">
+        <select class="form-control" [(ngModel)]="selectedCourse" (change)="applyFilters()">
+          <option value="">Tous les cours</option>
+          <option *ngFor="let course of courses" [value]="course._id">
+            {{ course.title }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Reset Filters -->
+      <div class="col-md-2">
+        <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
+          <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="text-center my-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container" *ngIf="!isLoading">
+      <table class="table table-striped resources-table">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Nom du fichier</th>
+          <th>Type</th>
+          <th>Taille</th>
+          <th>Date d'ajout</th>
+          <th>Télécharger</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let chapter of paginatedChapters; let i = index">
+          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td>
+            <strong>{{ chapter.file!.path.split('/').pop() || 'Sans nom' }}</strong>
+            <div class="text-muted" style="font-size: 0.85rem;">
+              {{ chapter.title }}
+            </div>
+          </td>
+          <td>
+              <span class="file-type {{ getFileType(chapter.file!.contentType) }}">
+                <i [ngClass]="getFileIconClass(chapter.file!.path)" ></i>
+                {{ getFileType(chapter.file!.contentType).toUpperCase() }}
+              </span>
+          </td>
+          <td class="file-size">{{ getFileSize(chapter.file!.size) }}</td>
+          <td>{{ chapter.createdAt | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary"
+                    (click)="downloadFile(chapter)"
+                    [disabled]="!chapter.file">
+              <i class="fas fa-download"></i>
+              Télécharger
+            </button>
+          </td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit-btn" title="Modifier">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete-btn" title="Supprimer">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="filteredChapters.length === 0">
+          <td colspan="7" class="text-center py-4">Aucune ressource trouvée</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination d-flex justify-content-center gap-2 mt-3">
+        <button class="btn btn-light" (click)="prevPage()" [disabled]="currentPage === 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <button *ngFor="let page of totalPages"
+                class="btn"
+                [ngClass]="{ 'btn-primary': currentPage === page, 'btn-light': currentPage !== page }"
+                (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <button class="btn btn-light" (click)="nextPage()" [disabled]="currentPage === totalPages.length">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+
+
+
+
+
+

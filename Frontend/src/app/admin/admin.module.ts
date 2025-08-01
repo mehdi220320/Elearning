@@ -10,6 +10,10 @@ import { CoursComponent } from './cours/cours.component';
 import { AddCourComponent } from './cours/add-cour/add-cour.component';
 import { InstructorsComponent } from './instructors/instructors.component';
 import { AddInstructorComponent } from './instructors/add-instructor/add-instructor.component';
+import { ChapitresComponent } from './chapitres/chapitres.component';
+import { AddChapitreComponent } from './chapitres/add-chapitre/add-chapitre.component';
+import { RessourcesListComponent } from './chapitres/ressources-list/ressources-list.component';
+import { MediaListComponent } from './chapitres/media-list/media-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +23,11 @@ import { AddInstructorComponent } from './instructors/add-instructor/add-instruc
     CoursComponent,
     AddCourComponent,
     InstructorsComponent,
-    AddInstructorComponent
+    AddInstructorComponent,
+    ChapitresComponent,
+    AddChapitreComponent,
+    RessourcesListComponent,
+    MediaListComponent,
   ],
   imports: [
     CommonModule,
