@@ -11,6 +11,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.component';
 import {authInterceptor} from './services/authServices/auth.interceptor';
+import { NavbarComponent } from './navbar/navbar.component';
+import { CoursesComponent } from './courses/courses.component';
+import { InstructorsComponent } from './instructors/instructors.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import {authInterceptor} from './services/authServices/auth.interceptor';
     SignupComponent,
     LandingpageComponent,
     HomeComponent,
-    ForgetpasswordComponent
+    ForgetpasswordComponent,
+    NavbarComponent,
+    CoursesComponent,
+    InstructorsComponent
   ],
   imports: [
     BrowserModule,

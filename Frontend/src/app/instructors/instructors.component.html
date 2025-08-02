@@ -1,0 +1,77 @@
+<!-- Hero Formateurs -->
+<section class="instructors-hero">
+  <div class="container">
+    <h1>Rencontrez nos Formateurs Experts</h1>
+    <p>Apprenez des meilleurs professionnels dans leur domaine.</p>
+
+    <div class="search-bar" style="max-width: 600px; margin: 0 auto;">
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Rechercher un formateur...">
+      <button type="button"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- Filtres -->
+<div class="instructors-filters">
+  <div
+    class="instructor-filter"
+    [class.active]="selectedCategory === 'Tous'"
+    (click)="selectCategory('Tous')"
+  >
+    Tous
+  </div>
+  <div
+    *ngFor="let category of categories"
+    class="instructor-filter"
+    [class.active]="selectedCategory === category.name"
+    (click)="selectCategory(category.name)"
+  >
+    {{ category.name }}
+  </div>
+</div>
+
+<!-- Liste des formateurs -->
+<main class="container">
+  <div class="instructors-grid">
+    <div *ngFor="let instructor of paginatedInstructors()" class="instructor-card">
+      <img [src]="getImagePath(instructor.picture!.path)" class="instructor-avatar" alt="{{ instructor.firstname }} {{ instructor.lastname }}">
+      <h3 class="instructor-name">{{ instructor.firstname }} {{ instructor.lastname }}</h3>
+      <p class="instructor-title">{{ instructor.speciality }}</p>
+
+      <div class="instructor-rating">
+        <i class="fas fa-star" *ngFor="let i of [1,2,3,4,5]"></i>
+        4.8
+      </div>
+
+      <div class="instructor-meta">
+        <div class="instructor-stat"><strong>--</strong> cours</div>
+        <div class="instructor-stat"><strong>--</strong> étudiants</div>
+      </div>
+
+      <div class="instructor-courses">
+        <span *ngFor="let skill of instructor.Competences" class="course-badge">{{ skill }}</span>
+      </div>
+
+      <a href="#" class="view-profile">Voir le profil</a>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <nav class="pagination">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="prevPage()">Précédent</a>
+      </li>
+      <li
+        *ngFor="let page of totalPagesArray"
+        class="page-item"
+        [class.active]="page === currentPage"
+      >
+        <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="nextPage()">Suivant</a>
+      </li>
+    </ul>
+  </nav>
+</main>

@@ -73,9 +73,21 @@
           <textarea id="bio" class="form-control" name="biographie"  [(ngModel)]="biographie" required></textarea>
         </div>
 
-        <div class="form-group full-width">
+        <div class="form-group ">
           <label for="specialty" class="form-label">Spécialité <span>*</span></label>
           <input type="text" id="specialty" class="form-control" name="speciality"  [(ngModel)]="speciality" required>
+        </div>
+        <div class="form-group">
+          <label for="category" class="form-label">Catégorie <span>*</span></label>
+          <div class="select-with-add">
+            <select id="category" class="form-control" name="categoryId" [(ngModel)]="categoryId" required >
+              <option value="" disabled >Sélectionnez une catégorie</option>
+              <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
+            </select>
+            <button type="button" class="add-btn" id="add-category-btn" title="Ajouter une nouvelle categorie" data-bs-toggle="modal" data-bs-target="#myModal">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
         </div>
 
         <div class="form-group full-width">
@@ -145,5 +157,32 @@
       </div>
 
     </form>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Ajouter une nouvelle catégorie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="name" class="form-label">Titre du catégorie <span>*</span></label>
+            <input type="text" id="name" name="CategoryName" [(ngModel)]="categoryName" class="form-control" required placeholder="Ex: Business">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"(click)="addCategory()">Valider</button>
+      </div>
+
+    </div>
   </div>
 </div>

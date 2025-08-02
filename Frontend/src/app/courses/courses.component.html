@@ -1,0 +1,123 @@
+<!-- Hero réduit pour la page Cours -->
+<section class="hero-banner" style="padding: 40px 0; border-radius: 0;">
+  <div class="container">
+    <h1 class="hero-title">Explorer les Cours</h1>
+    <p class="hero-subtitle">Trouvez le cours parfait pour développer vos compétences</p>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input type="text" (input)="searchCourses()" [(ngModel)]="searchTerm" placeholder="Rechercher des cours (Python, Design, Marketing...)">
+      <button type="button" (click)="searchCourses()"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- Contenu principal -->
+<main class="container" style="margin-top: -20px;">
+
+  <!-- Barre de recherche avancée -->
+  <div class="advanced-search">
+    <div class="search-tabs">
+      <div class="search-tab" [class.active]="filterMode === 'all'" (click)="filterMode = 'all'; filterCourses()">Tous les cours</div>
+      <div class="search-tab" [class.active]="filterMode === 'paid'" (click)="filterMode = 'paid'; filterCourses()">Payants</div>
+      <div class="search-tab" [class.active]="filterMode === 'free'" (click)="filterMode = 'free'; filterCourses()">Gratuits</div>
+      <div class="search-tab" [class.active]="filterMode === 'certified'" (click)="filterMode = 'certified'; filterCourses()">Certifiants</div>
+    </div>
+
+    <div class="search-filters">
+      <div class="filter-group">
+        <label>Catégorie</label>
+        <select [(ngModel)]="selectedCategory" (change)="filterCourses()">
+          <option value="">Toutes catégories</option>
+          <option *ngFor="let cat of allCategories" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Niveau</label>
+        <select [(ngModel)]="selectedLevel" (change)="filterCourses()">
+          <option value="">Tous niveaux</option>
+          <option value="debutant">Débutant</option>
+          <option value="intermediaire">Intermédiaire</option>
+          <option value="avance">Avancé</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Langue</label>
+        <select [(ngModel)]="selectedLangue" (change)="filterCourses()">
+          <option value="">Toutes langues</option>
+          <option value="francais">Français</option>
+          <option value="anglais">Anglais</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="filter-btn reset" (click)="resetFilters()">Réinitialiser</button>
+    </div>
+  </div>
+
+  <!-- Résultats -->
+  <div class="results-header">
+    <h2 class="section-title">{{ filteredCourses.length }} cours disponibles</h2>
+    <div class="sort-by">
+      <span>Trier par :</span>
+      <select [(ngModel)]="sortOption" (change)="sortCourses()">
+        <option value="pertinence">Pertinence</option>
+        <option value="newest">Nouveautés</option>
+        <option value="rating">Meilleures notes</option>
+        <option value="priceLow">Prix croissant</option>
+        <option value="priceHigh">Prix décroissant</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Grille de cours -->
+  <div class="courses-grid">
+    <div *ngFor="let course of paginatedCourses()" class="course-card">
+      <div class="course-thumbnail">
+        <img [src]="getImage(course.coverImage!.path)" alt="{{ course.title }}">
+        <span class="course-category">{{ course.categorie!.name }}</span>
+      </div>
+      <div class="course-info">
+        <h3 class="course-title">{{ course.title }}</h3>
+        <p class="course-instructor">
+          Par {{ course.formateur!.firstname }} {{ course.formateur!.lastname }}
+        </p>
+        <div class="course-meta">
+          <div class="course-rating">
+            <i class="fas fa-star"></i>
+<!--            {{ course.rating.toFixed(1) }}-->
+            5
+          </div>
+          <div class="course-price" *ngIf="course.prix > 0">
+            {{ course.prix | currency:'EUR' }}
+          </div>
+          <div class="course-price" *ngIf="course.prix === 0 || !course.prix">
+            Gratuit
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <nav class="pagination">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="prevPage()">Précédent</a>
+      </li>
+      <li
+        *ngFor="let page of totalPagesArray"
+        class="page-item"
+        [class.active]="page === currentPage"
+      >
+        <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="nextPage()">Suivant</a>
+      </li>
+    </ul>
+  </nav>
+</main>

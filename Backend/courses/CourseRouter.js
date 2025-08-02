@@ -5,7 +5,7 @@ const { adminAuthorization, checkTokenExists } = require('../middlewares/authMid
 const upload = require('../middlewares/uploadMiddleware');
 
 router.post('/add', [adminAuthorization, checkTokenExists,upload.single('coverImage')], courseController.add);
-router.get('/all', [adminAuthorization, checkTokenExists], courseController.getAll);
+router.get('/all',  checkTokenExists, courseController.getAll);
 // router.delete('/delete/:id', [adminAuthorization, checkTokenExists], instructorController.deleteInstructor);
 router.put('/isArchive/:id',[adminAuthorization, checkTokenExists], courseController.isArchive);
 

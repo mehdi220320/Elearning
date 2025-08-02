@@ -6,7 +6,8 @@ const ChapitreSchema = new mongoose.Schema({
     file: {
         path: String,
         contentType: String,
-        size:Number
+        size:Number,
+        name:String
     },
     url: String,
     course: {

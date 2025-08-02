@@ -8,7 +8,8 @@ class ChapitreController{
 
             let file = null;
             if (extractfile) {
-                file = { path: extractfile.path, contentType: extractfile.mimetype, size:extractfile.size };
+                console.log(extractfile.name)
+                file = { path: extractfile.path, contentType: extractfile.mimetype, size:extractfile.size,name:extractfile.name };
             }
 
             const chapitre = await ChapitreService.addChapitre(

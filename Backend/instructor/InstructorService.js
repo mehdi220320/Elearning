@@ -16,7 +16,10 @@ class InstructorService{
         }
     }    static async getAll(){
         try {
-            return await Instructor.find();
+            return await Instructor.find().populate({
+                path: "categorie",
+                select: "_id name"
+            });;
         }catch (e) {
             console.error('Error in getAll instructors:', e.message);
             throw e;

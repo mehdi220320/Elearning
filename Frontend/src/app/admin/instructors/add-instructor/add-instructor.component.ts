@@ -3,6 +3,8 @@ import {NgForm} from '@angular/forms';
 import {InstructorService} from '../../../services/instructor.service';
 import {Router} from '@angular/router';
 import { Location } from '@angular/common';
+import {Category} from '../../../models/Category';
+import {CategoryService} from '../../../services/category.service';
 
 @Component({
   selector: 'app-add-instructor',
@@ -22,15 +24,24 @@ export class AddInstructorComponent {
   phone: string= '';
   biographie:string= '';
   speciality:string= '';
+  categoryId:string="";
   skill:string= '';
   Competences:string[]=[]
   error: string | null = null;
   fileName: string = '';
   fileSize: string = '';
+  categories:Category[]=[]
 
-  constructor(private instructorService:InstructorService,private router:Router,private location: Location) {
+  constructor(private instructorService:InstructorService,private categoryService:CategoryService,private router:Router,private location: Location) {
   }
+  ngOnInit(){
+    this.categoryService.getAll().subscribe({
+      next:(response)=>{
+        this.categories=response;
+      },error:(e)=>{console.error(e)}
+    });
 
+  }
   addSkill(){
     if (this.skill && this.skill!=="")
     {
@@ -55,6 +66,27 @@ export class AddInstructorComponent {
   selectedFile: File | null = null;
   isLoading = false;
   errorMessage = '';
+  categoryName: any;
+  addCategory(){
+    if(this.categoryName===""){
+      return alert("Merci de renseigner un titre pour la catégorie");
+    }
+    this.categoryService.addCategory(this.categoryName).subscribe(
+      {
+        next:(response)=>{
+          this.categoryService.getAll().subscribe({
+            next:(response)=>{
+              this.categories=response;
+            },error:(e)=>{console.error(e)}
+          });
+          alert("La catégorie " + this.categoryName + " a été ajoutée avec succès");
+        },error:(error)=>{
+          console.error(error)
+          alert("Une erreur s'est produite avec le produit. Veuillez réessayer ultérieurement.");
+        }
+      }
+    )
+  }
 
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
@@ -147,6 +179,7 @@ export class AddInstructorComponent {
     formData.append('LinkedIn', this.LinkedIn);
     formData.append('speciality', this.speciality);
     formData.append('biographie', this.biographie);
+    formData.append('categoryId', this.categoryId);
 // Append each competence separately with the same key
     this.Competences.forEach((competence, index) => {
       formData.append(`Competences[${index}]`, competence);

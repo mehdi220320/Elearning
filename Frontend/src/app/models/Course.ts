@@ -22,5 +22,6 @@ export interface Course {
   duree: string;
   langue: string;
   certificat: boolean;
+  rating:number;
   createdAt: string;
 }

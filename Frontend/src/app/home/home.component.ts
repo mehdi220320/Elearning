@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import {AuthService} from '../services/authServices/auth.service';
-import {SidebarService} from '../admin/services/sidebar.service';
-import {Router} from '@angular/router';
-declare var google:any;
+import {CourseService} from '../services/course.service';
+import {Course} from '../models/Course';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -11,29 +10,23 @@ declare var google:any;
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  constructor(private authService: AuthService,
-              private sidebarService: SidebarService,
-              private router: Router) {}
-  logout(): void {
-    this.authService.logout();
-
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      try {
-        google.accounts.id.disableAutoSelect();
-        google.accounts.id.revoke(localStorage.getItem('email'), (done: {success: boolean})  => {
-          console.log('Google session revoked');
-        });
-      } catch (e) {
-        console.warn('Google Sign-Out error:', e);
-      }
-    }
-
-    localStorage.clear();
-    console.log("aw wselna taw")
-    this.router.navigate(['/login']).then(() => {
-      window.location.reload();
-    });
-
+  courses:Course[]=[]
+  constructor(private coursService:CourseService,private sanitizer:DomSanitizer) {
   }
-
+  ngOnInit(){
+    this.loadData()
+  }
+  loadData(): void {
+    this.coursService.getAll().subscribe({
+      next: (response: Course[]) => {
+        this.courses = response
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 3);
+      },
+      error: (err) => console.error(err),
+    });
+  }
+  getImage(url: string | null): SafeUrl | string {
+    return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : '/assets/img.png';
+  }
 }

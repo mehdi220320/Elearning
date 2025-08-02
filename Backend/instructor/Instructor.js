@@ -15,7 +15,12 @@ const instructorSchema=new mongoose.Schema({
     LinkedIn:String,
     Twitter:String,
     GitHub:String,
-    Site_web:String
+    Site_web:String,
+    categorie:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true
+    },
 },{ timestamps: true });
 
 

@@ -1,0 +1,105 @@
+<nav class="navbar">
+  <div class="container">
+    <a routerLink="/home" class="logo">LearnHub</a>
+
+    <div class="nav-links">
+      <a routerLink="/home" routerLinkActive="active">
+        <i class="fas fa-home"></i>
+        Accueil
+      </a>
+      <a routerLink="/courses" routerLinkActive="active">
+        <i class="fas fa-book-open"></i>
+        Cours
+      </a>
+      <a routerLink="/instructors" routerLinkActive="active">
+        <i class="fas fa-user"></i>
+        Formateurs
+      </a>
+
+      <a href="hackathons.html">
+        <i class="fas fa-code"></i>
+        Hackathons
+      </a>
+      <a href="resources.html">
+        <i class="fas fa-file-alt"></i>
+        Ressources
+      </a>
+    </div>
+
+    <div class="user-profile dropdown">
+      <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="user-menu">
+          <div class="notification-icon" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </div>
+          <div class="user-avatar">JD</div>
+        </div>
+      </div>
+
+      <!-- User dropdown menu -->
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profil</a></li>
+        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Paramètres</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" style="cursor: pointer" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+      </ul>
+
+      <!-- Notification dropdown menu -->
+      <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+        <li class="dropdown-header">Notifications (3)</li>
+        <li><a class="dropdown-item" href="#">Nouveau message reçu</a></li>
+        <li><a class="dropdown-item" href="#">Mise à jour disponible</a></li>
+        <li><a class="dropdown-item" href="#">Rappel de réunion</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-center" href="#">Voir toutes les notifications</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h3>LearnHub</h3>
+        <p style="color: #adb5bd; margin-bottom: 15px; line-height: 1.6;">
+          La plateforme d'apprentissage en ligne pour développer vos compétences et participer à des projets innovants.
+        </p>
+      </div>
+      <div class="footer-column">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="#">Accueil</a></li>
+          <li><a href="#">Cours</a></li>
+          <li><a href="#">Hackathons</a></li>
+          <li><a href="#">Ressources</a></li>
+          <li><a href="#">Profil</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="#">Centre d'aide</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Conditions d'utilisation</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-envelope"></i> contact&#64;learnhub.com</a></li>
+          <li><a href="#"><i class="fas fa-phone"></i> +33 1 23 45 67 89</a></li>
+          <li><a href="#"><i class="fas fa-map-marker-alt"></i> Paris, France</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 KidsInnov. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>

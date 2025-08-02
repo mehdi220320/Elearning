@@ -65,7 +65,7 @@ export class AddChapitreComponent {
     });
   }
   selectedFile: File | null = null;
-  fileMetadata: { path: string; contentType: string ,size:number } | null = null;
+  fileMetadata: { path: string; contentType: string ,size:number,name:string } | null = null;
   filename="";
   filesize:any="";
   onFileSelected(event: Event): void {
@@ -85,7 +85,8 @@ export class AddChapitreComponent {
       this.fileMetadata = {
         path: file.name,
         contentType: file.type,
-        size:file.size
+        size:file.size,
+        name:this.filename
       };
     }
   }

@@ -3,6 +3,7 @@ export interface Chapitre{
   title: string,
   description: string,
   file: {
+    name:string,
     path: string,
     contentType: string,
     size:number

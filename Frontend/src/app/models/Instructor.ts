@@ -15,6 +15,9 @@ export interface Instructor{
   biographie:string;
   speciality:string;
   Competences:string[];
-
+  categorie: {
+    _id: string;
+    name: string;
+  };
   createdAt:string,
 }

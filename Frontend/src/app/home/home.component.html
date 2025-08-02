@@ -1,218 +1,179 @@
-<p>home works!</p>
-<a (click)="logout()" style="cursor:pointer" class="nav-link">
-  <i class="fas fa-cog"></i>
-  <span>Logout</span>
-</a>
+<section class="hero-banner">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Bienvenue Jean Dupont</h1>
+      <p class="hero-subtitle">Continuez votre apprentissage, découvrez de nouveaux cours et participez à des hackathons passionnants.</p>
 
-<button class="btn btn-primary " (click)="logout()">Logout</button>
+      <div class="search-bar">
+        <input type="text" placeholder="Rechercher des cours, hackathons...">
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!--&lt;!&ndash; Barre de navigation &ndash;&gt;-->
-<!--<nav class="navbar">-->
-<!--  <div class="container">-->
-<!--    <a href="index.html" class="logo">LearnHub</a>-->
-<!--    <div class="search-bar">-->
-<!--      <input type="text" placeholder="Rechercher un cours...">-->
-<!--      <button><i class="fas fa-search"></i></button>-->
-<!--    </div>-->
-<!--    <div class="nav-links">-->
-<!--      <a href="courses.html"><i class="fas fa-book"></i> Cours</a>-->
-<!--      <a href="hackathons.html"><i class="fas fa-code"></i> Hackathons</a>-->
-<!--      <a href="dashboard.html"><i class="fas fa-user"></i> Mon compte</a>-->
-<!--      <a href="cart.html"><i class="fas fa-shopping-cart"></i> Panier</a>-->
-<!--    </div>-->
-<!--    <div class="mobile-menu-btn">-->
-<!--      <i class="fas fa-bars"></i>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</nav>-->
+<!-- Contenu principal -->
+<main class="container">
+  <!-- Section Cours Recommandés -->
+  <section>
+    <h2 class="section-title">
+      Cours recommandés pour vous
+      <a href="courses.html">
+        Voir tout
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </h2>
 
-<!--&lt;!&ndash; Bannière principale &ndash;&gt;-->
-<!--<header class="hero">-->
-<!--  <div class="container">-->
-<!--    <h1>Apprenez à votre rythme</h1>-->
-<!--    <p>Accédez à des centaines de cours et participez à des hackathons passionnants</p>-->
-<!--    <a href="courses.html" class="btn primary-btn">Explorer les cours</a>-->
-<!--    <a href="hackathons.html" class="btn secondary-btn">Découvrir les hackathons</a>-->
-<!--  </div>-->
-<!--</header>-->
+    <div class="courses-grid">
+      <!-- Cours 1 -->
+      <div class="course-card" *ngFor="let course of courses">
+        <div class="course-thumbnail">
+          <img [src]="getImage(course.coverImage!.path)"  alt="Python">
+          <span class="course-category">{{course.categorie.name}}</span>
+        </div>
+        <div class="course-info">
+          <h3 class="course-title">{{course.title}}</h3>
+          <p class="course-instructor">Par {{course.formateur.firstname+" " +course.formateur.lastname}}</p>
+          <div class="course-meta">
+            <div class="course-rating">
+              <i class="fas fa-star"></i>
+              4.8
+            </div>
+            <div *ngIf="course.prix" class="course-price">{{course.prix +" Dt"}}</div>
+            <div *ngIf="!course.prix" class="course-price-free">Gratuit</div>
+          </div>
+        </div>
+      </div>
 
-<!--&lt;!&ndash; Section cours populaires &ndash;&gt;-->
-<!--<section class="popular-courses">-->
-<!--  <div class="container">-->
-<!--    <h2>Cours populaires</h2>-->
-<!--    <div class="course-grid">-->
-<!--      &lt;!&ndash; Cours 1 &ndash;&gt;-->
-<!--      <div class="course-card">-->
-<!--        <img src="https://via.placeholder.com/300x200" alt="Introduction à Python">-->
-<!--        <div class="course-info">-->
-<!--          <h3>Introduction à Python</h3>-->
-<!--          <div class="rating">-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star-half-alt"></i>-->
-<!--            <span>(124)</span>-->
-<!--          </div>-->
-<!--          <p class="price">€29.99</p>-->
-<!--          <a href="course-detail.html" class="btn outline-btn">Voir détails</a>-->
-<!--        </div>-->
-<!--      </div>-->
+    </div>
+  </section>
 
-<!--      &lt;!&ndash; Cours 2 &ndash;&gt;-->
-<!--      <div class="course-card">-->
-<!--        <img src="https://via.placeholder.com/300x200" alt="Développement Web Moderne">-->
-<!--        <div class="course-info">-->
-<!--          <h3>Développement Web Moderne</h3>-->
-<!--          <div class="rating">-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="far fa-star"></i>-->
-<!--            <span>(89)</span>-->
-<!--          </div>-->
-<!--          <p class="price">€49.99</p>-->
-<!--          <a href="course-detail.html" class="btn outline-btn">Voir détails</a>-->
-<!--        </div>-->
-<!--      </div>-->
+  <!-- Section Hackathons à venir -->
+  <section>
+    <h2 class="section-title">
+      Hackathons à venir
+      <a href="hackathons.html">
+        Voir tout
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </h2>
 
-<!--      &lt;!&ndash; Cours 3 &ndash;&gt;-->
-<!--      <div class="course-card">-->
-<!--        <img src="https://via.placeholder.com/300x200" alt="Machine Learning Fondamentaux">-->
-<!--        <div class="course-info">-->
-<!--          <h3>Machine Learning Fondamentaux</h3>-->
-<!--          <div class="rating">-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <i class="fas fa-star"></i>-->
-<!--            <span>(67)</span>-->
-<!--          </div>-->
-<!--          <p class="price">€59.99</p>-->
-<!--          <a href="course-detail.html" class="btn outline-btn">Voir détails</a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <a href="courses.html" class="btn primary-btn">Voir tous les cours</a>-->
-<!--  </div>-->
-<!--</section>-->
+    <div class="hackathons-list">
+      <!-- Hackathon 1 -->
+      <div class="hackathon-card">
+        <div class="hackathon-header">
+          <div class="hackathon-date">
+            <div class="day">15</div>
+            <div class="month">Juin</div>
+          </div>
+          <div>
+            <h3 class="hackathon-title">Hackathon IA & Santé</h3>
+            <p class="hackathon-location">
+              <i class="fas fa-map-marker-alt"></i>
+              En ligne
+            </p>
+          </div>
+        </div>
+        <div class="hackathon-body">
+          <p class="hackathon-description">
+            Participez à notre hackathon de 48 heures pour développer des solutions innovantes en IA appliquée à la santé.
+          </p>
+          <p class="hackathon-prize">
+            <i class="fas fa-trophy"></i> Prix: €5,000
+          </p>
+        </div>
+        <div class="hackathon-footer">
+          <p class="participants-count">
+            <i class="fas fa-users"></i> 124 participants
+          </p>
+          <button class="join-btn">Participer</button>
+        </div>
+      </div>
 
-<!--&lt;!&ndash; Section hackathons à venir &ndash;&gt;-->
-<!--<section class="upcoming-hackathons">-->
-<!--  <div class="container">-->
-<!--    <h2>Hackathons à venir</h2>-->
-<!--    <div class="hackathon-grid">-->
-<!--      &lt;!&ndash; Hackathon 1 &ndash;&gt;-->
-<!--      <div class="hackathon-card">-->
-<!--        <div class="hackathon-date">-->
-<!--          <span class="day">15</span>-->
-<!--          <span class="month">Juin</span>-->
-<!--        </div>-->
-<!--        <div class="hackathon-info">-->
-<!--          <h3>Hackathon IA & Santé</h3>-->
-<!--          <p><i class="fas fa-map-marker-alt"></i> En ligne</p>-->
-<!--          <p><i class="far fa-clock"></i> 48 heures</p>-->
-<!--          <p class="prize">Prix: €5,000</p>-->
-<!--          <a href="hackathon-detail.html" class="btn outline-btn">Détails</a>-->
-<!--          <a href="#" class="btn primary-btn">Participer</a>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!-- Hackathon 2 -->
+      <div class="hackathon-card">
+        <div class="hackathon-header">
+          <div class="hackathon-date">
+            <div class="day">30</div>
+            <div class="month">Juin</div>
+          </div>
+          <div>
+            <h3 class="hackathon-title">Hackathon Développement Durable</h3>
+            <p class="hackathon-location">
+              <i class="fas fa-map-marker-alt"></i>
+              Paris, France
+            </p>
+          </div>
+        </div>
+        <div class="hackathon-body">
+          <p class="hackathon-description">
+            Créez des solutions technologiques pour répondre aux défis du développement durable et de l'écologie.
+          </p>
+          <p class="hackathon-prize">
+            <i class="fas fa-trophy"></i> Prix: €3,000
+          </p>
+        </div>
+        <div class="hackathon-footer">
+          <p class="participants-count">
+            <i class="fas fa-users"></i> 87 participants
+          </p>
+          <button class="join-btn">Participer</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<!--      &lt;!&ndash; Hackathon 2 &ndash;&gt;-->
-<!--      <div class="hackathon-card">-->
-<!--        <div class="hackathon-date">-->
-<!--          <span class="day">30</span>-->
-<!--          <span class="month">Juin</span>-->
-<!--        </div>-->
-<!--        <div class="hackathon-info">-->
-<!--          <h3>Hackathon Développement Durable</h3>-->
-<!--          <p><i class="fas fa-map-marker-alt"></i> En ligne</p>-->
-<!--          <p><i class="far fa-clock"></i> 24 heures</p>-->
-<!--          <p class="prize">Prix: €3,000</p>-->
-<!--          <a href="hackathon-detail.html" class="btn outline-btn">Détails</a>-->
-<!--          <a href="#" class="btn primary-btn">Participer</a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <a href="hackathons.html" class="btn primary-btn">Voir tous les hackathons</a>-->
-<!--  </div>-->
-<!--</section>-->
+  <!-- Section Progression -->
+  <section class="progress-section">
+    <h2 class="section-title">Votre progression</h2>
 
-<!--&lt;!&ndash; Section avantages &ndash;&gt;-->
-<!--<section class="benefits">-->
-<!--  <div class="container">-->
-<!--    <h2>Pourquoi choisir LearnHub?</h2>-->
-<!--    <div class="benefits-grid">-->
-<!--      <div class="benefit-card">-->
-<!--        <i class="fas fa-laptop"></i>-->
-<!--        <h3>Apprentissage flexible</h3>-->
-<!--        <p>Apprenez à votre rythme, quand vous voulez et où vous voulez.</p>-->
-<!--      </div>-->
-<!--      <div class="benefit-card">-->
-<!--        <i class="fas fa-chalkboard-teacher"></i>-->
-<!--        <h3>Contenu de qualité</h3>-->
-<!--        <p>Des cours créés par des experts dans leur domaine.</p>-->
-<!--      </div>-->
-<!--      <div class="benefit-card">-->
-<!--        <i class="fas fa-users"></i>-->
-<!--        <h3>Communauté active</h3>-->
-<!--        <p>Échangez avec d'autres apprenants et participez à des hackathons.</p>-->
-<!--      </div>-->
-<!--      <div class="benefit-card">-->
-<!--        <i class="fas fa-headset"></i>-->
-<!--        <h3>Support réactif</h3>-->
-<!--        <p>Notre équipe est là pour répondre à vos questions et problèmes.</p>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
+    <div class="progress-grid">
+      <!-- Progression 1 -->
+      <div class="progress-card">
+        <h3 class="progress-title">
+          Python pour les débutants
+          <span class="progress-percent">65%</span>
+        </h3>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 65%;"></div>
+        </div>
+        <div class="progress-meta">
+          <span>12/18 leçons</span>
+          <span>8h30</span>
+        </div>
+      </div>
 
-<!--&lt;!&ndash; Pied de page &ndash;&gt;-->
-<!--<footer class="footer">-->
-<!--  <div class="container">-->
-<!--    <div class="footer-grid">-->
-<!--      <div class="footer-col">-->
-<!--        <h3>LearnHub</h3>-->
-<!--        <p>La plateforme e-learning pour apprendre, progresser et participer à des événements passionnants.</p>-->
-<!--      </div>-->
-<!--      <div class="footer-col">-->
-<!--        <h3>Navigation</h3>-->
-<!--        <ul>-->
-<!--          <li><a href="index.html">Accueil</a></li>-->
-<!--          <li><a href="courses.html">Cours</a></li>-->
-<!--          <li><a href="hackathons.html">Hackathons</a></li>-->
-<!--          <li><a href="about.html">À propos</a></li>-->
-<!--          <li><a href="contact.html">Contact</a></li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--      <div class="footer-col">-->
-<!--        <h3>Légal</h3>-->
-<!--        <ul>-->
-<!--          <li><a href="terms.html">Conditions d'utilisation</a></li>-->
-<!--          <li><a href="privacy.html">Politique de confidentialité</a></li>-->
-<!--          <li><a href="cookies.html">Politique de cookies</a></li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--      <div class="footer-col">-->
-<!--        <h3>Contact</h3>-->
-<!--        <ul>-->
-<!--          <li><i class="fas fa-envelope"></i> contact&#64;learnhub.com</li>-->
-<!--          <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>-->
-<!--          <li><i class="fas fa-map-marker-alt"></i> Paris, France</li>-->
-<!--        </ul>-->
-<!--        <div class="social-links">-->
-<!--          <a href="#"><i class="fab fa-facebook"></i></a>-->
-<!--          <a href="#"><i class="fab fa-twitter"></i></a>-->
-<!--          <a href="#"><i class="fab fa-linkedin"></i></a>-->
-<!--          <a href="#"><i class="fab fa-instagram"></i></a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="footer-bottom">-->
-<!--      <p>&copy; 2023 LearnHub. Tous droits réservés.</p>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</footer>-->
+      <!-- Progression 2 -->
+      <div class="progress-card">
+        <h3 class="progress-title">
+          Introduction à Django
+          <span class="progress-percent">42%</span>
+        </h3>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 42%;"></div>
+        </div>
+        <div class="progress-meta">
+          <span>5/12 leçons</span>
+          <span>6h15</span>
+        </div>
+      </div>
 
+      <!-- Progression 3 -->
+      <div class="progress-card">
+        <h3 class="progress-title">
+          Bases de données SQL
+          <span class="progress-percent">30%</span>
+        </h3>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 30%;"></div>
+        </div>
+        <div class="progress-meta">
+          <span>3/10 leçons</span>
+          <span>4h00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->

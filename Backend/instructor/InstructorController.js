@@ -1,6 +1,7 @@
 const InstructorService=require("./InstructorService")
 const CategoryService = require("../categories/CategoryService");
 const path = require('path');
+const Category = require("../categories/Category");
 
 class InstructorController{
     static async getAll(req,res){
@@ -31,14 +32,20 @@ class InstructorController{
     }
     static async addInstructor(req, res) {
         try {
-            const { firstname, lastname, email, biographie, phone, speciality, Competences, LinkedIn, Twitter, GitHub, Site_web } = req.body;
+            const { firstname, lastname,categoryId, email, biographie, phone, speciality, Competences, LinkedIn, Twitter, GitHub, Site_web } = req.body;
             const pictureFile = req.file;
+            const categorie=await Category.findById(categoryId);
 
+            if (!categorie){
+                console.error("Category Doesn't Exists")
+                throw error("Category Doesn't Exists")
+            }
             if (!pictureFile) {
                 return res.status(400).json({ error: "L'image de profil est requise" });
             }
 
             const instructorData = {
+                categorie,
                 firstname,
                 lastname,
                 email,
