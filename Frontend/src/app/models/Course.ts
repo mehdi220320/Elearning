@@ -24,4 +24,5 @@ export interface Course {
   certificat: boolean;
   rating:number;
   createdAt: string;
+  learns:string [];
 }

@@ -49,7 +49,6 @@ export class CoursesComponent {
     );
   }
 
-  // Apply all filters
   applyFilters(): void {
     this.filteredCourses = this.courses.filter(course => {
       const matchesTitle = this.searchTerm

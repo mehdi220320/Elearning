@@ -33,7 +33,7 @@
 <!-- Liste des formateurs -->
 <main class="container">
   <div class="instructors-grid">
-    <div *ngFor="let instructor of paginatedInstructors()" class="instructor-card">
+    <div *ngFor="let instructor of paginatedInstructors()" class="instructor-card" [routerLink]="'/instructors/'+instructor._id">
       <img [src]="getImagePath(instructor.picture!.path)" class="instructor-avatar" alt="{{ instructor.firstname }} {{ instructor.lastname }}">
       <h3 class="instructor-name">{{ instructor.firstname }} {{ instructor.lastname }}</h3>
       <p class="instructor-title">{{ instructor.speciality }}</p>
@@ -52,7 +52,7 @@
         <span *ngFor="let skill of instructor.Competences" class="course-badge">{{ skill }}</span>
       </div>
 
-      <a href="#" class="view-profile">Voir le profil</a>
+      <a [routerLink]="'/instructors/'+instructor._id" class="view-profile">Voir le profil</a>
     </div>
   </div>
 

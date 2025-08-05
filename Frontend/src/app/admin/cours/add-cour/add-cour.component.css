@@ -352,7 +352,7 @@ select.form-control {
   top: 0;
   height: 100%;
   width: 40px;
-  background-color: #4cc9f0;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 0 8px 8px 0;
@@ -364,7 +364,7 @@ select.form-control {
 }
 
 .add-btn:hover {
-  background-color: #3ab5d8;
+  background-color: #3a5ad8;
 }
 
 .chapters-section {
@@ -483,4 +483,62 @@ select.form-control {
   to {
     transform: rotate(360deg);
   }
+}
+.skills-container {
+  display: grid;
+  width: fit-content;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.skill-tag:hover{
+  background-color: #ffe1e1;
+  color: #ee4343;
+}
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e1e8ff;
+  color: #4361ee;
+  padding: 0.5rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.skill-tag i{
+  display: none;
+}
+.skill-tag:hover i {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+}
+
+
+.skill-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.skill-input {
+  padding-right: 100px;
+}
+
+.add-skill-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  padding: 0 1rem;
+  background-color: #4361ee;
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.add-skill-btn:hover {
+  background-color: #3a56d4;
 }

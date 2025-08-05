@@ -18,13 +18,12 @@ class CourseController{
     }
     static async add(req,res){
         try {
-            const { title, description, formateurId, categoryId, prix, description_detaillee, niveau, duree, langue, certificat } = req.body;
+            const {learns, title, description, formateurId, categoryId, prix, description_detaillee, niveau, duree, langue, certificat } = req.body;
             const coverImageFile = req.file;
-
             if (!coverImageFile) {
                 return res.status(400).json({ error: "L'image de profil est requise" });
             }
-            const course = await CourseService.add({ coverImageFile,title, description, formateurId, categoryId, prix, description_detaillee, niveau, duree, langue, certificat });
+            const course = await CourseService.add({ learns,coverImageFile,title, description, formateurId, categoryId, prix, description_detaillee, niveau, duree, langue, certificat });
             res.status(201).json({ message: "Cours ajouté avec succès", course });
         }catch (error) {
             if (error.message.includes("Course Already Exists")) {
@@ -47,6 +46,62 @@ class CourseController{
                 course: { status, _id, title }
             });
         }catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+    static async getCoursesByInstructor(req,res){
+        try {
+            const id=req.params.id;
+            const courses=await CourseService.getCoursesByInstructorId(id);
+            const coursesWithImageUrls = courses.map(course => {
+                const courseObj = course.toObject();
+                if (courseObj.coverImage?.path) {
+                    return {
+                        ...courseObj,
+                        coverImage: {
+                            ...course.coverImage,
+                            path: `http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`
+                        }
+                    };
+                }
+                return chapterObj;
+            });
+
+            res.status(200).send(coursesWithImageUrls);
+        }catch (e){
+            res.status(500).json({ error: e.message });
+        }
+    }
+    static async getCoursesByCategorie(req,res){
+        try {
+            const categoryId=req.params.id
+            const courses=await CourseService.getCourseByCategorie(categoryId);
+            const coursesWithImageUrls = courses.map(course => {
+                const courseObj = course.toObject();
+                if (courseObj.coverImage?.path) {
+                    return {
+                        ...courseObj,
+                        coverImage: {
+                            ...course.coverImage,
+                            path: `http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`
+                        }
+                    };
+                }
+                return chapterObj;
+            });
+
+            res.status(200).send(coursesWithImageUrls);
+        }catch (e){
+            res.status(500).json({ error: e.message });
+        }
+    }
+    static async getById(req,res){
+        try {
+            const id=req.params.id
+            let course=await CourseService.getCourseId(id);
+            course.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`;
+            res.status(200).send(course);
+        }catch (e){
             res.status(500).json({ error: e.message });
         }
     }

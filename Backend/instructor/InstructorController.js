@@ -23,7 +23,8 @@ class InstructorController{
     static async getInstructorByid(req,res){
         try {
             const id=req.params.id;
-            const instructor= await InstructorService.getInstructorById(id)
+            let instructor= await InstructorService.getInstructorById(id)
+            instructor.picture.path=`http://${req.get('host')}/uploads/${path.basename(instructor.picture.path)}`
             res.status(201).send(instructor)
         }catch (e){
             res.status(500).json({ error: error.message });
@@ -32,7 +33,7 @@ class InstructorController{
     }
     static async addInstructor(req, res) {
         try {
-            const { firstname, lastname,categoryId, email, biographie, phone, speciality, Competences, LinkedIn, Twitter, GitHub, Site_web } = req.body;
+            const { experience,firstname, lastname,categoryId, email, biographie, phone, speciality, Competences, LinkedIn, Twitter, GitHub, Site_web } = req.body;
             const pictureFile = req.file;
             const categorie=await Category.findById(categoryId);
 
@@ -57,6 +58,7 @@ class InstructorController{
                 Twitter,
                 GitHub,
                 Site_web,
+                experience,
                 picture: { path: pictureFile.path, contentType: pictureFile.mimetype }
             };
 
@@ -84,6 +86,7 @@ class InstructorController{
 
         }
     }
+
 }
 
 module.exports=InstructorController

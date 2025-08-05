@@ -74,8 +74,8 @@
   </div>
 
   <!-- Grille de cours -->
-  <div class="courses-grid">
-    <div *ngFor="let course of paginatedCourses()" class="course-card">
+  <div class="courses-grid" >
+    <div *ngFor="let course of paginatedCourses()" class="course-card" [routerLink]="'/courses/'+course._id">
       <div class="course-thumbnail">
         <img [src]="getImage(course.coverImage!.path)" alt="{{ course.title }}">
         <span class="course-category">{{ course.categorie!.name }}</span>
@@ -85,6 +85,9 @@
         <p class="course-instructor">
           Par {{ course.formateur!.firstname }} {{ course.formateur!.lastname }}
         </p>
+        <p class="course-description">
+          {{course.description | truncate:94}}
+        </p>
         <div class="course-meta">
           <div class="course-rating">
             <i class="fas fa-star"></i>
@@ -92,7 +95,7 @@
             5
           </div>
           <div class="course-price" *ngIf="course.prix > 0">
-            {{ course.prix | currency:'EUR' }}
+            {{ course.prix}}Dt
           </div>
           <div class="course-price" *ngIf="course.prix === 0 || !course.prix">
             Gratuit

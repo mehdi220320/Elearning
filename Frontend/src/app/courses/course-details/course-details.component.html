@@ -1,0 +1,244 @@
+
+
+<!-- Course Header - Style amélioré -->
+<div class="course-header">
+  <div class="container">
+    <div class="course-header-content">
+      <button class="back-btn" (click)="goBackOrFallback()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="course-title-wrapper">
+        <h1 class="course-title">{{course.title}}</h1>
+        <p class="course-subtitle">{{course.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Course Cover Image -->
+<div class="container">
+  <div class="course-cover-container">
+    <img [src]="getImage(course.coverImage.path)" alt="Python Course" class="course-cover">
+  </div>
+</div>
+
+<!-- Main Course Content -->
+<div class="container">
+  <div class="course-details-section">
+    <!-- Left Column - Course Details -->
+    <div class="course-content">
+      <h2 class="section-title">À propos de ce cours</h2>
+      <p class="course-description">
+        {{course.description_detaillee}}
+      </p>
+
+      <div class="course-meta">
+        <div class="meta-item">
+          <i class="fas fa-users"></i>
+          <span>12,548 étudiants</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-star"></i>
+          <span>4.8 (1,248 avis)</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-clock"></i>
+          <span>18 heures au total</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-signal"></i>
+          <span>{{course.niveau}}</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-closed-captioning"></i>
+          <span>Sous-titres disponibles</span>
+        </div>
+      </div>
+
+      <div class="what-you-learn">
+        <h2 class="section-title">Ce que vous allez apprendre</h2>
+        <div class="learn-list">
+          <div class="learn-item" *ngFor="let learn of course.learns">
+            <i class="fas fa-check"></i>
+            <span>{{learn}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-chapters">
+        <h2 class="section-title">Contenu du cours</h2>
+
+        <div class="chapter">
+          <div class="chapter-header">
+            <div class="chapter-title">
+              <i class="fas fa-play-circle"></i>
+              <span>Introduction à Python</span>
+            </div>
+            <div class="chapter-duration">6 leçons • 1h 30min</div>
+          </div>
+          <div class="chapter-content">
+            <div class="chapter-lesson">
+              <span><i class="far fa-play-circle"></i> Qu'est-ce que Python ?</span>
+              <span>12:45</span>
+            </div>
+            <div class="chapter-lesson">
+              <span><i class="far fa-play-circle"></i> Installer Python</span>
+              <span>15:20</span>
+            </div>
+            <div class="chapter-lesson">
+              <span><i class="far fa-play-circle"></i> Premier programme</span>
+              <span>10:15</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter">
+          <div class="chapter-header">
+            <div class="chapter-title">
+              <i class="fas fa-play-circle"></i>
+              <span>Les bases de Python</span>
+            </div>
+            <div class="chapter-duration">8 leçons • 2h 45min</div>
+          </div>
+        </div>
+
+        <div class="chapter">
+          <div class="chapter-header">
+            <div class="chapter-title">
+              <i class="fas fa-play-circle"></i>
+              <span>Structures de données</span>
+            </div>
+            <div class="chapter-duration">7 leçons • 2h 15min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Sidebar -->
+    <div class="course-sidebar">
+      <div class="course-card">
+        <div class="course-price">
+          {{course.prix}}Dt
+<!--          <span class="price-original">No promos</span>-->
+        </div>
+        <button class="enroll-btn">S'inscrire maintenant</button>
+
+        <div class="includes-list">
+          <h3 style="font-size: 1.1rem; margin-bottom: 15px;">Ce cours comprend :</h3>
+          <div class="includes-item">
+            <i class="fas fa-video"></i>
+            <span>18 heures de vidéo à la demande</span>
+          </div>
+          <div class="includes-item">
+            <i class="fas fa-file-alt"></i>
+            <span>24 ressources téléchargeables</span>
+          </div>
+          <div class="includes-item">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Accès sur mobile et TV</span>
+          </div>
+          <div class="includes-item">
+            <i class="fas fa-certificate"></i>
+            <span>Certificat de fin de formation</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 10px;">Partager ce cours :</h3>
+          <div style="display: flex; gap: 10px;">
+            <a href="#" style="color: #3b5998;"><i class="fab fa-facebook-f fa-lg"></i></a>
+            <a href="#" style="color: #1da1f2;"><i class="fab fa-twitter fa-lg"></i></a>
+            <a href="#" style="color: #0077b5;"><i class="fab fa-linkedin-in fa-lg"></i></a>
+            <a href="#" style="color: #25d366;"><i class="fab fa-whatsapp fa-lg"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructor Section -->
+  <div class="instructor-section">
+    <h2 class="section-title">Votre formateur</h2>
+
+    <div class="instructor-header">
+      <img [src]="getImage(instructor.picture.path)" alt="Jean Martin" class="instructor-avatar">
+      <div class="instructor-info">
+        <h3 class="instructor-name">{{instructor.firstname+" "+instructor.lastname}}</h3>
+        <p class="instructor-title">{{instructor.speciality}}</p>
+        <div class="instructor-rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          4.8 Note moyenne
+        </div>
+        <div class="instructor-stats">
+          <div class="instructor-stat">
+            <strong>24</strong> cours
+          </div>
+          <div class="instructor-stat">
+            <strong>18,742</strong> étudiants
+          </div>
+          <div class="instructor-stat" >
+              <strong>{{instructor.experience}}</strong> années d'expérience
+          </div>
+        </div>
+      </div>
+      <a [routerLink]="'/instructors/'+instructor._id" class="view-instructor">Voir le profil</a>
+    </div>
+
+    <div class="instructor-bio">
+      <p>
+        {{instructor.biographie}}
+      </p>
+    </div>
+  </div>
+
+  <!-- Similar Courses -->
+  <div class="similar-courses">
+    <h2 class="section-title">Cours similaires</h2>
+
+    <div *ngIf="popularCourses.length > 0; else noCourses" class="similar-courses-grid">
+      <div class="similar-course-card" *ngFor="let cs of popularCourses">
+        <a [href]="'/courses/'+cs._id" style="all: unset; cursor: pointer">
+          <div class="similar-course-thumbnail">
+            <img [src]="getImage(cs.coverImage.path)" [alt]="cs.title" class="course-image">
+            <div class="course-badge" *ngIf="cs.prix === 0 || !cs.prix">GRATUIT</div>
+          </div>
+          <div class="similar-course-info">
+            <h3 class="similar-course-title">{{cs.title}}</h3>
+            <p class="similar-course-instructor">{{cs.formateur.firstname+" " +cs.formateur.lastname}}</p>
+            <p class="course-description">
+              {{cs.description | truncate:94}}
+            </p>
+            <div class="similar-course-meta">
+              <div class="similar-course-rating">
+                <i class="fas fa-star"></i>
+                <span>4.9</span>
+                <span class="students-count">(1.2k)</span>
+              </div>
+              <div class="similar-course-price" *ngIf="cs.prix > 0 && cs.prix">
+                {{ cs.prix }}Dt
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <ng-template #noCourses>
+      <div class="no-courses-container">
+        <div class="no-courses-illustration">
+          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        <h3 class="no-courses-title">Aucun cours similaire disponible</h3>
+        <p class="no-courses-message">Nous n'avons pas trouvé de cours similaires pour le moment.</p>
+        <a class="explore-btn" href="/courses" >Explorer tous les cours</a>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

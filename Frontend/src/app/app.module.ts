@@ -14,6 +14,9 @@ import {authInterceptor} from './services/authServices/auth.interceptor';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CoursesComponent } from './courses/courses.component';
 import { InstructorsComponent } from './instructors/instructors.component';
+import { InstructorDetailsComponent } from './instructors/instructor-details/instructor-details.component';
+import { CourseDetailsComponent } from './courses/course-details/course-details.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { InstructorsComponent } from './instructors/instructors.component';
     ForgetpasswordComponent,
     NavbarComponent,
     CoursesComponent,
-    InstructorsComponent
+    InstructorsComponent,
+    InstructorDetailsComponent,
+    CourseDetailsComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule,

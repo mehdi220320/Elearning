@@ -64,6 +64,19 @@
           </div>
 
           <div class="form-group full-width">
+            <label for="skills" class="form-label">Ce que les étudiants vont apprendre dans ce cours.</label>
+            <div class="skill-input-container">
+              <input type="text" id="skills" class="form-control skill-input" placeholder="Compétences ou notions apprises." name="learn"  [(ngModel)]="learn">
+              <button type="button" class="add-skill-btn" (click)="addLearn()">Ajouter</button>
+            </div>
+            <div class="skills-container" id="skills-tags" >
+              <div class="skill-tag" *ngFor="let learn of learns" (click)="removeLearn(learn)">
+                <li>{{learn}}</li> <i class="fas fa-times-circle "></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
             <label class="form-label">Image de couverture <span>*</span></label>
             <div class="file-upload">
               <div class="file-upload-btn"  *ngIf="!imagePreview; else previewBlock" class="file-upload-btn" (click)="fileInput.click()" >
@@ -107,6 +120,7 @@
           <div class="form-group">
             <label for="language" class="form-label">Langue <span>*</span></label>
             <select id="language" class="form-control" name="langue" [(ngModel)]="langue" required>
+              <option value="">Sélectionnez une langue</option>
               <option value="francais">Français</option>
               <option value="anglais">Anglais</option>
             </select>
@@ -115,8 +129,9 @@
           <div class="form-group">
             <label for="certificate" class="form-label">Certificat</label>
             <select id="certificate" class="form-control" name="certificat" [(ngModel)]="certificat">
-              <option value="false">Non inclus</option>
+              <option value="">Sélectionnez le mode du certificat</option>
               <option value="true">Inclus</option>
+              <option value="false">Non inclus</option>
             </select>
           </div>
         </div>

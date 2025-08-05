@@ -2,7 +2,6 @@ const Course = require('./Course')
 const Instructor=require('../instructor/Instructor')
 const Category=require('../categories/Category')
 const mongoose = require("mongoose");
-const User = require("../user/User");
 class CoursesService{
     static async getAll(){
         try {
@@ -41,7 +40,7 @@ class CoursesService{
             const coverImage = { path: courseData.coverImageFile.path, contentType: courseData.coverImageFile.mimetype }
             const  newCourse=new Course({description:courseData.description,title:courseData.title,formateur:formateur,categorie:category,
                 prix:courseData.prix,description_detaillee:courseData.description_detaillee,niveau:courseData.niveau,duree:courseData.duree,
-                langue:courseData.langue,certificat:courseData.certificat,coverImage:coverImage})
+                langue:courseData.langue,certificat:courseData.certificat,coverImage:coverImage,learns:courseData.learns})
             return await  newCourse.save();
         }catch (e) {
             console.error('Error in getAll instructors:', e.message);
@@ -71,6 +70,56 @@ class CoursesService{
             console.error('Error archive course :', error);
             throw error;
 
+        }
+    }
+    static async getCoursesByInstructorId(id){
+        try {
+            const instractor=await Instructor.findById(id);
+            if(!instractor){
+                console.error("Formateur Doesn't Exists")
+                throw error("Formateur Doesn't Exists")
+            }
+
+            return await Course.find({formateur:instractor}).populate({
+                path: "formateur",
+                select: "_id firstname lastname"
+            }).populate({
+                path: "categorie",
+                select: "_id name"
+            });
+        }catch (e) {
+            console.error('Error in getAll courses:', e.message);
+            throw e;
+        }
+    }
+    static async getCourseId(id){
+        try {
+            return await Course.findById(id).populate({
+                path: "categorie",
+                select: "_id name"
+            });;
+        }catch (e) {
+            console.error('Error in getAll courses:', e.message);
+            throw e;
+        }
+    }
+    static async getCourseByCategorie(categorieId){
+        try {
+            const categorie=await Category.findById(categorieId)
+            if (!categorie){
+                console.error("Category Doesn't Exists")
+                throw error("Category Doesn't Exists")
+            }
+            return await Course.find({categorie:categorie}).populate({
+                path: "formateur",
+                select: "_id firstname lastname"
+            }).populate({
+                path: "categorie",
+                select: "_id name"
+            });;
+        }catch (e) {
+            console.error('Error in get Course By Categorie :', e.message);
+            throw e;
         }
     }
 }

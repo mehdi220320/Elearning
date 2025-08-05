@@ -7,6 +7,7 @@ const instructorSchema=new mongoose.Schema({
         path: String,
         contentType: String
     },
+    experience:Number,
     email:{required:true,unique:true,type:String},
     biographie :String,
     phone:Number,

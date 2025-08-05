@@ -24,6 +24,7 @@ const CourseSchema=new mongoose.Schema({
     duree:String,
     langue:String,
     certificat:Boolean,
+    learns:[String],
 },{ timestamps: true });
 
 

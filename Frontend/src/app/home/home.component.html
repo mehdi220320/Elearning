@@ -18,7 +18,7 @@
   <section>
     <h2 class="section-title">
       Cours recommandés pour vous
-      <a href="courses.html">
+      <a href="/courses">
         Voir tout
         <i class="fas fa-arrow-right"></i>
       </a>
@@ -26,7 +26,7 @@
 
     <div class="courses-grid">
       <!-- Cours 1 -->
-      <div class="course-card" *ngFor="let course of courses">
+      <div class="course-card" *ngFor="let course of courses" [routerLink]="'/courses/'+course._id">
         <div class="course-thumbnail">
           <img [src]="getImage(course.coverImage!.path)"  alt="Python">
           <span class="course-category">{{course.categorie.name}}</span>
@@ -52,7 +52,7 @@
   <section>
     <h2 class="section-title">
       Hackathons à venir
-      <a href="hackathons.html">
+      <a href="/courses">
         Voir tout
         <i class="fas fa-arrow-right"></i>
       </a>

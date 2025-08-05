@@ -609,6 +609,7 @@
   color: #4361ee;
   border-radius: 6px;
   transition: all 0.3s ease;
+  cursor:pointer;
 }
 
 .page-link:hover {
@@ -688,6 +689,7 @@
   transition: all 0.3s ease;
   text-align: center;
   padding: 25px;
+  cursor: pointer;
 }
 
 .instructor-card:hover {

@@ -3,6 +3,7 @@ export interface Instructor{
   firstname: string;
   lastname:string;
   email:string;
+  experience:number;
   Site_web:string;
   GitHub:string;
   Twitter:string;

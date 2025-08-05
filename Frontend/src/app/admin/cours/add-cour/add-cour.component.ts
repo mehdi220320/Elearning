@@ -17,6 +17,7 @@ import {CourseService} from '../../../services/course.service';
 export class AddCourComponent implements OnInit{
   categories:Category[]=[]
   instructors:Instructor[]=[]
+  learns:string []=[]
   selectedCategory: string | null = null;
   categoryName: string="";
   title:string="";
@@ -125,7 +126,14 @@ export class AddCourComponent implements OnInit{
   error: string | null = null;
   categoryId: string="";
   formateurId: string="";
-
+  learn:string=""
+  addLearn(){
+    if (this.learn && this.learn!=="")
+    {
+      this.learns.push(this.learn)
+      this.learn=""
+    }
+  }
   onSubmit(form: NgForm) {
     if (form.invalid) {
       this.error = "Veuillez remplir tous les champs obligatoires correctement";
@@ -143,6 +151,9 @@ export class AddCourComponent implements OnInit{
     formData.append('description', this.description);
     formData.append('categoryId', this.categoryId);
     formData.append('formateurId', this.formateurId);
+    this.learns.forEach((learn, index) => {
+      formData.append(`learns[${index}]`, learn);
+    });
     if (this.selectedFile) {
       formData.append('coverImage', this.selectedFile);
     }
@@ -156,5 +167,9 @@ export class AddCourComponent implements OnInit{
         alert("Le cours a été ajouté avec succès !");
       },error:(err)=>{console.error(err)}
     })
+  }
+
+  removeLearn(learn: any) {
+    this.learns=this.learns.filter(l=> l!=learn)
   }
 }

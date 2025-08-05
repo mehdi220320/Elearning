@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {environment} from '../models/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {Course} from '../models/Course';
+import {Category} from '../models/Category';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +20,14 @@ export class CourseService {
   }
   isArchive(id:any):Observable<any>{
     return this.http.put(this.apiUrl+"isArchive/"+id,{})
+  }
+  getByInstructorId(id:any):Observable<Course[]>{
+    return this.http.get<any>(this.apiUrl+"instructor/"+id)
+  }
+  getById(id:any):Observable<Course>{
+    return this.http.get<any>(this.apiUrl+id)
+  }
+  getCoursesByCategorie(categorie:any):Observable<any>{
+    return this.http.get<any>(this.apiUrl+"category/"+ categorie)
   }
 }

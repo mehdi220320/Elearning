@@ -19,6 +19,9 @@ export class InstructorService {
   getAll():Observable<Instructor[]>{
     return this.http.get<Instructor[]>(this.apiUrl+"all")
   }
+  getInstructorById(id:any):Observable<Instructor>{
+    return this.http.get<Instructor>(this.apiUrl+id)
+  }
   deleteById(id:string):Observable<any>{
     return this.http.delete(this.apiUrl+"delete/"+id)
   }

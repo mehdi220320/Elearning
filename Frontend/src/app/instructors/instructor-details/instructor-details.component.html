@@ -1,0 +1,146 @@
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Détails du formateur</h1>
+      <div class="actions">
+        <a (click)="goBackOrFallback()"  class="btn btn-outline">
+          <i class="fas fa-arrow-left"></i>
+          Retour
+        </a>
+<!--        <a href="formateur-edit.html" class="btn btn-primary">-->
+<!--          <i class="fas fa-edit"></i>-->
+<!--          Modifier-->
+<!--        </a>-->
+      </div>
+    </div>
+
+    <div class="instructor-profile">
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <img [src]="getImage(instructor.picture.path)"
+               [alt]="(instructor.firstname || '') + ' ' + (instructor.lastname || '')"
+               class="profile-avatar">
+          <h2 class="profile-name">{{instructor.firstname+" "+instructor.lastname}}</h2>
+          <p class="profile-title">{{instructor.speciality}}</p>
+
+          <div class="profile-rating">
+            <div class="rating-stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <span class="rating-value">4.7</span>
+          </div>
+        </div>
+
+        <div class="profile-meta">
+          <div class="meta-item">
+            <i class="fas fa-envelope"></i>
+            <span>{{instructor.email}}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-phone"></i>
+            <span>+216 {{instructor.phone}}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Paris, France</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-user-graduate"></i>
+            <span>12 cours enseignés</span>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a *ngIf="instructor.LinkedIn!==''|| instructor.LinkedIn" [href]="instructor.LinkedIn" class="social-link">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a *ngIf="instructor.Twitter!==''|| instructor.Twitter" [href]="instructor.Twitter" class="social-link">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a *ngIf="instructor.GitHub!==''|| instructor.GitHub" [href]="instructor.GitHub" class="social-link">
+            <i class="fab fa-github"></i>
+          </a>
+          <a *ngIf="instructor.Site_web!==''|| instructor.Site_web" [href]="instructor.Site_web" class="social-link">
+            <i class="fas fa-globe"></i>
+          </a>
+        </div>
+
+        <div class="profile-actions">
+          <a href="#" class="btn btn-primary">
+            <i class="fas fa-envelope"></i>
+            Envoyer un mail
+          </a>
+<!--          <a href="#" class="btn btn-danger">-->
+<!--            <i class="fas fa-trash-alt"></i>-->
+<!--            Supprimer le formateur-->
+<!--          </a>-->
+        </div>
+      </div>
+
+      <!-- Profile Content -->
+      <div class="profile-content">
+        <section class="bio-section">
+          <h2 class="section-title">Biographie</h2>
+          <div class="bio-text">
+          {{instructor.biographie}}
+          </div>
+        </section>
+
+        <section class="skills-section">
+          <h2 class="section-title">Compétences</h2>
+          <div class="skills-container">
+            <span *ngFor="let skill of instructor.Competences" class="skill-tag">{{skill}}</span>
+          </div>
+        </section>
+
+        <section class="courses-section">
+          <h2 class="section-title">Cours enseignés</h2>
+          <div class="courses-grid" *ngIf="courses.length > 0; else noCourses">
+            <div *ngFor="let course of courses" class="course-card">
+              <div class="course-thumbnail">
+                <img [src]="getImage(course.coverImage!.path)" alt="{{ course.title }}">
+                <span class="course-category">{{ course.categorie!.name }}</span>
+              </div>
+              <div class="course-info">
+                <h3 class="course-title">{{ course.title }}</h3>
+                <p class="course-instructor">
+                  Par {{ course.formateur!.firstname }} {{ course.formateur!.lastname }}
+                </p>
+                <p class="course-description">
+                  {{course.description | truncate:94}}
+                </p>
+                <div class="course-meta">
+                  <div class="course-rating">
+                    <i class="fas fa-star"></i>
+                    <!--            {{ course.rating.toFixed(1) }}-->
+                    5
+                  </div>
+                  <div class="course-price" *ngIf="course.prix > 0">
+                    {{ course.prix | currency:'EUR' }}
+                  </div>
+                  <div class="course-price" *ngIf="course.prix === 0 || !course.prix">
+                    Gratuit
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noCourses>
+            <div class="no-courses-modern">
+              <img src="/assets/img_2.png" alt="Aucun cours" class="no-courses-img">
+              <h2>Pas encore de cours disponibles</h2>
+              <p>Les cours de cet instructeur seront bientôt disponibles. Restez à l'écoute !</p>
+<!--              <button class="btn-refresh" (click)="loadData()">🔄 Actualiser</button>-->
+            </div>
+          </ng-template>
+
+        </section>
+      </div>
+    </div>
+  </div>
+</main>

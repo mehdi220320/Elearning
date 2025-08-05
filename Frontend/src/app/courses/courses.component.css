@@ -90,6 +90,7 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   cursor:pointer;
+
 }
 
 .course-card:hover {
@@ -608,6 +609,7 @@
   color: #4361ee;
   border-radius: 6px;
   transition: all 0.3s ease;
+  cursor:pointer;
 }
 
 .page-link:hover {

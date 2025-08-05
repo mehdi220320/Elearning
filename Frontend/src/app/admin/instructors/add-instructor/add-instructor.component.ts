@@ -67,6 +67,7 @@ export class AddInstructorComponent {
   isLoading = false;
   errorMessage = '';
   categoryName: any;
+  experience: any=0;
   addCategory(){
     if(this.categoryName===""){
       return alert("Merci de renseigner un titre pour la catégorie");
@@ -180,7 +181,7 @@ export class AddInstructorComponent {
     formData.append('speciality', this.speciality);
     formData.append('biographie', this.biographie);
     formData.append('categoryId', this.categoryId);
-// Append each competence separately with the same key
+    formData.append('experience', this.experience);
     this.Competences.forEach((competence, index) => {
       formData.append(`Competences[${index}]`, competence);
     });
