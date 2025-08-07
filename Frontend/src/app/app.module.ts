@@ -17,6 +17,8 @@ import { InstructorsComponent } from './instructors/instructors.component';
 import { InstructorDetailsComponent } from './instructors/instructor-details/instructor-details.component';
 import { CourseDetailsComponent } from './courses/course-details/course-details.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { ChaptersComponent } from './chapters/chapters.component';
+import { RatingModalComponent } from './rating-modal/rating-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     InstructorsComponent,
     InstructorDetailsComponent,
     CourseDetailsComponent,
-    TruncatePipe
+    TruncatePipe,
+    ChaptersComponent,
+    RatingModalComponent
   ],
   imports: [
     BrowserModule,

@@ -24,4 +24,7 @@ export class ChapitreService {
   getChaptersWithMedia():Observable<Chapitre[]>{
     return this.http.get<Chapitre[]>(this.apiUrl+"medias");
   }
+  getChaptersByCourse(id:any):Observable<Chapitre[]>{
+    return this.http.get<Chapitre[]>(this.apiUrl+"course/"+id);
+  }
 }

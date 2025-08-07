@@ -1,0 +1,180 @@
+<div class="course-header">
+  <div class="container">
+    <div class="course-header-content">
+      <div class="course-breadcrumb">
+        <a (click)="goBackOrFallback()" class="breadcrumb-link">{{course.categorie.name}}</a>
+        <span class="divider">/</span>
+        <span class="current-chapter" *ngIf="chapters.length > 0">{{chapters[currentChapterIndex].title}}</span>
+      </div>
+    </div>
+    <h1 class="course-title">{{course.title}}</h1>
+  </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="container">
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-title">Votre progression</div>
+      <div class="progress-percent">{{ (currentChapterIndex + 1) / chapters.length * 100 | number:'1.0-0' }}% complété</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width]="(currentChapterIndex + 1) / chapters.length * 100 + '%'"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Chapter Content -->
+<div class="container">
+  <div class="chapter-grid">
+    <!-- Main Content -->
+    <main class="chapter-content">
+      <div class="content-card">
+        <h1 class="chapter-title" *ngIf="chapters.length > 0">{{chapters[currentChapterIndex].title}}</h1>
+
+        <!-- Video Player -->
+        <div class="media-container" *ngIf="chapters[currentChapterIndex]?.url">
+          <div class="video-wrapper">
+            <iframe class="video-player" [src]="playVideo(chapters[currentChapterIndex].url)" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <!-- PDF Viewer -->
+        <div class="media-container" *ngIf="chapters[currentChapterIndex]?.file?.path && chapters[currentChapterIndex].file.contentType === 'application/pdf'">
+          <div class="pdf-wrapper">
+            <iframe class="pdf-viewer" [src]="getImage(chapters[currentChapterIndex].file.path)"></iframe>
+          </div>
+        </div>
+
+        <!-- Chapter Description -->
+        <div class="chapter-description" *ngIf="chapters.length > 0">
+          <h3 class="description-title">À propos de ce chapitre</h3>
+          <p>{{chapters[currentChapterIndex].description}}</p>
+        </div>
+
+        <!-- Test Section -->
+        <div class="quiz-card">
+          <div class="quiz-header">
+            <div>
+              <h3 class="quiz-title">Testez vos connaissances</h3>
+              <p class="quiz-subtitle">Quiz de 10 questions sur ce chapitre</p>
+            </div>
+            <button class="quiz-button">
+              <i class="fas fa-play"></i> Commencer
+            </button>
+          </div>
+        </div>
+
+        <!-- Chapter Navigation -->
+        <div class="chapter-navigation">
+          <button class="nav-button prev" (click)="previousChapter()" [disabled]="currentChapterIndex === 0">
+            <i class="fas fa-chevron-left"></i>
+            <span>Précédent</span>
+          </button>
+          <div class="chapter-counter">
+            Chapitre {{currentChapterIndex + 1}}/{{chapters.length}}
+          </div>
+          <button class="nav-button next" (click)="nextChapter()" [disabled]="currentChapterIndex === chapters.length - 1">
+            <span>Suivant</span>
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="comments-card">
+        <div class="comments-header">
+          <h3 class="comments-title">
+            <i class="far fa-comments"></i> Discussions
+          </h3>
+          <button class="show-all">Voir tout</button>
+        </div>
+
+        <div class="comment-form">
+          <div class="user-avatar">Y</div>
+          <div class="form-group">
+            <textarea placeholder="Ajouter un commentaire..." class="comment-input"></textarea>
+            <button class="submit-button">Publier</button>
+          </div>
+        </div>
+
+        <div class="comments-list">
+          <div class="comment">
+            <div class="comment-avatar">JD</div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">Jean Dupont</span>
+                <span class="comment-time">Il y a 2 jours</span>
+              </div>
+              <div class="comment-text">
+                Excellent chapitre ! Les explications sont très claires.
+              </div>
+              <div class="comment-actions">
+                <button class="action-button"><i class="far fa-thumbs-up"></i> 12</button>
+                <button class="action-button"><i class="far fa-comment"></i> Répondre</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="chapter-sidebar">
+      <!-- Chapters List -->
+      <div class="sidebar-card chapters-card">
+        <div class="card-header">
+          <h3 class="card-title">Contenu du cours</h3>
+          <span class="chapter-count">{{chapters.length}} chapitres</span>
+        </div>
+        <div class="chapters-list">
+          <div class="chapter-list-item"
+               *ngFor="let chapter of chapters; let i = index"
+               [class.active]="i === currentChapterIndex"
+               (click)="goToChapter(i)">
+            <div class="chapter-icon">
+              <i class="far" [class.fa-play-circle]="i !== currentChapterIndex" [class.fas.fa-play-circle]="i === currentChapterIndex"></i>
+            </div>
+            <div class="chapter-info">
+              <h4 class="chapter-name">{{chapter.title}}</h4>
+              <div class="chapter-meta">
+                <span class="meta-item"><i class="far fa-file-alt"></i> {{chapter.nombrePage}} pages</span>
+                <span class="meta-item"><i class="far fa-clock"></i> {{chapter.dureeVideo}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources -->
+      <div class="sidebar-card resources-card">
+        <h3 class="card-title">Ressources</h3>
+        <div class="resources-list">
+          <a *ngIf="chapters[currentChapterIndex]?.file?.path"
+             [href]="chapters[currentChapterIndex].file.path"
+             target="_blank"
+             class="resource-item">
+            <div class="resource-icon pdf">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+            <span class="resource-name">Notes ({{chapters[currentChapterIndex].file.name}})</span>
+          </a>
+          <a href="#" class="resource-item">
+            <div class="resource-icon code">
+              <i class="fas fa-file-code"></i>
+            </div>
+            <span class="resource-name">Code source</span>
+          </a>
+          <a href="#" class="resource-item">
+            <div class="resource-icon link">
+              <i class="fas fa-link"></i>
+            </div>
+            <span class="resource-name">Liens utiles</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

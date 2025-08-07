@@ -140,6 +140,81 @@
           </ng-template>
 
         </section>
+        <section class="reviews-section">
+          <div class="section-header">
+            <h2 class="section-title">Avis & Évaluations</h2>
+            <button class="btn btn-primary" (click)="openRatingModal()">
+              <i class="fas fa-star"></i>
+              Noter ce formateur
+            </button>
+          </div>
+
+          <div class="rating-summary">
+            <div class="overall-rating">
+              <div class="rating-value">4.7</div>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <div class="rating-count">42 évaluations</div>
+            </div>
+
+            <div class="rating-details">
+              <div class="rating-bar" *ngFor="let i of [5,4,3,2,1]; let idx = index">
+                <div class="star-count">
+                  <span>{{i}}</span>
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" [style.width]="getRatingPercentage(i) + '%'"></div>
+                </div>
+                <div class="percentage">{{getRatingPercentage(i)}}%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reviews-list">
+            <div class="review-card" *ngFor="let review of sampleReviews">
+              <div class="reviewer-info">
+                <img [src]="review.avatar" alt="Reviewer" class="reviewer-avatar">
+                <div class="reviewer-meta">
+                  <h4 class="reviewer-name">{{review.name}}</h4>
+                  <div class="review-rating">
+                    <div class="stars">
+                      <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]"
+                         [class.filled]="star <= review.rating"></i>
+                    </div>
+                    <span class="review-date">{{review.date}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="review-content">
+                <p>{{review.comment}}</p>
+              </div>
+              <div class="review-actions">
+                <button class="like-btn">
+                  <i class="far fa-thumbs-up"></i>
+                  <span>Utile ({{review.likes}})</span>
+                </button>
+                <button class="report-btn">
+                  <i class="far fa-flag"></i>
+                  <span>Signaler</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="no-reviews" *ngIf="sampleReviews.length === 0">
+              <div class="no-reviews-illustration">
+                <i class="far fa-comment-dots"></i>
+              </div>
+              <h3>Aucun avis pour le moment</h3>
+              <p>Soyez le premier à évaluer ce formateur</p>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </div>

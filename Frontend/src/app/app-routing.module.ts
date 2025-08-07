@@ -12,6 +12,7 @@ import {CoursesComponent} from './courses/courses.component';
 import {InstructorsComponent} from './instructors/instructors.component';
 import {InstructorDetailsComponent} from './instructors/instructor-details/instructor-details.component';
 import {CourseDetailsComponent} from './courses/course-details/course-details.component';
+import {ChaptersComponent} from './chapters/chapters.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,7 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'courses/:id', component: CourseDetailsComponent },
+      { path: 'courses/:id/chapters', component: ChaptersComponent },
       { path: 'instructors', component: InstructorsComponent },
       { path: 'instructors/:id', component: InstructorDetailsComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }

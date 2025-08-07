@@ -82,6 +82,30 @@ class ChapitreController{
             res.status(500).json({ error: e.message });
         }
     }
+    static async getByCourseId(req,res){
+        try {
+            const id=req.params.id
+            const chapters = await ChapitreService.getbycourse(id);
+            const chaptersWithImageUrls = chapters.map(chapter => {
+                const chapterObj = chapter.toObject();
+
+                if (chapterObj.file?.path) {
+                    return {
+                        ...chapterObj,
+                        file: {
+                            ...chapterObj.file,
+                            path: `http://${req.get('host')}/uploads/${path.basename(chapterObj.file.path)}`
+                        }
+                    };
+                }
+                return chapterObj;
+            });
+
+            res.status(200).send(chaptersWithImageUrls);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 
 }
 module.exports=ChapitreController

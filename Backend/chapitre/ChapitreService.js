@@ -62,7 +62,14 @@ class ChapitreService{
             throw new Error('Error fetching Media of chapters:');
         }
     }
-
+    static async getbycourse(id){
+        try {
+            return await Chapitre.find({course:id})
+        }catch (e) {
+            console.error('Error in getAll chapters:', e.message);
+            throw e;
+        }
+    }
 }
 
 module.exports=ChapitreService

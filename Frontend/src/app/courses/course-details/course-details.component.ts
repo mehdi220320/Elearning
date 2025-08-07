@@ -14,6 +14,31 @@ import {Instructor} from '../../models/Instructor';
   styleUrl: './course-details.component.css'
 })
 export class CourseDetailsComponent {
+  instructor:Instructor ={
+    _id:"",
+    firstname: "",
+    experience:0,
+    lastname:"",
+    email:"",
+    Site_web:"",
+    GitHub:"",
+    Twitter:"",
+    LinkedIn:"",
+    picture:{
+      path: "/assets/img.png",
+      contentType: "",
+    },
+    phone: "",
+    biographie:"",
+    speciality:"",
+    Competences:[""],
+    categorie: {
+      _id: "",
+      name: "",
+    },
+    createdAt:"",
+  };
+
   courseId:any=""
   course:Course= {
         _id: "",
@@ -43,30 +68,6 @@ export class CourseDetailsComponent {
         createdAt: "",
         learns:[]
   }
-  instructor:Instructor ={
-    _id:"",
-    firstname: "",
-    experience:0,
-    lastname:"",
-    email:"",
-    Site_web:"",
-    GitHub:"",
-    Twitter:"",
-    LinkedIn:"",
-    picture:{
-      path: "/assets/img.png",
-      contentType: "",
-    },
-    phone: "",
-    biographie:"",
-    speciality:"",
-    Competences:[""],
-    categorie: {
-      _id: "",
-      name: "",
-    },
-    createdAt:"",
-  };
 
   popularCourses:Course[]=[]
   constructor(private router:Router,
@@ -119,5 +120,9 @@ export class CourseDetailsComponent {
     } else {
       this.router.navigate(['/admin/instructors']);
     }
+  }
+
+  setRating(number: number) {
+
   }
 }
