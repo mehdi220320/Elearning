@@ -33,7 +33,7 @@ class InstructorController{
     }
     static async addInstructor(req, res) {
         try {
-            const { experience,firstname, lastname,categoryId, email, biographie, phone, speciality, Competences, LinkedIn, Twitter, GitHub, Site_web } = req.body;
+            const { adresse, experience,firstname, lastname,categoryId, email, biographie, phone, speciality, Competences, LinkedIn, Twitter, GitHub, Site_web } = req.body;
             const pictureFile = req.file;
             const categorie=await Category.findById(categoryId);
 
@@ -48,6 +48,7 @@ class InstructorController{
             const instructorData = {
                 categorie,
                 firstname,
+                adresse,
                 lastname,
                 email,
                 biographie,

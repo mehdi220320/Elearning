@@ -10,10 +10,21 @@ class RatingController{
             res.status(500).json({ error: e.message });
         }
     }
-    static async add(req,res){
+    static async addFormateur(req,res){
         try{
-            const {formateurid,courseid,userid,comment,rate}=req.body
-            const newRate=await RatingService.addRate(formateurid,courseid,userid,rate,comment);
+            const {formateurid,userid,comment,rate}=req.body
+            const newRate=await RatingService.addRateFormateur(formateurid,userid,rate,comment);
+            res.status(200).send(newRate);
+
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+    static async addCourse(req,res){
+        try{
+            const {courseid,userid,comment,rate}=req.body
+            console.log(courseid)
+            const newRate=await RatingService.addRateCourse(courseid,userid,rate,comment);
             res.status(200).send(newRate);
 
         } catch (e) {

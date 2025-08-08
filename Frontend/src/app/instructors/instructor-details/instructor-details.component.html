@@ -45,13 +45,13 @@
             <i class="fas fa-phone"></i>
             <span>+216 {{instructor.phone}}</span>
           </div>
-          <div class="meta-item">
+          <div class="meta-item" *ngIf="instructor.adresse">
             <i class="fas fa-map-marker-alt"></i>
-            <span>Paris, France</span>
+            <span>{{instructor.adresse}}</span>
           </div>
           <div class="meta-item">
             <i class="fas fa-user-graduate"></i>
-            <span>12 cours enseignés</span>
+            <span>{{courses.length}} cours enseignés</span>
           </div>
         </div>
 

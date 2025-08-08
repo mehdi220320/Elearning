@@ -585,3 +585,24 @@
     order: -1;
   }
 }
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #4361ee;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  transform: translateX(-3px);
+}

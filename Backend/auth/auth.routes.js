@@ -93,7 +93,8 @@ const generateAuthToken = async (user) => {
         {
             userId: user._id,
             email: user.email,
-            role: user.role
+            role: user.role,
+            picture:user.picture
         },
         process.env.SECRET_KEY,
         { expiresIn: jwtExpiresIn }

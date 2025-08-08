@@ -16,6 +16,7 @@ const instructorSchema=new mongoose.Schema({
     LinkedIn:String,
     Twitter:String,
     GitHub:String,
+    adresse:String,
     Site_web:String,
     categorie:{
         type: mongoose.Schema.Types.ObjectId,

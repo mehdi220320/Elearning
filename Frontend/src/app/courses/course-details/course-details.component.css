@@ -325,6 +325,7 @@
 }
 
 .enroll-btn {
+
   width: 100%;
   padding: 12px;
   background-color: #4361ee;
@@ -613,15 +614,22 @@
 }
 /* Reviews Section */
 .reviews-section {
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
   margin-top: 50px;
-  padding-top: 30px;
+  margin-bottom: 50px;
+  /*padding-top: 30px;*/
   border-top: 1px solid #e9ecef;
+  padding: 30px;
+
 }
 
 .reviews-header {
-  display: grid;
+  display: flex;
   gap: 40px;
   margin-bottom: 40px;
+
 }
 
 .reviews-summary {

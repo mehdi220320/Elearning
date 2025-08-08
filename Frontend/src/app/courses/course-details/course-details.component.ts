@@ -6,6 +6,8 @@ import {CourseService} from '../../services/course.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Course} from '../../models/Course';
 import {Instructor} from '../../models/Instructor';
+import {AuthService} from '../../services/authServices/auth.service';
+import {RatingService} from '../../services/rating.service';
 
 @Component({
   selector: 'app-course-details',
@@ -17,6 +19,7 @@ export class CourseDetailsComponent {
   instructor:Instructor ={
     _id:"",
     firstname: "",
+    adresse:"",
     experience:0,
     lastname:"",
     email:"",
@@ -75,6 +78,8 @@ export class CourseDetailsComponent {
               private courseService:CourseService,
               private route:ActivatedRoute,
               private instructorService:InstructorService,
+              private authService:AuthService,
+              private rateService:RatingService,
               private sanitizer:DomSanitizer) {}
   loadData(){
     this.courseId = this.route.snapshot.paramMap.get('id') ;
@@ -110,6 +115,8 @@ export class CourseDetailsComponent {
   }
   ngOnInit(){
     this.loadData()
+    console.log(this.authService.getUserId())
+
   }
   getImage(url: string | null): SafeUrl | string {
     return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : '/assets/coverImage.png';
@@ -121,8 +128,31 @@ export class CourseDetailsComponent {
       this.router.navigate(['/admin/instructors']);
     }
   }
-
+  rate:number=0;
+  comment:string="";
   setRating(number: number) {
-
+    if (this.rate!==number){
+      this.rate=number
+    }else{
+      this.rate=0
+    }
   }
-}
+  submitRate() {
+    const ratingData = {
+      courseid: this.course._id,
+      userid: this.authService.getUserId() || '',
+      rate: this.rate,
+      comment: this.comment
+    };
+
+    console.log("Submitting rating:", ratingData);
+
+    this.rateService.addCourse(ratingData).subscribe({
+      next: (response) => {
+        this.comment = "";
+        this.rate = 0;
+        console.log("L'avis a été ajouté avec succès !");
+      },
+      error: (err) => console.error(err)
+    });
+  }}

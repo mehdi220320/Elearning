@@ -7,27 +7,45 @@ class RatingService{
      static async getAll(){
         try {
             return await Rating.find().populate({
-                path: "user",
+                path: "User",
                 select: "_id firstname lastname picture"
             })
         }catch (e){
             throw e;
         }
     }
-     static async addRate(formateurid,courseid,userId,rate,comment){
+    static async addRateFormateur(formateurid,userId,rate,comment){
         try {
             const formateur=await Instructor.findById(formateurid);
-            const course=await Course.findById(courseid)
             const user=await User.findById(userId)
-            if(!formateur || !course){
-                console.error("Formateur or Course Doesn't Exists")
-                throw error("Formateur or Course Doesn't Exists")
+            if(!formateur ){
+                console.error("Formateur  Doesn't Exists")
+                throw error("Formateur Doesn't Exists")
             }
             if(!user){
                 console.error("User Doesn't Exists")
                 throw error("User Doesn't Exists")
             }
-            const newrate=new Rating({formateur,course,rate,comment,user})
+            const newrate=new Rating({formateur,rate,comment,User:user})
+            return newrate.save()
+
+        }catch (e){
+            throw e;
+        }
+    }
+    static async addRateCourse(courseid,userId,rate,comment){
+        try {
+            const course=await Course.findById(courseid)
+            const user=await User.findById(userId)
+            if(!course){
+                console.error(" Course Doesn't Exists")
+                throw error("Course Doesn't Exists")
+            }
+            if(!user){
+                console.error("User Doesn't Exists")
+                throw error("User Doesn't Exists")
+            }
+            const newrate=new Rating({course,rate,comment,User:user})
             return newrate.save()
 
         }catch (e){

@@ -2,7 +2,10 @@
   <div class="container">
     <div class="course-header-content">
       <div class="course-breadcrumb">
-        <a (click)="goBackOrFallback()" class="breadcrumb-link">{{course.categorie.name}}</a>
+        <button class="back-btn" (click)="goBackOrFallback()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <a  (click)="goBackOrFallback()" style="cursor: pointer" class="breadcrumb-link">{{course.categorie.name}}</a>
         <span class="divider">/</span>
         <span class="current-chapter" *ngIf="chapters.length > 0">{{chapters[currentChapterIndex].title}}</span>
       </div>

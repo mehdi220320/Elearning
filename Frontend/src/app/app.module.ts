@@ -18,7 +18,6 @@ import { InstructorDetailsComponent } from './instructors/instructor-details/ins
 import { CourseDetailsComponent } from './courses/course-details/course-details.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { ChaptersComponent } from './chapters/chapters.component';
-import { RatingModalComponent } from './rating-modal/rating-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +33,7 @@ import { RatingModalComponent } from './rating-modal/rating-modal.component';
     InstructorDetailsComponent,
     CourseDetailsComponent,
     TruncatePipe,
-    ChaptersComponent,
-    RatingModalComponent
+    ChaptersComponent
   ],
   imports: [
     BrowserModule,

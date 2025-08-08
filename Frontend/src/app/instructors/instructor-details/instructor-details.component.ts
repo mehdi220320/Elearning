@@ -18,6 +18,7 @@ export class InstructorDetailsComponent {
   instructor:Instructor ={
     _id:"",
     firstname: "",
+    adresse:"",
     lastname:"",
     email:"",
     Site_web:"",

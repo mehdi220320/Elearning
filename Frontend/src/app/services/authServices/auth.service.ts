@@ -1,45 +1,58 @@
 import { Injectable } from '@angular/core';
-import {jwtDecode} from 'jwt-decode';
-import {HttpClient} from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
-import {environment} from '../../models/environment';
-declare var google:any;
+import { jwtDecode } from 'jwt-decode';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../models/environment';
+
+interface DecodedToken {
+  userId?: string;
+  email?:string;
+  role?: string;
+  exp?: number;
+  picture?:string;
+  [key: string]: any;
+}
+
+declare var google: any;
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl+'auth';
+  private apiUrl = environment.apiUrl + 'auth';
   private tokenKey = 'auth_token';
-  private roleKey = 'user_role';
+  private authSourceKey = 'auth_source';
 
   constructor(private http: HttpClient) {}
 
-  register(lastname: string,firstname:string, email: string, password: string, phone: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { lastname,firstname, email, password, phone });
+  // Registration
+  register(lastname: string, firstname: string, email: string, password: string, phone: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, { lastname, firstname, email, password, phone });
   }
 
+  // Login with email/password
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((response: any) => {
-        if (response.token && response.role) {
+        if (response.token) {
           this.setToken(response.token);
-          this.setUserRole(response.role);
         }
       })
     );
   }
 
+  // Google OAuth login
   loginWithGoogle(credential: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/google-auth`, { credential }).pipe(
+    return this.http.post(`${this.apiUrl}/google-auth`, { credential }).pipe(
       tap((response: any) => {
-        if (response.token && response.role) {
+        if (response.token) {
           this.setToken(response.token);
-          this.setUserRole(response.role);
         }
       })
     );
   }
 
+  // Token management
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
   }
@@ -48,62 +61,76 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
-  setUserRole(role: string): void {
-    localStorage.setItem(this.roleKey, role);
+  // Get decoded token (with error handling)
+  getDecodedToken(): DecodedToken | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      return jwtDecode<DecodedToken>(token);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
   }
 
+  // Get user role from token
   getUserRole(): string | null {
-    return localStorage.getItem(this.roleKey);
+    const decoded = this.getDecodedToken();
+    return decoded?.role || null;
   }
 
+  getUserId(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.userId || null;
+  }
+  getUserEmail(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.email || null;
+  }
+  // Authentication checks
   isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.roleKey);
-  }
-  isGoogleAuth(): boolean {
-    return localStorage.getItem('auth_source') === 'google';
-  }
-
-  googleSignOut(): Promise<void> {
-    return new Promise((resolve) => {
-      if (typeof google !== 'undefined') {
-        google.accounts.id.disableAutoSelect();
-        google.accounts.id.revoke(localStorage.getItem('email'), () => {
-          resolve();
-        });
-      } else {
-        resolve();
-      }
-    });
+    return this.isTokenValid();
   }
 
   isAdmin(): boolean {
     return this.getUserRole() === 'admin';
   }
 
-  clearAuthData(): void {
-    this.logout();
-    localStorage.removeItem('auth_source');
-    localStorage.removeItem('email');
+  isGoogleAuth(): boolean {
+    return localStorage.getItem(this.authSourceKey) === 'google';
   }
 
+  // Token validation
   isTokenValid(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
+    const decoded = this.getDecodedToken();
+    if (!decoded) return false;
 
-    try {
-      const decoded: any = jwtDecode(token);
-      if (decoded.exp === undefined) return true;
-      return decoded.exp > (Date.now() / 1000);
-    } catch {
-      return false;
-    }
+    // Check expiration if exists
+    if (decoded.exp === undefined) return true;
+    return decoded.exp > Date.now() / 1000;
   }
 
+  // Logout
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.authSourceKey);
+  }
+
+  // Google signout
+  async googleSignOut(): Promise<void> {
+    if (typeof google !== 'undefined') {
+      try {
+        await google.accounts.id.disableAutoSelect();
+        await google.accounts.id.revoke(localStorage.getItem('email'));
+      } catch (error) {
+        console.error('Google signout error:', error);
+      }
+    }
+    this.logout();
+  }
+
+  // Password recovery
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });
   }

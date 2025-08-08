@@ -58,7 +58,7 @@ export class LoginComponent {
         const role = decoded.role;
 
         this.authService.setToken(response.token);
-        this.authService.setUserRole(role);
+        // this.authService.setUserRole(role);
 
         if (role === 'admin') {
           this.router.navigate(['/admin']);

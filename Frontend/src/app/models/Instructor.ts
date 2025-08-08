@@ -4,6 +4,7 @@ export interface Instructor{
   lastname:string;
   email:string;
   experience:number;
+  adresse:string;
   Site_web:string;
   GitHub:string;
   Twitter:string;
