@@ -1,6 +1,5 @@
 const Rating=require('./Rating')
 const Instructor = require("../instructor/Instructor");
-const Category = require("../categories/Category");
 const Course = require("../courses/Course");
 const User=require("../user/User")
 class RatingService{
@@ -14,7 +13,7 @@ class RatingService{
             throw e;
         }
     }
-    static async addRateFormateur(formateurid,userId,rate,comment){
+    static async addRateFormateur(formateurid,userId,rate,comment,title){
         try {
             const formateur=await Instructor.findById(formateurid);
             const user=await User.findById(userId)
@@ -26,14 +25,14 @@ class RatingService{
                 console.error("User Doesn't Exists")
                 throw error("User Doesn't Exists")
             }
-            const newrate=new Rating({formateur,rate,comment,User:user})
+            const newrate=new Rating({formateur,rate,comment,User:user,title})
             return newrate.save()
 
         }catch (e){
             throw e;
         }
     }
-    static async addRateCourse(courseid,userId,rate,comment){
+    static async addRateCourse(courseid,userId,rate,comment,title){
         try {
             const course=await Course.findById(courseid)
             const user=await User.findById(userId)
@@ -45,7 +44,7 @@ class RatingService{
                 console.error("User Doesn't Exists")
                 throw error("User Doesn't Exists")
             }
-            const newrate=new Rating({course,rate,comment,User:user})
+            const newrate=new Rating({course,rate,comment,User:user,title})
             return newrate.save()
 
         }catch (e){
@@ -60,7 +59,7 @@ class RatingService{
                  throw error("Formateur Doesn't Exists")
              }
              return await Rating.find({formateur:formateur}).populate({
-                 path: "user",
+                 path: "User",
                  select: "_id firstname lastname picture"
              })
          }catch (e){
@@ -75,7 +74,7 @@ class RatingService{
                 throw error("Formateur Doesn't Exists")
             }
             return await Rating.find({course:course}).populate({
-                path: "user",
+                path: "User",
                 select: "_id firstname lastname picture"
             })
         }catch (e){

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import {Course} from '../models/Course';
+import {Rating} from '../models/Rating';
 import {CourseService} from '../services/course.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {RatingService} from '../services/rating.service';
 
 @Component({
   selector: 'app-courses',
@@ -25,7 +27,7 @@ export class CoursesComponent {
 
   allCategories: string[] = [];
 
-  constructor(private coursService: CourseService, private sanitizer: DomSanitizer) {}
+  constructor(private coursService: CourseService, private sanitizer: DomSanitizer,private rateService:RatingService) {}
 
   ngOnInit() {
     this.loadData();
@@ -34,13 +36,37 @@ export class CoursesComponent {
   loadData(): void {
     this.coursService.getAll().subscribe({
       next: (response: Course[]) => {
+        this.loadAllCourseRatings(response);
         this.courses = response;
         this.allCategories = [...new Set(response.map(c => c.categorie?.name).filter(Boolean))];
-        this.applyFilters();
+        // Load ratings for all courses
       },
       error: (err) => console.error(err),
     });
   }
+
+  loadAllCourseRatings(courses: Course[]): void {
+    courses.forEach(course => {
+      this.rateService.getByCourse(course._id).subscribe({
+        next: (ratings: Rating[]) => {
+          if (ratings.length > 0) {
+            const sum = ratings.reduce((acc, rating) => acc + Number(rating.rate), 0);
+            course.rating = sum / ratings.length;
+          } else {
+            course.rating = 0;
+          }
+          // Update the filtered courses after ratings are loaded
+          this.applyFilters();
+        },
+        error: (error) => {
+          console.error(error);
+          course.rating = 0;
+          this.applyFilters();
+        }
+      });
+    });
+  }
+
 
   getImage(path: string | null): SafeUrl | string {
     if (!path) return '/assets/img.png';

@@ -39,8 +39,12 @@
       <p class="instructor-title">{{ instructor.speciality }}</p>
 
       <div class="instructor-rating">
-        <i class="fas fa-star" *ngFor="let i of [1,2,3,4,5]"></i>
-        4.8
+        <i *ngFor="let star of [1,2,3,4,5]"
+           class="fas"
+           [class.fa-star]="star <= instructor.rating"
+           [class.fa-star-half-alt]="star > instructor.rating && star - 0.5 <= instructor.rating"
+           [class.far]="star > instructor.rating + 0.5"></i>
+        {{ instructor.rating || '0.0' }}
       </div>
 
       <div class="instructor-meta">

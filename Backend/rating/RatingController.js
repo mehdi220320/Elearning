@@ -12,8 +12,8 @@ class RatingController{
     }
     static async addFormateur(req,res){
         try{
-            const {formateurid,userid,comment,rate}=req.body
-            const newRate=await RatingService.addRateFormateur(formateurid,userid,rate,comment);
+            const {title,formateurid,userid,comment,rate}=req.body
+            const newRate=await RatingService.addRateFormateur(formateurid,userid,rate,comment,title);
             res.status(200).send(newRate);
 
         } catch (e) {
@@ -22,9 +22,8 @@ class RatingController{
     }
     static async addCourse(req,res){
         try{
-            const {courseid,userid,comment,rate}=req.body
-            console.log(courseid)
-            const newRate=await RatingService.addRateCourse(courseid,userid,rate,comment);
+            const {title,courseid,userid,comment,rate}=req.body
+            const newRate=await RatingService.addRateCourse(courseid,userid,rate,comment,title);
             res.status(200).send(newRate);
 
         } catch (e) {

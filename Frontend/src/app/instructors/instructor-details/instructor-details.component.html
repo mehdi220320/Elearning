@@ -3,14 +3,10 @@
     <div class="page-header">
       <h1 class="page-title">Détails du formateur</h1>
       <div class="actions">
-        <a (click)="goBackOrFallback()"  class="btn btn-outline">
+        <a (click)="goBackOrFallback()" class="btn btn-outline">
           <i class="fas fa-arrow-left"></i>
           Retour
         </a>
-<!--        <a href="formateur-edit.html" class="btn btn-primary">-->
-<!--          <i class="fas fa-edit"></i>-->
-<!--          Modifier-->
-<!--        </a>-->
       </div>
     </div>
 
@@ -26,13 +22,13 @@
 
           <div class="profile-rating">
             <div class="rating-stars">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
+              <i *ngFor="let star of [1,2,3,4,5]"
+                 class="fas"
+                 [class.fa-star]="star <= calculateAverageRating()"
+                 [class.fa-star-half-alt]="star > calculateAverageRating() && star - 0.5 <= calculateAverageRating()"
+                 [class.far]="star > calculateAverageRating() + 0.5"></i>
             </div>
-            <span class="rating-value">4.7</span>
+            <span class="rating-value">{{ calculateAverageRating() | number:'1.1-1' }}</span>
           </div>
         </div>
 
@@ -75,10 +71,6 @@
             <i class="fas fa-envelope"></i>
             Envoyer un mail
           </a>
-<!--          <a href="#" class="btn btn-danger">-->
-<!--            <i class="fas fa-trash-alt"></i>-->
-<!--            Supprimer le formateur-->
-<!--          </a>-->
         </div>
       </div>
 
@@ -87,7 +79,7 @@
         <section class="bio-section">
           <h2 class="section-title">Biographie</h2>
           <div class="bio-text">
-          {{instructor.biographie}}
+            {{instructor.biographie}}
           </div>
         </section>
 
@@ -101,7 +93,7 @@
         <section class="courses-section">
           <h2 class="section-title">Cours enseignés</h2>
           <div class="courses-grid" *ngIf="courses.length > 0; else noCourses">
-            <div *ngFor="let course of courses" class="course-card">
+            <div *ngFor="let course of courses" class="course-card" [routerLink]="'/courses/'+course._id">
               <div class="course-thumbnail">
                 <img [src]="getImage(course.coverImage!.path)" alt="{{ course.title }}">
                 <span class="course-category">{{ course.categorie!.name }}</span>
@@ -117,8 +109,7 @@
                 <div class="course-meta">
                   <div class="course-rating">
                     <i class="fas fa-star"></i>
-                    <!--            {{ course.rating.toFixed(1) }}-->
-                    5
+                    {{ course.rating|| '0.0' }}
                   </div>
                   <div class="course-price" *ngIf="course.prix > 0">
                     {{ course.prix | currency:'EUR' }}
@@ -135,11 +126,10 @@
               <img src="/assets/img_2.png" alt="Aucun cours" class="no-courses-img">
               <h2>Pas encore de cours disponibles</h2>
               <p>Les cours de cet instructeur seront bientôt disponibles. Restez à l'écoute !</p>
-<!--              <button class="btn-refresh" (click)="loadData()">🔄 Actualiser</button>-->
             </div>
           </ng-template>
-
         </section>
+
         <section class="reviews-section">
           <div class="section-header">
             <h2 class="section-title">Avis & Évaluations</h2>
@@ -151,53 +141,55 @@
 
           <div class="rating-summary">
             <div class="overall-rating">
-              <div class="rating-value">4.7</div>
+              <div class="rating-value">{{ calculateAverageRating() | number:'1.1-1' }}</div>
               <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
+                <i *ngFor="let star of [1,2,3,4,5]"
+                   class="fas"
+                   [class.fa-star]="star <= calculateAverageRating()"
+                   [class.fa-star-half-alt]="star > calculateAverageRating() && star - 0.5 <= calculateAverageRating()"
+                   [class.far]="star > calculateAverageRating() + 0.5"></i>
               </div>
-              <div class="rating-count">42 évaluations</div>
+              <div class="rating-count">{{ratings.length}} évaluations</div>
             </div>
 
             <div class="rating-details">
-              <div class="rating-bar" *ngFor="let i of [5,4,3,2,1]; let idx = index">
+              <div class="rating-bar" *ngFor="let i of [5,4,3,2,1]">
                 <div class="star-count">
                   <span>{{i}}</span>
                   <i class="fas fa-star"></i>
                 </div>
                 <div class="progress-container">
-                  <div class="progress-bar" [style.width]="getRatingPercentage(i) + '%'"></div>
+                  <div class="progress-bar" [style.width.%]="(getRatingDistribution()[i] / ratings.length) * 100 || 0"></div>
                 </div>
-                <div class="percentage">{{getRatingPercentage(i)}}%</div>
+                <div class="percentage">{{ (getRatingDistribution()[i] / ratings.length * 100 || 0) | number:'1.0-0' }}%</div>
               </div>
             </div>
           </div>
 
           <div class="reviews-list">
-            <div class="review-card" *ngFor="let review of sampleReviews">
+            <div class="review-card" *ngFor="let rating of paginatedRatings">
               <div class="reviewer-info">
-                <img [src]="review.avatar" alt="Reviewer" class="reviewer-avatar">
+                <img [src]="rating.User!.picture || '/assets/img.png'" alt="Reviewer" class="reviewer-avatar">
                 <div class="reviewer-meta">
-                  <h4 class="reviewer-name">{{review.name}}</h4>
+                  <h4 class="reviewer-name">{{rating.User!.firstname}} {{rating.User!.lastname}}</h4>
                   <div class="review-rating">
                     <div class="stars">
-                      <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]"
-                         [class.filled]="star <= review.rating"></i>
+                      <i *ngFor="let star of [1,2,3,4,5]"
+                         class="fas fa-star"
+                         [class.filled]="star <= rating.rate"></i>
                     </div>
-                    <span class="review-date">{{review.date}}</span>
+                    <span class="review-date">{{rating.createdAt | date:'mediumDate'}}</span>
                   </div>
                 </div>
               </div>
               <div class="review-content">
-                <p>{{review.comment}}</p>
+                <h4>{{rating.title}}</h4>
+                <p>{{rating.comment}}</p>
               </div>
               <div class="review-actions">
                 <button class="like-btn">
                   <i class="far fa-thumbs-up"></i>
-                  <span>Utile ({{review.likes}})</span>
+                  <span>Utile (0)</span>
                 </button>
                 <button class="report-btn">
                   <i class="far fa-flag"></i>
@@ -206,7 +198,7 @@
               </div>
             </div>
 
-            <div class="no-reviews" *ngIf="sampleReviews.length === 0">
+            <div class="no-reviews" *ngIf="ratings.length === 0">
               <div class="no-reviews-illustration">
                 <i class="far fa-comment-dots"></i>
               </div>
@@ -214,8 +206,47 @@
               <p>Soyez le premier à évaluer ce formateur</p>
             </div>
           </div>
+
+          <button *ngIf="hasMoreReviews" class="show-more-reviews" (click)="loadMoreReviews()">
+            Afficher plus d'avis
+          </button>
         </section>
       </div>
     </div>
   </div>
 </main>
+
+<!-- Rating Modal -->
+<div class="modal-backdrop" *ngIf="showRatingModal"  >
+  <div class="rating-modal" @slideInOut>
+    <div class="modal-header">
+      <h3>Donnez votre avis</h3>
+      <button class="close-btn" (click)="openRatingModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="rating-input">
+        <span>Votre note :</span>
+        <div class="star-rating">
+          <i class="far fa-star" [style.color]="rate > 0 ? 'gold' : 'inherit'" (click)="setRating(1)"></i>
+          <i class="far fa-star" [style.color]="rate > 1 ? 'gold' : 'inherit'" (click)="setRating(2)"></i>
+          <i class="far fa-star" [style.color]="rate > 2 ? 'gold' : 'inherit'" (click)="setRating(3)"></i>
+          <i class="far fa-star" [style.color]="rate > 3 ? 'gold' : 'inherit'" (click)="setRating(4)"></i>
+          <i class="far fa-star" [style.color]="rate > 4 ? 'gold' : 'inherit'" (click)="setRating(5)"></i>
+        </div>
+      </div>
+      <div *ngIf="error" class="error-message">{{error}}</div>
+      <div class="form-group">
+        <label for="rating-title">Titre</label>
+        <input id="rating-title" type="text" [(ngModel)]="title" placeholder="Titre de votre avis">
+      </div>
+      <div class="form-group">
+        <label for="rating-comment">Commentaire</label>
+        <textarea id="rating-comment" [(ngModel)]="comment" placeholder="Décrivez votre expérience..." rows="4"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="openRatingModal()">Annuler</button>
+      <button class="btn btn-primary" (click)="submitRate()">Envoyer</button>
+    </div>
+  </div>
+</div>

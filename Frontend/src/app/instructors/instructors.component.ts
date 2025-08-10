@@ -4,6 +4,9 @@ import {Instructor} from '../models/Instructor';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {CategoryService} from '../services/category.service';
 import {Category} from '../models/Category';
+import {RatingService} from '../services/rating.service';
+import {Course} from '../models/Course';
+import {Rating} from '../models/Rating';
 
 @Component({
   selector: 'app-instructors',
@@ -21,12 +24,36 @@ export class InstructorsComponent {
   currentPage: number = 1;
   itemsPerPage: number = 6;
   categories:Category[]=[]
-  constructor(private instructorService: InstructorService,private categoryService:CategoryService,private sanitizer:DomSanitizer) {}
+  constructor(private instructorService: InstructorService,
+              private categoryService:CategoryService,
+              private rateService:RatingService,
+              private sanitizer:DomSanitizer) {}
 
   ngOnInit() {
     this.loadInstructors();
     this.loadCategories();
   }
+  loadAllInstructorRatings(instructors: Instructor[]): void {
+    instructors.forEach(instructor => {
+      this.rateService.getByformateur(instructor._id).subscribe({
+        next: (ratings: Rating[]) => {
+          if (ratings.length > 0) {
+            const sum = ratings.reduce((acc, rating) => acc + Number(rating.rate), 0);
+            instructor.rating = sum / ratings.length;
+          } else {
+            instructor.rating = 0;
+          }
+          this.applyFilters();
+        },
+        error: (error) => {
+          console.error(error);
+          instructor.rating = 0;
+          this.applyFilters();
+        }
+      });
+    });
+  }
+
   loadCategories(){
     this.categoryService.getAll().subscribe({
       next:(response)=>{
@@ -39,6 +66,7 @@ export class InstructorsComponent {
     this.instructorService.getAll().subscribe({
       next: (response) => {
         this.instructors = response;
+        this.loadAllInstructorRatings(response)
         this.applyFilters();
       },
       error: (err) => console.error(err)

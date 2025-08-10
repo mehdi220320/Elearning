@@ -92,7 +92,7 @@
           <div class="course-rating">
             <i class="fas fa-star"></i>
 <!--            {{ course.rating.toFixed(1) }}-->
-            5
+            {{ course.rating | number:'1.1-1' }}
           </div>
           <div class="course-price" *ngIf="course.prix > 0">
             {{ course.prix}}Dt

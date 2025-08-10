@@ -1,6 +1,7 @@
 const mongoose=require('mongoose')
 
 const RatingSchema=new mongoose.Schema({
+    title:String,
     rate:Number,
     comment :String,
     formateur:{

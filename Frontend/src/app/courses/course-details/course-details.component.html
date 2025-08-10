@@ -37,7 +37,7 @@
         </div>
         <div class="meta-item">
           <i class="fas fa-star"></i>
-          <span>4.8 (1,248 avis)</span>
+          <span>{{ calculateAverageRating() | number:'1.1-1' }} ({{ratings.length}} avis)</span>
         </div>
         <div class="meta-item">
           <i class="fas fa-clock"></i>
@@ -198,51 +198,23 @@
     <div class="reviews-header">
       <div class="reviews-summary">
         <div class="average-rating">
-          <span class="rating-number">4.8</span>
+          <span class="rating-number">{{ calculateAverageRating() | number:'1.1-1' }}</span>
           <div class="stars">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
+            <i *ngFor="let star of [1,2,3,4,5]"
+               class="fas"
+               [class.fa-star]="star <= calculateAverageRating()"
+               [class.fa-star-half-alt]="star > calculateAverageRating() && star - 0.5 <= calculateAverageRating()"
+               [class.far]="star > calculateAverageRating() + 0.5"></i>
           </div>
-          <span class="total-reviews">1,248 avis</span>
+          <span class="total-reviews">{{ratings.length}} avis</span>
         </div>
         <div class="rating-bars">
-          <div class="rating-bar">
-            <span>5 étoiles</span>
+          <div class="rating-bar" *ngFor="let star of [5,4,3,2,1]">
+            <span>{{star}} étoiles</span>
             <div class="bar-container">
-              <div class="bar-fill" style="width: 78%;"></div>
+              <div class="bar-fill" [style.width.%]="(getRatingDistribution()[star] / ratings.length) * 100 || 0"></div>
             </div>
-            <span>78%</span>
-          </div>
-          <div class="rating-bar">
-            <span>4 étoiles</span>
-            <div class="bar-container">
-              <div class="bar-fill" style="width: 15%;"></div>
-            </div>
-            <span>15%</span>
-          </div>
-          <div class="rating-bar">
-            <span>3 étoiles</span>
-            <div class="bar-container">
-              <div class="bar-fill" style="width: 5%;"></div>
-            </div>
-            <span>5%</span>
-          </div>
-          <div class="rating-bar">
-            <span>2 étoiles</span>
-            <div class="bar-container">
-              <div class="bar-fill" style="width: 1%;"></div>
-            </div>
-            <span>1%</span>
-          </div>
-          <div class="rating-bar">
-            <span>1 étoile</span>
-            <div class="bar-container">
-              <div class="bar-fill" style="width: 1%;"></div>
-            </div>
-            <span>1%</span>
+            <span>{{ (getRatingDistribution()[star] / ratings.length * 100 || 0) | number:'1.0-0' }}%</span>
           </div>
         </div>
       </div>
@@ -253,117 +225,46 @@
         <div class="rating-input">
           <span>Votre note :</span>
           <div class="star-rating">
-            <i
-              class="far fa-star"
-              [style.color]="rate > 0 ? 'gold' : 'inherit'"
-              (click)="setRating(1)">
-            </i>
-            <i
-              class="far fa-star"
-              [style.color]="rate > 1 ? 'gold' : 'inherit'"
-              (click)="setRating(2)">
-            </i>
-            <i
-              class="far fa-star"
-              [style.color]="rate > 2 ? 'gold' : 'inherit'"
-              (click)="setRating(3)">
-            </i>
-            <i
-              class="far fa-star"
-              [style.color]="rate > 3 ? 'gold' : 'inherit'"
-              (click)="setRating(4)">
-            </i>
-            <i
-              class="far fa-star"
-              [style.color]="rate > 4 ? 'gold' : 'inherit'"
-              (click)="setRating(5)">
-            </i>
-
+            <i class="far fa-star" [style.color]="rate > 0 ? 'gold' : 'inherit'" (click)="setRating(1)"></i>
+            <i class="far fa-star" [style.color]="rate > 1 ? 'gold' : 'inherit'" (click)="setRating(2)"></i>
+            <i class="far fa-star" [style.color]="rate > 2 ? 'gold' : 'inherit'" (click)="setRating(3)"></i>
+            <i class="far fa-star" [style.color]="rate > 3 ? 'gold' : 'inherit'" (click)="setRating(4)"></i>
+            <i class="far fa-star" [style.color]="rate > 4 ? 'gold' : 'inherit'" (click)="setRating(5)"></i>
           </div>
         </div>
+        <div *ngIf="error!==''" class="error-message">
+          {{error}}
+        </div>
+        <label id="title">Titre</label>
+        <input placeholder="Titre" for="title" name="title" [(ngModel)]="title">
+
         <textarea class="review-textarea" placeholder="Partagez votre expérience avec ce cours..." name="comment" [(ngModel)]="comment" rows="4"></textarea>
+
         <button class="submit-review-btn" (click)="submitRate()">Soumettre l'avis</button>
       </div>
     </div>
 
     <!-- Reviews List -->
     <div class="reviews-list">
-      <div class="review">
+      <div class="review" *ngFor="let rating of paginatedRatings">
         <div class="reviewer-info">
           <div class="reviewer-avatar">
-            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sophie Martin">
+            <img [src]="rating.User.picture || '/assets/img.png'" [alt]="rating.User.firstname + ' ' + rating.User.lastname">
           </div>
           <div class="reviewer-details">
-            <h4 class="reviewer-name">Sophie Martin</h4>
+            <h4 class="reviewer-name">{{rating.User.firstname}} {{rating.User.lastname}}</h4>
             <div class="review-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <span class="review-date">Il y a 2 semaines</span>
+              <i *ngFor="let star of [1,2,3,4,5]"
+                 class="fas"
+                 [class.fa-star]="star <= rating.rate"
+                 [class.far]="star > rating.rate"></i>
+              <span class="review-date">{{rating!.createdAt | date}}</span>
             </div>
           </div>
         </div>
         <div class="review-content">
-          <h4 class="review-title">Excellent cours pour débutants</h4>
-          <p class="review-text">Ce cours m'a permis de comprendre les bases de Python rapidement. Les explications sont claires et les exercices pratiques très utiles. Je recommande vivement ce cours à tous ceux qui veulent apprendre Python.</p>
-          <div class="review-helpful">
-            <span>Cet avis vous a-t-il été utile ?</span>
-            <button class="helpful-btn">Oui</button>
-            <button class="not-helpful-btn">Non</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="review">
-        <div class="reviewer-info">
-          <div class="reviewer-avatar">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas Dupont">
-          </div>
-          <div class="reviewer-details">
-            <h4 class="reviewer-name">Thomas Dupont</h4>
-            <div class="review-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <span class="review-date">Il y a 1 mois</span>
-            </div>
-          </div>
-        </div>
-        <div class="review-content">
-          <h4 class="review-title">Très bon contenu</h4>
-          <p class="review-text">Le cours est bien structuré et couvre tous les aspects fondamentaux de Python. J'aurais aimé plus d'exemples avancés vers la fin, mais dans l'ensemble c'est une excellente ressource pour apprendre.</p>
-          <div class="review-helpful">
-            <span>Cet avis vous a-t-il été utile ?</span>
-            <button class="helpful-btn">Oui</button>
-            <button class="not-helpful-btn">Non</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="review">
-        <div class="reviewer-info">
-          <div class="reviewer-avatar">
-            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Émilie Leroy">
-          </div>
-          <div class="reviewer-details">
-            <h4 class="reviewer-name">Émilie Leroy</h4>
-            <div class="review-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <span class="review-date">Il y a 3 mois</span>
-            </div>
-          </div>
-        </div>
-        <div class="review-content">
-          <h4 class="review-title">Parfait pour se lancer</h4>
-          <p class="review-text">En tant que débutante complète en programmation, ce cours a été parfait pour m'initier à Python. Les concepts sont bien expliqués et le rythme est adapté aux débutants. Les exercices permettent de bien pratiquer ce qu'on apprend.</p>
+          <h4 class="review-title">{{rating.title}}</h4>
+          <p class="review-text">{{rating.comment}}</p>
           <div class="review-helpful">
             <span>Cet avis vous a-t-il été utile ?</span>
             <button class="helpful-btn">Oui</button>
@@ -373,9 +274,8 @@
       </div>
     </div>
 
-    <button class="show-more-reviews">Afficher plus d'avis</button>
+    <button *ngIf="hasMoreReviews" class="show-more-reviews" (click)="loadMoreReviews()">Afficher plus d'avis</button>
   </div>
-
   <!-- Similar Courses -->
   <div class="similar-courses">
     <h2 class="section-title">Cours similaires</h2>

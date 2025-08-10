@@ -6,6 +6,9 @@ import {Instructor} from '../../models/Instructor';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {CourseService} from '../../services/course.service';
 import {Course} from '../../models/Course';
+import {Rating} from '../../models/Rating';
+import {RatingService} from '../../services/rating.service';
+import {AuthService} from '../../services/authServices/auth.service';
 
 @Component({
   selector: 'app-instructor-details',
@@ -15,6 +18,15 @@ import {Course} from '../../models/Course';
 })
 export class InstructorDetailsComponent {
   courses:Course[]=[]
+  showRatingModal: boolean = false;
+
+  openRatingModal() {
+    this.showRatingModal = !this.showRatingModal;
+    this.rate = 0;
+    this.title = '';
+    this.comment = '';
+    this.error = '';
+  }
   instructor:Instructor ={
     _id:"",
     firstname: "",
@@ -38,20 +50,54 @@ export class InstructorDetailsComponent {
       name: "",
     },
     createdAt:"",
-    experience:0
+    experience:0,
+    rating:0
   };
   instructorId:string |null =""
+  ratings:Rating[]=[]
+  currentPage: number = 1;
+  itemsPerPage: number = 3;
+  hasMoreReviews: boolean = true;
   constructor(
     private router:Router,
     private location: Location,
     private instructorService:InstructorService,
     private courseService:CourseService,
     private route:ActivatedRoute,
+    private rateService:RatingService,
+    private authService:AuthService,
     private sanitizer:DomSanitizer
   ) {
   }
   ngOnInit(){
     this.loadData();
+  }
+  loadRatings() {
+    this.rateService.getByformateur(this.instructorId).subscribe({
+      next: (response) => {
+        this.ratings = response;
+        this.updateHasMoreReviews();
+      },
+      error: (error) => { console.error(error) }
+    });
+  }
+  loadAllCourseRatings(courses: Course[]): void {
+    courses.forEach(course => {
+      this.rateService.getByCourse(course._id).subscribe({
+        next: (ratings: Rating[]) => {
+          if (ratings.length > 0) {
+            const sum = ratings.reduce((acc, rating) => acc + Number(rating.rate), 0);
+            course.rating = sum / ratings.length;
+          } else {
+            course.rating = 0;
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          course.rating = 0;
+        }
+      });
+    });
   }
 
   loadData(){
@@ -60,6 +106,7 @@ export class InstructorDetailsComponent {
       {
         next:(response)=>{
           this.instructor=response
+          this.loadRatings()
             // console.log(this.instructor)
         },error:(err)=>{console.error(err)}
       }
@@ -67,6 +114,7 @@ export class InstructorDetailsComponent {
     this.courseService.getByInstructorId(this.instructorId).subscribe(
       {
         next:(response)=>{
+          this.loadAllCourseRatings(response)
           this.courses=response,
             console.log(this.courses)
         },error:(err)=>{console.error(err)}
@@ -83,50 +131,82 @@ export class InstructorDetailsComponent {
       this.router.navigate(['/instructors']);
     }
   }
-  sampleReviews = [
-    {
-      id: 1,
-      name: "Mohamed Ali",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      rating: 5,
-      date: "15 Mars 2023",
-      comment: "Excellent formateur! Les explications sont très claires et les supports de cours sont bien organisés. Je recommande vivement.",
-      likes: 12
-    },
-    {
-      id: 2,
-      name: "Sarah Ben Ahmed",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      rating: 4,
-      date: "2 Février 2023",
-      comment: "Très bon pédagogue. J'ai beaucoup appris même si parfois le rythme était un peu rapide pour moi.",
-      likes: 5
-    },
-    {
-      id: 3,
-      name: "Karim Jlassi",
-      avatar: "https://randomuser.me/api/portraits/men/75.jpg",
-      rating: 5,
-      date: "28 Janvier 2023",
-      comment: "Un des meilleurs formateurs que j'ai eu. Il prend le temps de répondre à toutes les questions et ses exemples sont très pertinents.",
-      likes: 8
-    }
-  ];
 
-  getRatingPercentage(rating: number): number {
-    // Temporary static data - replace with real calculations later
-    const ratingDistribution = {
-      5: 65,
-      4: 20,
-      3: 10,
-      2: 3,
-      1: 2
+  rate:number=0;
+  comment:string="";
+  title:string="";
+  setRating(number: number) {
+    if (this.rate!==number){
+      this.rate=number
+    }else{
+      this.rate=0
+    }
+  }
+  error:string=""
+  submitRate() {
+    if (this.comment === '' && this.title) {
+      this.error = "Le titre et commentaire sont requis"
+      return;
+    }
+    if (this.title === '') {
+      this.error = "Le titre est requis"
+      return;
+    }
+    if (this.comment === '') {
+      this.error = "Le commentaire est requis"
+      return;
+    }
+
+    const ratingData = {
+      formateurid: this.instructorId,
+      userid: this.authService.getUserId() || '',
+      rate: this.rate,
+      title: this.title,
+      comment: this.comment
     };
-    return ratingDistribution[rating as keyof typeof ratingDistribution];
+
+    this.rateService.addFormateur(ratingData).subscribe({
+      next: (response) => {
+        this.comment = "";
+        this.rate = 0;
+        this.title = "";
+        this.error = '';
+        this.loadRatings(); // Reload ratings after submission
+        this.currentPage = 1; // Reset to first page
+      },
+      error: (err) => console.error(err)
+    });
   }
 
-  openRatingModal() {
-    // Implement modal opening logic here
-    console.log("Open rating modal");
+  loadMoreReviews() {
+    this.currentPage++;
+    this.updateHasMoreReviews();
+  }
+
+  updateHasMoreReviews() {
+    this.hasMoreReviews = this.ratings.length > this.currentPage * this.itemsPerPage;
+  }
+
+  get paginatedRatings(): Rating[] {
+    const startIndex = 0; // Always show all ratings up to current page
+    const endIndex = this.currentPage * this.itemsPerPage;
+    return this.ratings.slice(0, endIndex);
+  }
+
+  calculateAverageRating(): number {
+    if (this.ratings.length === 0) return 0;
+    const sum = this.ratings.reduce((acc, rating) => acc + Number(rating.rate), 0);
+    return sum / this.ratings.length;
+  }
+
+  getRatingDistribution(): { [key: number]: number } {
+    const distribution: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    this.ratings.forEach(rating => {
+      const rate = Math.round(Number(rating.rate));
+      distribution[rate]++;
+    });
+
+    return distribution;
   }
 }

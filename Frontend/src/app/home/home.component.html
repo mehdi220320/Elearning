@@ -37,7 +37,7 @@
           <div class="course-meta">
             <div class="course-rating">
               <i class="fas fa-star"></i>
-              4.8
+              {{course.rating}}
             </div>
             <div *ngIf="course.prix" class="course-price">{{course.prix +" Dt"}}</div>
             <div *ngIf="!course.prix" class="course-price-free">Gratuit</div>

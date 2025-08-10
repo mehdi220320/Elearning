@@ -1,15 +1,12 @@
 export interface Rating {
-  id?: string;
-  instructorId: string;
-  userId: string;
-  userName: string;
-  userAvatar?: string;
-  rating: number;
-  comment: string;
-  createdAt?: Date;
+  title:string,
+  rate:number,
+  comment :string,
+  formateur:string,
+  course:string,
+  User: { _id :string,firstname :string,lastname :string,picture:string },
+  createdAt: string;
+
 }
 
-export interface RatingForm {
-  rating: number;
-  comment: string;
-}
+

@@ -25,4 +25,5 @@ export interface Course {
   rating:number;
   createdAt: string;
   learns:string [];
+
 }

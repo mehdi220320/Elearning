@@ -634,7 +634,7 @@
 
 .reviews-summary {
   flex: 1;
-  background: #f8f9fa;
+  background: #f9faff;
   padding: 25px;
   border-radius: 8px;
 }
@@ -701,7 +701,7 @@
 
 .add-review {
   flex: 1;
-  background: #f8f9fa;
+  background: #f9faff;
   padding: 25px;
   border-radius: 8px;
 }
@@ -738,19 +738,12 @@
   color: #fbbf24;
 }
 
-.review-textarea {
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  resize: none;
-  margin-bottom: 15px;
-  font-family: inherit;
-}
+
 
 .review-textarea:focus {
   outline: none;
-  border-color: #4361ee;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
 }
 
 .submit-review-btn {
@@ -895,4 +888,69 @@
   .reviewer-details {
     flex: 1;
   }
+}
+/* Style pour le label */
+.add-review label#title {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+/* Style général pour les inputs */
+.add-review input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+/* Style quand l'input est en focus */
+.add-review input:focus {
+  outline: none;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+/* Style du placeholder */
+.add-review input::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+/* Style pour le textarea (au cas où vous voudriez une cohérence) */
+.add-review .review-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+/* STYLES D'ERREUR */
+.add-review .error {
+  border-color: #e74c3c !important;
+}
+
+.add-review .error-message {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.add-review .error:focus {
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
 }
