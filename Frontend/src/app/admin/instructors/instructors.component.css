@@ -155,6 +155,23 @@
   transform: translateY(-2px);
 }
 
+
+
+.actions {
+  display: flex;
+  gap: 2px;
+}
+
+.actions {
+  color: #6c757d;
+  transition: all 0.3s;
+}
+
+.actions:hover {
+  color: #4361ee;
+  transform: translateY(-2px);
+}
+
 .badge {
   font-weight: 500;
   padding: 5px 10px;

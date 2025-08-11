@@ -27,4 +27,11 @@ export class ChapitreService {
   getChaptersByCourse(id:any):Observable<Chapitre[]>{
     return this.http.get<Chapitre[]>(this.apiUrl+"course/"+id);
   }
+  getdureeVideosByCourse(id:any):Observable<number>{
+    return this.http.get<number>(this.apiUrl+"course/dureeVideos/"+id);
+  }
+  getnbDocummentsByCourse(id:any):Observable<number>{
+    return this.http.get<number>(this.apiUrl+"course/nbDocumments/"+id);
+  }
+
 }

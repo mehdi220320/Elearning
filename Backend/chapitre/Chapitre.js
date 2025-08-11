@@ -16,7 +16,7 @@ const ChapitreSchema = new mongoose.Schema({
         required: true
     },
     nombrePage: Number,
-    dureeVideo: String
+    dureeVideo: Number
 }, { timestamps: true });
 
 ChapitreSchema.index({ title: 1, course: 1 }, { unique: true });

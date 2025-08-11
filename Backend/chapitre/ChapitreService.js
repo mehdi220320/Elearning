@@ -70,6 +70,37 @@ class ChapitreService{
             throw e;
         }
     }
+    static async VideoDuration(id){
+        try {
+            const chapters= await Chapitre.find({course:id})
+            let total=0;
+            for(let chap of chapters){
+                if(chap.dureeVideo){
+                    total=total+chap.dureeVideo
+                }
+            }
+            return total;
+        }catch (e) {
+            console.error('Error in getAll chapters:', e.message);
+            throw e;
+        }
+    }
+    static async NumberOfDocumments(id){
+        try {
+            const chapters= await Chapitre.find({course:id})
+            let total=0;
+            for(let chap of chapters){
+                if(chap.file){
+                    total=total+1
+                }
+            }
+            return total;
+        }catch (e) {
+            console.error('Error in getAll chapters:', e.message);
+            throw e;
+        }
+    }
+
 }
 
 module.exports=ChapitreService

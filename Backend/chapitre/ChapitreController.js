@@ -106,6 +106,24 @@ class ChapitreController{
             res.status(500).json({ error: e.message });
         }
     }
+    static async getVideoDurationByCourseId(req,res){
+        try {
+            const id=req.params.id
+            const duree = await ChapitreService.VideoDuration(id);
+            res.status(200).send(duree);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+    static async getNumberOfDocumentsByCourseId(req,res){
+        try {
+            const id=req.params.id
+            const numberOfDocuments = await ChapitreService.NumberOfDocumments(id);
+            res.status(200).send(numberOfDocuments);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 
 }
 module.exports=ChapitreController

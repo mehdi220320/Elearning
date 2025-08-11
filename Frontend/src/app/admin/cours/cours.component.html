@@ -102,8 +102,8 @@
                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                   Actions
                 </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                <ul class="dropdown-menu" style="opacity: 1">
+                  <li><a class="dropdown-item" [routerLink]="'/courses/'+course._id" style="cursor: pointer"><i class="fas fa-eye me-2"></i>Voir</a></li>
                   <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
                   <li *ngIf="course.status"><a class="dropdown-item text-danger" style="cursor: pointer" (click)="isArchive(course._id)"><i class="fas fa-archive me-2"></i>Archiver</a></li>
                   <li *ngIf="!course.status"><a class="dropdown-item text-success" style="cursor: pointer" (click)="isArchive(course._id)"><i class="fas fa-archive me-2"></i>Activer</a></li>
@@ -119,13 +119,13 @@
       <nav *ngIf="totalPages > 1" aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center">
           <li class="page-item" [class.disabled]="currentPage === 1">
-            <a class="page-link" href="#" (click)="changePage(currentPage - 1)">Précédent</a>
+            <a class="page-link"  (click)="changePage(currentPage - 1)">Précédent</a>
           </li>
           <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
-            <a class="page-link" href="#" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+            <a class="page-link"  (click)="changePage(i + 1)">{{ i + 1 }}</a>
           </li>
           <li class="page-item" [class.disabled]="currentPage === totalPages">
-            <a class="page-link" href="#" (click)="changePage(currentPage + 1)">Suivant</a>
+            <a class="page-link"  (click)="changePage(currentPage + 1)">Suivant</a>
           </li>
         </ul>
       </nav>

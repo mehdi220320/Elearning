@@ -126,17 +126,17 @@
           <h3 style="font-size: 1.1rem; margin-bottom: 15px;">Ce cours comprend :</h3>
           <div class="includes-item">
             <i class="fas fa-video"></i>
-            <span>18 heures de vidéo à la demande</span>
+            <span>{{duree}} heures de vidéo à la demande</span>
           </div>
           <div class="includes-item">
             <i class="fas fa-file-alt"></i>
-            <span>24 ressources téléchargeables</span>
+            <span>{{numberOfDocuments}} ressources téléchargeables</span>
           </div>
           <div class="includes-item">
             <i class="fas fa-mobile-alt"></i>
             <span>Accès sur mobile et TV</span>
           </div>
-          <div class="includes-item">
+          <div class="includes-item" *ngIf="course.certificat">
             <i class="fas fa-certificate"></i>
             <span>Certificat de fin de formation</span>
           </div>
@@ -296,8 +296,8 @@
             <div class="similar-course-meta">
               <div class="similar-course-rating">
                 <i class="fas fa-star"></i>
-                <span>4.9</span>
-                <span class="students-count">(1.2k)</span>
+                <span>{{cs.rating}}</span>
+<!--                <span class="students-count">(1.2k)</span>-->
               </div>
               <div class="similar-course-price" *ngIf="cs.prix > 0 && cs.prix">
                 {{ cs.prix }}Dt

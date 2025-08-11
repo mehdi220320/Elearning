@@ -7,6 +7,8 @@ const upload = require('../middlewares/uploadFileMiddleware');
 router.post('/add', [adminAuthorization, checkTokenExists,upload.single('file')], ChapitreController.addChapitre);
 router.get('/all', [adminAuthorization, checkTokenExists], ChapitreController.getAll);
 router.get('/course/:id', [adminAuthorization, checkTokenExists], ChapitreController.getByCourseId);
+router.get('/course/dureeVideos/:id', [adminAuthorization, checkTokenExists], ChapitreController.getVideoDurationByCourseId);
+router.get('/course/nbDocumments/:id', [adminAuthorization, checkTokenExists], ChapitreController.getNumberOfDocumentsByCourseId);
 router.get('/ressources', [adminAuthorization, checkTokenExists], ChapitreController.getRessources);
 router.get('/medias', [adminAuthorization, checkTokenExists], ChapitreController.getMedia);
 // router.delete('/delete/:id', [adminAuthorization, checkTokenExists], instructorController.deleteInstructor);

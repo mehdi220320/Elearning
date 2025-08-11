@@ -1,7 +1,9 @@
 .courses-list-container {
   padding: 30px;
 }
-
+.page-link{
+  cursor: pointer;
+}
 .list-header {
   display: flex;
   justify-content: space-between;

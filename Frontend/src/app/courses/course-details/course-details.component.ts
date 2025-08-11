@@ -9,6 +9,7 @@ import {Rating} from '../../models/Rating';
 import {Instructor} from '../../models/Instructor';
 import {AuthService} from '../../services/authServices/auth.service';
 import {RatingService} from '../../services/rating.service';
+import {ChapitreService} from '../../services/chapitre.service';
 
 @Component({
   selector: 'app-course-details',
@@ -17,6 +18,8 @@ import {RatingService} from '../../services/rating.service';
   styleUrl: './course-details.component.css'
 })
 export class CourseDetailsComponent {
+  numberOfDocuments:number=0;
+  duree:number=0;
   instructor:Instructor ={
     _id:"",
     firstname: "",
@@ -85,6 +88,7 @@ export class CourseDetailsComponent {
               private instructorService:InstructorService,
               private authService:AuthService,
               private rateService:RatingService,
+              private chapterService:ChapitreService,
               private sanitizer:DomSanitizer) {}
   loadData(){
     this.courseId = this.route.snapshot.paramMap.get('id') ;
@@ -95,7 +99,7 @@ export class CourseDetailsComponent {
           this.courseService.getCoursesByCategorie(this.course.categorie._id).subscribe(
             {
               next:(response)=>{
-
+                this.loadAllCourseRatings(response)
                 this.popularCourses = response
                   .filter((x: Course) => x._id !== this.course._id)
                   .sort(() => 0.5 - Math.random())
@@ -113,12 +117,40 @@ export class CourseDetailsComponent {
               },error:(err)=>{console.error(err)}
             }
           )
+          this.chapterService.getdureeVideosByCourse(this.courseId).subscribe({
+            next:(response)=>{this.duree=response},
+            error:(error)=>{console.error(error)}
+          })
+          this.chapterService.getnbDocummentsByCourse(this.courseId).subscribe({
+            next:(response)=>{this.numberOfDocuments=response},
+            error:(error)=>{console.error(error)}
+          })
           this.loadRatings();
         },error:(err)=>{console.error(err)}
       }
     )
 
   }
+  loadAllCourseRatings(courses: Course[]): void {
+    courses.forEach(course => {
+      this.rateService.getByCourse(course._id).subscribe({
+        next: (ratings: Rating[]) => {
+          if (ratings.length > 0) {
+            const sum = ratings.reduce((acc, rating) => acc + Number(rating.rate), 0);
+            course.rating = sum / ratings.length;
+          } else {
+            course.rating = 0;
+          }
+          // Update the filtered courses after ratings are loaded
+        },
+        error: (error) => {
+          console.error(error);
+          course.rating = 0;
+        }
+      });
+    });
+  }
+
   loadRatings() {
     this.rateService.getByCourse(this.courseId).subscribe({
       next: (response) => {

@@ -56,7 +56,7 @@
               {{ chapter.description }}
             </div>
           </td>
-          <td>{{ chapter.course!.title }}</td>
+          <td>{{ chapter.course.title }}</td>
           <td>
               <span *ngIf="chapter.file" class="content-type">
                 <i [ngClass]="getFileIconClass(chapter.file!.path)" ></i>File
