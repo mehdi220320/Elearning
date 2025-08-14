@@ -3,10 +3,10 @@ import {Course} from '../models/Course';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {CourseService} from '../services/course.service';
-import {InstructorService} from '../services/instructor.service';
 import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 import {Chapitre} from '../models/Chapitres';
 import {ChapitreService} from '../services/chapitre.service';
+import {TestService} from '../services/test.service';
 
 @Component({
   selector: 'app-chapters',
@@ -50,7 +50,22 @@ export class ChaptersComponent {
               private courseService:CourseService,
               private route:ActivatedRoute,
               private chapterService:ChapitreService,
+              private testService:TestService,
               private sanitizer:DomSanitizer) {}
+  tests:any=[]
+  loadTests(id:any): void {
+    this.tests=[]
+    this.testService.getAllTestsByChapter(id).subscribe({
+      next: (response) => {
+        this.tests = response.data.tests;
+        console.log(response.data.tests)
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des tests', err);
+      }
+    });
+  }
+
   loadData(){
     this.courseId = this.route.snapshot.paramMap.get('id') ;
     this.courseService.getById(this.courseId).subscribe(
@@ -64,7 +79,9 @@ export class ChaptersComponent {
       {
         next:(response)=>{
           this.chapters=response
+          this.loadTests(this.chapters[0]._id)
         },error:(err)=>{console.error(err)}
+
       }
     )
 

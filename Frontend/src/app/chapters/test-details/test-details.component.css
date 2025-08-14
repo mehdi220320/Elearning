@@ -1,0 +1,246 @@
+.test-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
+.test-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.test-header h1 {
+  color: #4361ee;
+  margin-bottom: 0.5rem;
+}
+.test-header p {
+  color: #6c757d;
+}
+
+/* Meta */
+.test-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.test-meta .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6c757d;
+}
+.test-meta .meta-item i {
+  color: #4361ee;
+}
+
+/* Progress */
+.progress-bar {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.progress-bar .progress {
+  height: 100%;
+  background: #4361ee;
+  transition: width 0.3s ease;
+}
+
+/* Question card */
+.question-card {
+  background: #f8fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+.question-card h2 {
+  margin-bottom: 1rem;
+  color: #1b263b;
+}
+.question-card .points {
+  color: #3f37c9;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Options */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.option:hover {
+  border-color: #e0e7ff;
+  transform: translateY(-2px);
+}
+.option.selected {
+  border-color: #4361ee;
+  background: rgba(67, 97, 238, 0.05);
+}
+
+/* Radio */
+.option-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.option-radio .radio-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+.option-radio .radio-dot.active {
+  background: #4361ee;
+}
+
+.option-text {
+  flex-grow: 1;
+}
+
+/* Nav buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+.btn-nav,
+.btn-submit {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-nav:disabled,
+.btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-nav {
+  background: white;
+  border: 1px solid #e9ecef;
+  color: #1b263b;
+}
+.btn-nav:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.btn-submit {
+  background: #4361ee;
+  color: white;
+  border: none;
+}
+.btn-submit:hover:not(:disabled) {
+  background: #354fcc; /* ~darken(#4361ee, 10%) */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+/* Result */
+.result-container {
+  max-width: 100%;
+  margin: 2rem auto;
+  text-align: center;
+}
+.result-card {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+.result-card.passed .result-icon {
+  color: #4cc9f0;
+}
+.result-card.failed .result-icon {
+  color: #f72585;
+}
+.result-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+.score {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  color: #1b263b;
+}
+.pass-status {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+.btn-result {
+  padding: 0.75rem 2rem;
+  background: #4361ee;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-result:hover {
+  background: #354fcc; /* ~darken(#4361ee, 10%) */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+/* Loading */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.loading-overlay .spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(67, 97, 238, 0.2);
+  border-radius: 50%;
+  border-top-color: #4361ee;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.result-actions{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}

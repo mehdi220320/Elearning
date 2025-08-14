@@ -57,15 +57,27 @@
           <p>{{chapters[currentChapterIndex].description}}</p>
         </div>
 
-        <!-- Test Section -->
-        <div class="quiz-card">
-          <div class="quiz-header">
-            <div>
-              <h3 class="quiz-title">Testez vos connaissances</h3>
-              <p class="quiz-subtitle">Quiz de 10 questions sur ce chapitre</p>
+        <!-- Tests Section -->
+        <div class="tests-section">
+          <h3 class="tests-title">Tests disponibles</h3>
+
+          <div class="tests-list">
+            <div class="test-item" *ngFor="let test of tests">
+              <div class="test-info">
+                <h4 class=" passing-score">{{test.title}}</h4>
+                <p class="test-title">Score minimum pour réussir le test : {{test.passingScore}}</p>
+                <p class="test-questions"> {{test.questions.length}} questions</p>
+              </div>
+              <button class="start-test-btn" [routerLink]="'/courses/'+courseId+'/chapters/'+chapters[currentChapterIndex]._id+'/test/'+test._id">
+                <i class="fas fa-play"></i> Commencer
+              </button>
             </div>
-            <button class="quiz-button">
-              <i class="fas fa-play"></i> Commencer
+          </div>
+
+          <!-- Show more/less button if there are more than 2 tests -->
+          <div class="show-more-container" >
+            <button class="show-more-btn" >
+            Afficher plus
             </button>
           </div>
         </div>
@@ -145,6 +157,7 @@
               <div class="chapter-meta">
                 <span class="meta-item"><i class="far fa-file-alt"></i> {{chapter.nombrePage}} pages</span>
                 <span class="meta-item"><i class="far fa-clock"></i> {{chapter.dureeVideo}}</span>
+                <span  class="meta-item"><i class="far fa-question-circle"></i> chapter.tests.length test(s)</span>
               </div>
             </div>
           </div>

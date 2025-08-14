@@ -1,0 +1,157 @@
+<div class="container">
+  <div class="form-header">
+    <div class="form-icon">
+      <i class="fas fa-question-circle"></i>
+    </div>
+    <h1 class="form-title">Ajouter un Test</h1>
+    <p class="form-subtitle">Créez un test pour évaluer les connaissances des étudiants sur ce chapitre</p>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="testForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="test-title" class="form-label">Titre du test <span>*</span></label>
+        <input type="text" id="test-title" class="form-control" formControlName="title" placeholder="Ex: Test sur les bases de Python">
+        <div *ngIf="testForm.get('title')?.invalid && testForm.get('title')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Un titre valide est requis (max 100 caractères)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="test-description" class="form-label">Description</label>
+        <textarea id="test-description" class="form-control" formControlName="description" placeholder="Décrivez l'objectif de ce test"></textarea>
+        <div *ngIf="testForm.get('description')?.invalid && testForm.get('description')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          La description ne peut pas dépasser 500 caractères
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="course-select" class="form-label">Cours <span>*</span></label>
+        <div class="select-with-icon">
+          <i class="fas fa-book"></i>
+          <select id="course-select" class="form-control" formControlName="course" (change)="onCourseChange()" required>
+            <option value="" disabled selected>Sélectionnez un cours</option>
+            <option *ngFor="let course of courses" [value]="course._id">{{course.title}}</option>
+          </select>
+        </div>
+        <div *ngIf="testForm.get('course')?.invalid && testForm.get('course')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Sélectionnez un cours valide
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="chapter-select" class="form-label">Chapitre <span>*</span></label>
+        <div class="select-with-icon">
+          <i class="fas fa-file-alt"></i>
+          <select id="chapter-select" class="form-control" formControlName="chapter" required>
+            <option value="" disabled selected>Sélectionnez un chapitre</option>
+            <option *ngFor="let chapter of chapters" [value]="chapter._id">{{chapter.title}}</option>
+          </select>
+        </div>
+        <div *ngIf="testForm.get('chapter')?.invalid && testForm.get('chapter')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Sélectionnez un chapitre valide
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="passing-score" class="form-label">Score de passage (%) <span>*</span></label>
+        <input type="number" id="passing-score" class="form-control" formControlName="passingScore" min="0" max="100">
+        <div *ngIf="testForm.get('passingScore')?.invalid && testForm.get('passingScore')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Le score doit être entre 0 et 100
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="time-limit" class="form-label">Limite de temps (minutes)</label>
+        <input type="number" id="time-limit" class="form-control" formControlName="timeLimit" min="1" placeholder="0 pour aucun limite">
+        <div *ngIf="testForm.get('timeLimit')?.invalid && testForm.get('timeLimit')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          La limite doit être d'au moins 1 minute
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="questions-count" class="form-label">Nombre de questions à afficher <span>*</span></label>
+        <input type="number" id="questions-count" class="form-control" formControlName="questionsToShow" min="1" required>
+        <div *ngIf="testForm.get('questionsToShow')?.invalid && testForm.get('questionsToShow')?.touched" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Le nombre doit être au moins 1
+        </div>
+      </div>
+
+      <div class="questions-list">
+        <div class="question-container" *ngFor="let question of questionsList; let i = index">
+          <div class="question-header">
+            <span class="question-number">Question {{i + 1}}</span>
+            <button type="button" class="remove-question" (click)="removeQuestion(i)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label [for]="'question-text-' + i" class="form-label">Question <span>*</span></label>
+            <input [id]="'question-text-' + i" type="text" class="form-control"
+                   [(ngModel)]="question.questionText" [ngModelOptions]="{standalone: true}"
+                   required maxlength="500" placeholder="Entrez la question">
+          </div>
+
+          <div class="form-group">
+            <label [for]="'question-points-' + i" class="form-label">Points <span>*</span></label>
+            <input [id]="'question-points-' + i" type="number" class="form-control"
+                   [(ngModel)]="question.points" [ngModelOptions]="{standalone: true}"
+                   required min="1">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Options <span>*</span></label>
+            <div class="options-list">
+              <div class="option-item" *ngFor="let option of question.options; let j = index">
+                <input type="radio" [name]="'correct-answer-' + i" class="option-radio"
+                       [checked]="option.isCorrect" (change)="setCorrectAnswer(i, j)">
+                <input type="text" class="option-input" [(ngModel)]="option.text"
+                       [ngModelOptions]="{standalone: true}" required maxlength="200"
+                       [placeholder]="'Option ' + (j + 1)">
+                <button type="button" class="remove-option" (click)="removeOption(i, j)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="add-option-btn" (click)="addOption(i)">
+              <i class="fas fa-plus"></i> Ajouter une option
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="add-question-btn" (click)="addQuestion()">
+        <i class="fas fa-plus-circle"></i> Ajouter une question
+      </button>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" (click)="onCancel()">
+          <i class="fas fa-times"></i> Annuler
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]=" testForm.invalid || isLoading">
+          <i *ngIf="!isLoading" class="fas fa-save"></i>
+          <span *ngIf="isLoading">Enregistrement...</span>
+          <span *ngIf="!isLoading">Enregistrer le test</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+

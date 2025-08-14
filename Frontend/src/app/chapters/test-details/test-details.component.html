@@ -1,0 +1,87 @@
+<div class="test-container">
+  <div class="test-header">
+    <div class="test-info">
+      <h1>{{test!.title}}</h1>
+      <p>{{test!.description}}</p>
+    </div>
+
+    <div class="test-meta">
+      <div class="meta-item">
+        <i class="fas fa-question-circle"></i>
+        <span>Question {{ currentQuestionIndex + 1 }} sur {{test!.questions.length}} </span>
+      </div>
+
+      <div class="meta-item">
+        <i class="fas fa-clock"></i>
+        <span>{{formatTime(timeRemaining)}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress" [style.width.%]="(currentQuestionIndex/(test!.questions.length-1)) *100">
+    </div>
+  </div>
+
+  <div class="question-container">
+    <div class="question-card" >
+      <h2>{{test!.questions[currentQuestionIndex].questionText}}</h2>
+      <p class="points">Points : {{test!.questions[currentQuestionIndex].points}}</p>
+
+      <div class="options-list" *ngFor="let option of test!.questions[currentQuestionIndex].options;let i = index" >
+        <div class="option" [class.selected]="isSelected(i)"
+             (click)="selectAnswer(i)">
+          <div class="option-radio">
+            <div class="radio-dot" [class.active]="isSelected(i)"></div>
+          </div>
+          <div class="option-text">{{option.text}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navigation-buttons">
+      <button class="btn-nav prev" (click)="previous()" [disabled]="currentQuestionIndex===0">
+        <i class="fas fa-chevron-left"></i> Précédent
+      </button>
+
+      <button class="btn-nav next" (click)="next()" [disabled]="currentQuestionIndex+1===test!.questions.length">
+        Suivant <i class="fas fa-chevron-right"></i>
+      </button>
+
+      <button
+        class="btn-submit"
+        [disabled]="!(currentQuestionIndex + 1 === test!.questions.length)"
+        (click)="submitTest()">
+        Soumettre le test
+      </button>
+
+    </div>
+  </div>
+</div>
+<div class="result-container" *ngIf="testCompleted && score !== null">
+  <div class="result-card" [class.passed]="test.passingScore!==undefined && score >= test!.passingScore" [class.failed]="test.passingScore!==undefined && score < test!.passingScore">
+    <div class="result-icon">
+      <i class="fas" [class.fa-check-circle]=" test.passingScore!==undefined && score >= test!.passingScore" [class.fa-times-circle]="test.passingScore!==undefined && score < test!.passingScore"></i>
+    </div>
+
+    <h2>Test Completed!</h2>
+    <p class="score">Your Score: {{ score }}%</p>
+    <p> les questions correct {{correctAnswers}} sur {{test!.questions.length}}</p>
+    <p class="pass-status" *ngIf="test">
+      {{ test.passingScore!==undefined && score >= test.passingScore ? 'Congratulations! You passed.' : 'You need ' + test.passingScore + '% to pass.' }}
+    </p>
+    <div class="result-actions">
+      <button class="btn-result" (click)="reload()">
+        Refaire le test
+      </button>
+      <button class="btn-result" (click)="goBackOrFallback()">
+        Retour au chapitre
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="spinner"></div>
+</div>

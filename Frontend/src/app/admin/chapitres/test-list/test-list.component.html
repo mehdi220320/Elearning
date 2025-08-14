@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="form-header">
+    <div class="form-icon">
+      <i class="fas fa-question-circle"></i>
+    </div>
+    <h1 class="form-title">Liste des Tests</h1>
+    <p class="form-subtitle">Gérez les tests disponibles pour vos cours</p>
+    <button class="btn btn-primary" routerLink="/admin/addTest">
+      <i class="fas fa-plus"></i> Ajouter un nouveau test
+    </button>
+  </div>
+
+  <div class="form-card">
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Cours</th>
+          <th>Chapitre</th>
+          <th>Questions</th>
+          <th>Score de passage</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let test of paginatedTests">
+          <td>{{ test.title }}</td>
+          <td>{{ test.course.title }}</td>
+          <td>{{ test.chapter.title }}</td>
+          <td>{{ test.questions.length }}</td>
+          <td>{{ test.passingScore }}%</td>
+          <td>
+      <span class="badge" [ngClass]="{
+        'badge-success': test.isPublished,
+        'badge-warning': !test.isPublished
+      }">
+        {{ test.isPublished ? 'Publié' : 'Brouillon' }}
+      </span>
+          </td>
+          <td class="actions">
+            <button class="btn-action btn-view" (click)="viewTest(test._id)">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn-action btn-edit" (click)="editTest(test._id)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-action btn-delete" (click)="confirmDelete(test._id)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="tests.length === 0">
+          <td colspan="7" class="text-center">Aucun test disponible</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer">
+      <div class="table-pagination" *ngIf="tests.length > 0">
+        <button class="btn-pagination" [disabled]="currentPage === 1" (click)="previousPage()">
+          <i class="fas fa-chevron-left"></i> Précédent
+        </button>
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+        <button class="btn-pagination" [disabled]="currentPage === totalPages" (click)="nextPage()">
+          Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Confirmer la suppression</h3>
+      <button class="modal-close" (click)="cancelDelete()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Êtes-vous sûr de vouloir supprimer ce test ? Cette action est irréversible.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="cancelDelete()">Annuler</button>
+      <button class="btn btn-danger" (click)="deleteTest()">Supprimer</button>
+    </div>
+  </div>
+</div>

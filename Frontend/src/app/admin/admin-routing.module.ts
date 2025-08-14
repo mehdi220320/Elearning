@@ -11,6 +11,8 @@ import {AddChapitreComponent} from './chapitres/add-chapitre/add-chapitre.compon
 import {ChapitresComponent} from './chapitres/chapitres.component';
 import {RessourcesListComponent} from './chapitres/ressources-list/ressources-list.component';
 import {MediaListComponent} from './chapitres/media-list/media-list.component';
+import {AddTestComponent} from './chapitres/add-test/add-test.component';
+import {TestListComponent} from './chapitres/test-list/test-list.component';
 
 const routes: Routes = [
   {
@@ -28,6 +30,8 @@ const routes: Routes = [
       { path: 'chapters', component: ChapitresComponent },
       { path: 'ressources', component: RessourcesListComponent },
       { path: 'medias', component: MediaListComponent },
+      { path: 'addTest',component:AddTestComponent},
+      { path: 'tests',component:TestListComponent}
     ]
   }
 ];

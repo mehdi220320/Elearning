@@ -18,6 +18,7 @@ import { InstructorDetailsComponent } from './instructors/instructor-details/ins
 import { CourseDetailsComponent } from './courses/course-details/course-details.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { ChaptersComponent } from './chapters/chapters.component';
+import { TestDetailsComponent } from './chapters/test-details/test-details.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ChaptersComponent } from './chapters/chapters.component';
     InstructorDetailsComponent,
     CourseDetailsComponent,
     TruncatePipe,
-    ChaptersComponent
+    ChaptersComponent,
+    TestDetailsComponent
   ],
   imports: [
     BrowserModule,

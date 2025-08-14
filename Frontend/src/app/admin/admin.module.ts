@@ -5,7 +5,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CoursComponent } from './cours/cours.component';
 import { AddCourComponent } from './cours/add-cour/add-cour.component';
 import { InstructorsComponent } from './instructors/instructors.component';
@@ -14,6 +14,9 @@ import { ChapitresComponent } from './chapitres/chapitres.component';
 import { AddChapitreComponent } from './chapitres/add-chapitre/add-chapitre.component';
 import { RessourcesListComponent } from './chapitres/ressources-list/ressources-list.component';
 import { MediaListComponent } from './chapitres/media-list/media-list.component';
+import { AddTestComponent } from './chapitres/add-test/add-test.component';
+import {ToastrModule} from 'ngx-toastr';
+import { TestListComponent } from './chapitres/test-list/test-list.component';
 
 @NgModule({
   declarations: [
@@ -28,11 +31,15 @@ import { MediaListComponent } from './chapitres/media-list/media-list.component'
     AddChapitreComponent,
     RessourcesListComponent,
     MediaListComponent,
+    AddTestComponent,
+    TestListComponent,
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot(),
+    ReactiveFormsModule
   ]
 
 })
