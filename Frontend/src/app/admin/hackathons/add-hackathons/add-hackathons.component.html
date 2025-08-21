@@ -1,0 +1,168 @@
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Créer un nouveau hackathon</h1>
+      <a href="#" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i>
+        Retour
+      </a>
+    </div>
+
+    <div class="form-card">
+      <div class="form-header">
+        <h2 class="form-title">Informations du hackathon</h2>
+        <p class="form-subtitle">Renseignez les détails de base du hackathon</p>
+      </div>
+
+      <form id="hackathon-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="title" class="form-label">Titre du hackathon <span>*</span></label>
+            <input type="text" id="title" class="form-control" name="title" required placeholder="Ex: Hackathon IA 2023">
+          </div>
+
+          <div class="form-group">
+            <label for="theme" class="form-label">Thème principal <span>*</span></label>
+            <input type="text" id="theme" class="form-control" name="theme" required placeholder="Ex: Intelligence Artificielle">
+          </div>
+
+          <div class="form-group">
+            <label for="start-date" class="form-label">Date de début <span>*</span></label>
+            <input type="datetime-local" id="start-date" class="form-control" name="startDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="end-date" class="form-label">Date de fin <span>*</span></label>
+            <input type="datetime-local" id="end-date" class="form-control" name="endDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="location" class="form-label">Lieu <span>*</span></label>
+            <input type="text" id="location" class="form-control" name="location" required placeholder="Ex: En ligne ou Paris, France">
+          </div>
+
+          <div class="form-group">
+            <label for="max-participants" class="form-label">Nombre maximum de participants</label>
+            <input type="number" id="max-participants" class="form-control" name="maxParticipants" min="1" placeholder="Ex: 100">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="short-description" class="form-label">Description courte <span>*</span></label>
+            <textarea id="short-description" class="form-control" name="shortDescription" required placeholder="Une brève description qui apparaîtra sur la page d'accueil"></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="description" class="form-label">Description détaillée <span>*</span></label>
+            <textarea id="description" class="form-control" name="description" required placeholder="Description complète du hackathon avec les objectifs, les règles, etc."></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Image de couverture <span>*</span></label>
+            <div class="file-upload">
+              <div class="file-upload-btn">
+                <div class="file-upload-text">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Cliquez pour télécharger</span>
+                  ou glissez-déposez une image
+                  <small>(JPEG, PNG - 16:9 recommandé)</small>
+                </div>
+                <input type="file" class="file-upload-input" accept="image/*">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Cours associés <span>*</span></label>
+            <p class="form-subtitle">Sélectionnez les cours qui seront utiles pour participer à ce hackathon</p>
+
+            <div class="courses-selection">
+              <div class="course-checkbox">
+                <input type="checkbox" id="course1" name="courses" value="course1">
+                <div class="course-info">
+                  <div class="course-title">Introduction à Python</div>
+                  <div class="course-details">
+                    <span>Débutant</span>
+                    <span>15 heures</span>
+                    <span>49,99 €</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="course-checkbox">
+                <input type="checkbox" id="course2" name="courses" value="course2">
+                <div class="course-info">
+                  <div class="course-title">Machine Learning avancé</div>
+                  <div class="course-details">
+                    <span>Avancé</span>
+                    <span>25 heures</span>
+                    <span>89,99 €</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="course-checkbox">
+                <input type="checkbox" id="course3" name="courses" value="course3">
+                <div class="course-info">
+                  <div class="course-title">Développement Web Full Stack</div>
+                  <div class="course-details">
+                    <span>Intermédiaire</span>
+                    <span>30 heures</span>
+                    <span>79,99 €</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="course-checkbox">
+                <input type="checkbox" id="course4" name="courses" value="course4">
+                <div class="course-info">
+                  <div class="course-title">Data Science pour débutants</div>
+                  <div class="course-details">
+                    <span>Débutant</span>
+                    <span>20 heures</span>
+                    <span>69,99 €</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prizes" class="form-label">Prix à gagner</label>
+            <input type="text" id="prizes" class="form-control" name="prizes" placeholder="Ex: 5000€, Formation gratuite, etc.">
+          </div>
+
+          <div class="form-group">
+            <label for="status" class="form-label">Statut <span>*</span></label>
+            <select id="status" class="form-control" name="status" required>
+              <option value="">Sélectionnez un statut</option>
+              <option value="planned">Planifié</option>
+              <option value="ongoing">En cours</option>
+              <option value="completed">Terminé</option>
+              <option value="canceled">Annulé</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <div class="error-container" style="display: none;">
+            <div class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              <span class="error-text"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline">
+            <i class="fas fa-times"></i>
+            Annuler
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-calendar-plus"></i>
+            Créer le hackathon
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>

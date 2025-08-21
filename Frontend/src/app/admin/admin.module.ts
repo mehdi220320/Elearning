@@ -17,6 +17,8 @@ import { MediaListComponent } from './chapitres/media-list/media-list.component'
 import { AddTestComponent } from './chapitres/add-test/add-test.component';
 import {ToastrModule} from 'ngx-toastr';
 import { TestListComponent } from './chapitres/test-list/test-list.component';
+import { HackathonsComponent } from './hackathons/hackathons.component';
+import { AddHackathonsComponent } from './hackathons/add-hackathons/add-hackathons.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { TestListComponent } from './chapitres/test-list/test-list.component';
     MediaListComponent,
     AddTestComponent,
     TestListComponent,
+    HackathonsComponent,
+    AddHackathonsComponent,
   ],
   imports: [
     CommonModule,

@@ -58,30 +58,61 @@
         </div>
 
         <!-- Tests Section -->
-        <div class="tests-section">
-          <h3 class="tests-title">Tests disponibles</h3>
-
-          <div class="tests-list">
-            <div class="test-item" *ngFor="let test of tests">
+        <div class="tests-section" *ngIf="tests.length>0">
+          <div class="tests-list" >
+            <h3 class="tests-title">
+              <i class="fas fa-graduation-cap"></i>
+              Tests disponibles
+            </h3>
+            <!-- Test Item 1 -->
+            <div class="test-item"  *ngFor="let test of testsPagination">
               <div class="test-info">
-                <h4 class=" passing-score">{{test.title}}</h4>
-                <p class="test-title">Score minimum pour réussir le test : {{test.passingScore}}</p>
-                <p class="test-questions"> {{test.questions.length}} questions</p>
+                <div class="test-header">
+                  <div class="test-icon">
+                    <i class="fas fa-brain"></i>
+                  </div>
+                  <h4 class="test-title">{{test.title}}</h4>
+                </div>
+                <div class="test-details">
+                  <div class="test-detail">
+                    <span class="detail-icon"><i class="fas fa-trophy"></i></span>
+                    Score minimum: {{test.passingScore}}%
+                  </div>
+                  <div class="test-detail">
+                    <span class="detail-icon"><i class="fas fa-question-circle"></i></span>
+                    {{test.questions.length}} questions
+                  </div>
+                  <div class="test-detail">
+                    <span class="detail-icon"><i class="fas fa-clock"></i></span>
+                    {{test.questions.timeLimit}} minutes
+                  </div>
+                </div>
+                <div  *ngIf="lastScore(test.results)!==null" [ngClass]="lastScore(test.results).score<test.passingScore ? 'score-badge-fail': 'score-badge'">
+                  <i class="fas fa-star"></i>
+                  Last score: {{lastScore(test.results).score}}%
+                </div>
               </div>
               <button class="start-test-btn" [routerLink]="'/courses/'+courseId+'/chapters/'+chapters[currentChapterIndex]._id+'/test/'+test._id">
-                <i class="fas fa-play"></i> Commencer
+                <i class="fas fa-play-circle"></i> Commencer
               </button>
             </div>
+
           </div>
 
+
           <!-- Show more/less button if there are more than 2 tests -->
-          <div class="show-more-container" >
-            <button class="show-more-btn" >
+          <div class="show-more-container" *ngIf="testsPagination.length<tests.length">
+            <button class="show-more-btn" (click)="afficherPlus()">
             Afficher plus
             </button>
           </div>
         </div>
-
+        <div class="no-reviews" *ngIf="tests.length === 0">
+          <div class="no-reviews-illustration">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>Aucun Test pour le moment</h3>
+        </div>
         <!-- Chapter Navigation -->
         <div class="chapter-navigation">
           <button class="nav-button prev" (click)="previousChapter()" [disabled]="currentChapterIndex === 0">
@@ -154,11 +185,11 @@
             </div>
             <div class="chapter-info">
               <h4 class="chapter-name">{{chapter.title}}</h4>
-              <div class="chapter-meta">
-                <span class="meta-item"><i class="far fa-file-alt"></i> {{chapter.nombrePage}} pages</span>
-                <span class="meta-item"><i class="far fa-clock"></i> {{chapter.dureeVideo}}</span>
-                <span  class="meta-item"><i class="far fa-question-circle"></i> chapter.tests.length test(s)</span>
-              </div>
+<!--              <div class="chapter-meta">-->
+<!--                <span class="meta-item"><i class="far fa-file-alt"></i> {{chapter.nombrePage}} pages</span>-->
+<!--                <span class="meta-item"><i class="far fa-clock"></i> {{chapter.dureeVideo}}</span>-->
+<!--                <span  class="meta-item"><i class="far fa-question-circle"></i> chapter.tests.length test(s)</span>-->
+<!--              </div>-->
             </div>
           </div>
         </div>

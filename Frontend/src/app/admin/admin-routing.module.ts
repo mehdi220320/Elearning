@@ -13,6 +13,8 @@ import {RessourcesListComponent} from './chapitres/ressources-list/ressources-li
 import {MediaListComponent} from './chapitres/media-list/media-list.component';
 import {AddTestComponent} from './chapitres/add-test/add-test.component';
 import {TestListComponent} from './chapitres/test-list/test-list.component';
+import {AddHackathonsComponent} from './hackathons/add-hackathons/add-hackathons.component';
+import {HackathonsComponent} from './hackathons/hackathons.component';
 
 const routes: Routes = [
   {
@@ -31,7 +33,9 @@ const routes: Routes = [
       { path: 'ressources', component: RessourcesListComponent },
       { path: 'medias', component: MediaListComponent },
       { path: 'addTest',component:AddTestComponent},
-      { path: 'tests',component:TestListComponent}
+      { path: 'tests',component:TestListComponent},
+      { path: 'addhackathon',component:AddHackathonsComponent},
+      { path: 'hackathon',component:HackathonsComponent},
     ]
   }
 ];

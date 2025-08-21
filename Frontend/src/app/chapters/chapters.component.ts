@@ -7,6 +7,7 @@ import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser'
 import {Chapitre} from '../models/Chapitres';
 import {ChapitreService} from '../services/chapitre.service';
 import {TestService} from '../services/test.service';
+import {AuthService} from '../services/authServices/auth.service';
 
 @Component({
   selector: 'app-chapters',
@@ -51,14 +52,17 @@ export class ChaptersComponent {
               private route:ActivatedRoute,
               private chapterService:ChapitreService,
               private testService:TestService,
+              private authService:AuthService,
               private sanitizer:DomSanitizer) {}
   tests:any=[]
+  numberTest=2;
+  testsPagination:any=[]
   loadTests(id:any): void {
     this.tests=[]
     this.testService.getAllTestsByChapter(id).subscribe({
       next: (response) => {
         this.tests = response.data.tests;
-        console.log(response.data.tests)
+        this.testsPagination=this.tests.slice(0,this.numberTest)
       },
       error: (err) => {
         console.error('Erreur lors du chargement des tests', err);
@@ -106,18 +110,27 @@ export class ChaptersComponent {
     if (this.currentChapterIndex > 0) {
       this.currentChapterIndex--;
     }
+    this.loadTests(this.chapters[this.currentChapterIndex]._id)
+
   }
 
   nextChapter(): void {
     if (this.currentChapterIndex < this.chapters.length - 1) {
       this.currentChapterIndex++;
     }
-  }
+    this.loadTests(this.chapters[this.currentChapterIndex]._id)
 
+  }
+  afficherPlus(){
+    this.numberTest+=3;
+    this.testsPagination=this.tests.slice(0,this.numberTest)
+  }
   goToChapter(index: number): void {
     if (index >= 0 && index < this.chapters.length) {
       this.currentChapterIndex = index;
     }
+    this.loadTests(this.chapters[this.currentChapterIndex]._id)
+
   }
 
   playVideo(url: any): SafeResourceUrl {
@@ -138,6 +151,19 @@ export class ChaptersComponent {
     return (match && match[2].length === 11) ? match[2] : '';
   }
 
+  lastScore(results: any[]) :any{
 
+    const userResultItems = results.filter(x =>
+      x.user._id === this.authService.getUserId() &&
+      x.completedAt
+    );
+
+    if (userResultItems.length === 0) return null;
+
+    return userResultItems.reduce((latest, current) => {
+      return new Date(current.completedAt) > new Date(latest.completedAt) ? current : latest;
+    });
+
+  }
 
 }
