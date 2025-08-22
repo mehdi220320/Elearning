@@ -18,15 +18,19 @@ const hackathonSchema=new mongoose.Schema({
    }],
    status: {
       type: String,
-      enum: ['in_progress', 'finished', 'scheduled'],
+      enum: ['ongoing', 'completed','canceled', 'scheduled'],
       default: 'scheduled'}
    ,
    fee:Number,
-   Prizes:Number,
+   Prizes:String,
    coverImage:{
       path: String,
       contentType: String
    },
+   maxParticipants:Number,
+   objectifs:[String],
+   skills:[String],
+   rules:[String]
 },{ timestamps: true });
 
 

@@ -2,7 +2,8 @@ const Hackathon=require('./Hackathon')
 const Course=require('../courses/Course')
 const Category=require('../categories/Category')
 class HackathonService {
-    static async addHackathon(coverImageFile,title,location,startDate,endDate,shortDescription,
+    static async addHackathon(objectifs,rules,skills,maxParticipants,coverImageFile,title,
+                              location,startDate,endDate,shortDescription,
                               description,themeid,coursesId,fee,Prizes){
         try{
             let courses=[];
@@ -17,7 +18,9 @@ class HackathonService {
                 console.error("Category Doesn't Exists")
                 throw error("Category Doesn't Exists")
             }
-            const hack=new Hackathon({title,coverImage,location,startDate,endDate,shortDescription,
+            const hack=new Hackathon(
+                {maxParticipants,title,coverImage,location,
+                startDate,endDate,shortDescription,
                 description,theme,courses,fee,Prizes});
             return await hack.save();
         }catch (e){
@@ -38,6 +41,33 @@ class HackathonService {
             return await Hackathon.find()
         }catch (e){
             console.error('Error in getAllHackathon:', e.message);
+            throw e;
+        }
+    }
+    static async getById(id){
+        try {
+            return await Hackathon.findById(id)
+                .populate({
+                    path: "theme",
+                    select: "_id name"
+                })
+                .populate({
+                    path: "courses",
+                    select: "_id title prix coverImage",
+                    populate: [
+                        {
+                            path: "formateur",
+                            select: "firstname lastname"
+                        },
+                        {
+                            path: "categorie",
+                            select: "name"
+                        }
+                    ]
+                });
+
+        }catch (e){
+            console.error('Error in getById:', e.message);
             throw e;
         }
     }
