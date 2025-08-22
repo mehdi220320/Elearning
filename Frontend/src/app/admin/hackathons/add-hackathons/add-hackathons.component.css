@@ -392,3 +392,126 @@ select.form-control {
     width: 100%;
   }
 }
+.no-courses-message, .theme-alert-message {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed #e9ecef;
+}
+
+.no-courses-message i, .theme-alert-message i {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.no-courses-message i {
+  color: #4361ee;
+}
+
+.theme-alert-message i {
+  color: #f59e0b;
+}
+
+.no-courses-message h3, .theme-alert-message h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #1b263b;
+}
+
+.no-courses-message p, .theme-alert-message p {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.btn-course {
+  display: contents;
+  /*align-items: center;*/
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: none;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.btn-outline-course {
+  background-color: transparent;
+  color: #4361ee;
+  border: 2px solid #4361ee;
+}
+
+.btn-outline-course:hover {
+  color: rgba(67, 95, 246, 0.77);
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.skill-tag:hover{
+  background-color: #ffe1e1;
+  color: #ee4343;
+}
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e1e8ff;
+  color: #4361ee;
+  padding: 0.5rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.skill-tag i{
+  display: none;
+}
+.skill-tag:hover i {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+}
+
+
+.skill-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.skill-input {
+  padding-right: 100px;
+}
+
+.add-skill-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  padding: 0 1rem;
+  background-color: #4361ee;
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.add-skill-btn:hover {
+  background-color: #3a56d4;
+}
+.objectifs-container {
+  display: grid;
+  width: fit-content;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}

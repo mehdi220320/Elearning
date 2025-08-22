@@ -19,6 +19,9 @@ import { CourseDetailsComponent } from './courses/course-details/course-details.
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { ChaptersComponent } from './chapters/chapters.component';
 import { TestDetailsComponent } from './chapters/test-details/test-details.component';
+import { HackthonsComponent } from './hackthons/hackthons.component';
+import { HackathonDetailsComponent } from './hackthons/hackathon-details/hackathon-details.component';
+import { FirstLettersPipe } from './pipes/first-letters.pipe';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { TestDetailsComponent } from './chapters/test-details/test-details.compo
     CourseDetailsComponent,
     TruncatePipe,
     ChaptersComponent,
-    TestDetailsComponent
+    TestDetailsComponent,
+    HackthonsComponent,
+    HackathonDetailsComponent,
+    FirstLettersPipe
   ],
   imports: [
     BrowserModule,

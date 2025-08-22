@@ -1,0 +1,146 @@
+<!-- component.html -->
+<section class="hero-banner">
+  <div class="container">
+    <h1 class="hero-title">Découvrez les Hackathons</h1>
+    <p class="hero-subtitle">Participez à des défis passionnants et développez vos compétences en équipe</p>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Rechercher des hackathons (IA, Web, Blockchain...)"
+        (input)="onSearchFilterChange($event)"
+        [value]="searchFilter">
+      <button type="button"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- Contenu principal -->
+<main class="container">
+  <!-- Barre de recherche avancée -->
+  <div class="advanced-search">
+    <div class="search-tabs">
+      <div class="search-tab active">Tous les hackathons</div>
+      <div class="search-tab">À venir</div>
+      <div class="search-tab">En cours</div>
+      <div class="search-tab">Terminés</div>
+    </div>
+
+    <div class="search-filters">
+      <div class="filter-group">
+        <label>Thème</label>
+        <select (change)="onThemeFilterChange($event)" [value]="themeFilter">
+          <option value="">Tous les thèmes</option>
+          <option *ngFor="let theme of themes" [value]="theme._id">{{ theme.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Lieu</label>
+        <select>
+          <option value="">Tous les lieux</option>
+          <option value="online">En ligne</option>
+          <option value="paris">Paris</option>
+          <option value="lyon">Lyon</option>
+          <option value="toulouse">Toulouse</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Durée</label>
+        <select>
+          <option value="">Toutes les durées</option>
+          <option value="1">24 heures</option>
+          <option value="2">48 heures</option>
+          <option value="3">72 heures</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="filter-btn reset" (click)="refreshData()">Réinitialiser</button>
+    </div>
+  </div>
+
+  <!-- Résultats -->
+  <div class="results-header">
+    <h2 class="section-title">{{ filteredHackathons.length }} hackathon(s) disponible(s)</h2>
+    <div class="sort-by">
+      <span>Trier par :</span>
+      <select>
+        <option value="pertinence">Pertinence</option>
+        <option value="newest">Nouveautés</option>
+        <option value="closest">Plus proches</option>
+        <option value="participants">Plus populaires</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Grille de hackathons -->
+  <div class="hackathons-grid">
+    <!-- Dynamic hackathon cards -->
+    <div *ngFor="let hackathon of getPaginatedHackathons()" class="hackathon-card" [routerLink]="'/hackathons/'+hackathon._id">
+      <div class="hackathon-thumbnail">
+        <img [src]="getImage(hackathon.coverImage!.path)" [alt]="hackathon.title">
+        <span class="hackathon-status" [class]="getStatusClass(hackathon.status)">
+          {{ getStatusText(hackathon.status) }}
+        </span>
+      </div>
+      <div class="hackathon-info">
+        <div class="hackathon-theme">{{ getThemeName(hackathon.theme._id) }}</div>
+        <h3 class="hackathon-title">{{ hackathon.title }}</h3>
+        <p class="hackathon-description">
+          {{ hackathon.shortDescription || hackathon.description }}
+        </p>
+        <div class="hackathon-details">
+          <div class="hackathon-detail">
+            <i class="fas fa-calendar-alt"></i>
+            <span>{{ formatDateRange(hackathon.startDate, hackathon.endDate) }}</span>
+          </div>
+          <div class="hackathon-detail">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ hackathon.location }}</span>
+          </div>
+          <div class="hackathon-detail">
+            <i class="fas fa-trophy"></i>
+            <span>Prix: {{ formatCurrency(hackathon.Prizes) }}</span>
+          </div>
+        </div>
+        <div class="hackathon-footer">
+          <div class="participants-count">
+            <i class="fas fa-users"></i>
+            <span>{{ hackathon.maxParticipants }} participants max</span>
+          </div>
+          <button class="join-btn" [class.view-results]="hackathon.status === 'completed'">
+            {{ hackathon.status === 'completed' ? 'Voir les résultats' : 'Rejoindre' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No results message -->
+    <div *ngIf="filteredHackathons.length === 0" class="no-results-message">
+      <i class="fas fa-search fa-3x"></i>
+      <h3>Aucun hackathon trouvé</h3>
+      <p>Essayez de modifier vos critères de recherche ou réinitialisez les filtres.</p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <nav class="pagination" *ngIf="totalPages > 1">
+    <ul>
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="goToPage(currentPage - 1)">Précédent</a>
+      </li>
+
+      <li *ngFor="let page of getPageNumbers()" class="page-item" [class.active]="page === currentPage">
+        <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="goToPage(currentPage + 1)">Suivant</a>
+      </li>
+    </ul>
+  </nav>
+</main>

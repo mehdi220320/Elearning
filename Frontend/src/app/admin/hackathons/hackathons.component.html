@@ -1,1 +1,131 @@
-<p>hackathons works!</p>
+<!-- component.html -->
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Gestion des Hackathons</h1>
+      <a href="/admin/addhackathon" class="btn btn-primary">
+        <i class="fas fa-plus"></i>
+        Nouveau Hackathon
+      </a>
+    </div>
+
+    <div class="filters-section">
+      <div class="filter-group">
+        <label class="filter-label">Filtrer par statut</label>
+        <select class="filter-select" (change)="onStatusFilterChange($event)" [value]="statusFilter">
+          <option value="">Tous les statuts</option>
+          <option value="planned">Planifié</option>
+          <option value="ongoing">En cours</option>
+          <option value="completed">Terminé</option>
+          <option value="canceled">Annulé</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Filtrer par thème</label>
+        <select class="filter-select" (change)="onThemeFilterChange($event)" [value]="themeFilter">
+          <option value="">Tous les thèmes</option>
+          <option *ngFor="let theme of themes" [value]="theme._id">{{ theme.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Rechercher</label>
+        <div class="search-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Rechercher..."
+            (input)="onSearchFilterChange($event)"
+            [value]="searchFilter">
+        </div>
+      </div>
+
+      <button class="btn btn-outline" (click)="refreshData()">
+        <i class="fas fa-sync-alt"></i>
+        Actualiser
+      </button>
+    </div>
+
+    <!-- Results count -->
+    <div class="results-count">
+      {{ filteredHackathons.length }} hackathon(s) trouvé(s)
+    </div>
+
+    <!-- Tableau des hackathons -->
+    <div class="table-container">
+      <table class="hackathons-table">
+        <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Thème</th>
+          <th>Date</th>
+          <th>Lieu</th>
+          <th>Participants</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let hackathon of getPaginatedHackathons()">
+          <td>{{ hackathon.title }}</td>
+          <td>{{ getThemeName(hackathon.theme._id) }}</td>
+          <td>{{ formatDateRange(hackathon.startDate, hackathon.endDate) }}</td>
+          <td>{{ hackathon.location }}</td>
+          <td>{{ hackathon.maxParticipants }}</td>
+          <td>
+              <span class="status-badge" [class]="getStatusClass(hackathon.status)">
+                {{ getStatusText(hackathon.status) }}
+              </span>
+          </td>
+          <td>
+            <div class="table-actions">
+              <button class="action-btn view-btn" title="Voir" [routerLink]="['/admin/hackathon', hackathon._id]">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit-btn" title="Modifier" [routerLink]="['/admin/edithackathon', hackathon._id]">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete-btn" title="Supprimer" >
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="filteredHackathons.length === 0">
+          <td colspan="7" class="no-results">
+            Aucun hackathon trouvé avec les filtres actuels.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button
+        class="pagination-btn"
+        [class.disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <button
+        class="pagination-btn"
+        [class.disabled]="currentPage === totalPages"
+        (click)="goToPage(currentPage + 1)">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</main>

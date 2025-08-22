@@ -1,0 +1,217 @@
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-image">
+        <img [src]="getImage(hackathon.coverImage.path)" [alt]="hackathon.title">
+      </div>
+      <div class="hero-info">
+        <div class="hackathon-theme">{{ hackathon.theme.name }}</div>
+        <h1 class="hackathon-title">{{ hackathon.title }}</h1>
+        <span class="hackathon-status" [class]="'status-' + hackathon.status">
+          {{ getStatusText(hackathon.status) }} - {{ hackathon.status === 'planned' ? 'Inscriptions ouvertes' : hackathon.status === 'ongoing' ? 'En cours' : 'Terminé' }}
+        </span>
+
+        <p class="hackathon-description">
+          {{ hackathon.description || hackathon.shortDescription }}
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="participate-btn" *ngIf="hackathon.status !== 'completed'">
+            <i class="fas fa-plus-circle"></i>
+            {{ hackathon.status === 'ongoing' ? 'Rejoindre le hackathon' : 'Participer au hackathon' }}
+          </button>
+          <button class="btn btn-outline">
+            <i class="fas fa-share-alt"></i>
+            Partager
+          </button>
+        </div>
+
+        <div class="hackathon-meta">
+          <div class="meta-item">
+            <div class="meta-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="meta-content">
+              <h4>Date</h4>
+              <p>{{ formatDateRange(hackathon.startDate, hackathon.endDate) }}</p>
+            </div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="meta-content">
+              <h4>Lieu</h4>
+              <p>{{ hackathon.location }}</p>
+            </div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <div class="meta-content">
+              <h4>Prix</h4>
+              <p>{{ formatCurrency(hackathon.Prizes) }} {{ hackathon.fee > 0 ? '+ Frais: ' + formatCurrency(hackathon.fee) : '' }}</p>
+            </div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="meta-content">
+              <h4>Participants</h4>
+              <p>{{ hackathon.maxParticipants }} places disponibles</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Détails Section -->
+<section class="details-section">
+  <div class="container">
+    <h2 class="section-title">Détails du Hackathon</h2>
+
+    <div class="details-grid">
+      <div class="details-content">
+        <div class="detail-item">
+          <h3>Description complète</h3>
+          <p>
+            {{ hackathon.description || hackathon.shortDescription }}
+          </p>
+          <p *ngIf="!hackathon.description && !hackathon.shortDescription">
+            Aucune description détaillée n'est disponible pour ce hackathon.
+          </p>
+        </div>
+
+        <div class="detail-item">
+          <h3>Objectifs du hackathon</h3>
+          <p>
+            - Développer des solutions innovantes utilisant l'IA et le machine learning<br>
+            - Promouvoir la collaboration entre passionnés d'IA<br>
+            - Encourager l'apprentissage pratique et le partage de connaissances<br>
+            - Identifier et récompenser les talents émergents dans le domaine de l'IA
+          </p>
+        </div>
+
+        <div class="detail-item">
+          <h3>Compétences recommandées</h3>
+          <div class="skills-list">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Machine Learning</span>
+            <span class="skill-tag">Traitement de données</span>
+            <span class="skill-tag">Deep Learning</span>
+            <span class="skill-tag">Algorithmes d'IA</span>
+            <span class="skill-tag">Visualisation de données</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <h3>Règles et conditions</h3>
+          <p>
+            - Les participants doivent former des équipes de 3 à 5 personnes<br>
+            - Tous les codeurs doivent être présents pendant toute la durée du hackathon<br>
+            - Les projets doivent être originaux et créés pendant le hackathon<br>
+            - Le code source doit être ouvert et disponible sur GitHub<br>
+            - Les participants doivent respecter le code de conduite de l'événement
+          </p>
+        </div>
+      </div>
+
+      <div class="sidebar-details">
+        <div class="organizer">
+          <div class="organizer-avatar">{{ hackathon.theme.name | firstLetters  }}</div>
+          <div class="organizer-info">
+            <h3>{{ hackathon.theme.name }}</h3>
+            <p>Thème du hackathon</p>
+          </div>
+        </div>
+
+        <div class="sidebar-stats">
+          <div class="stat-item">
+            <span>Début:</span>
+            <span>{{ formatDateTime(hackathon.startDate) }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Fin:</span>
+            <span>{{ formatDateTime(hackathon.endDate) }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Durée:</span>
+            <span>{{ calculateDuration(hackathon.startDate, hackathon.endDate) }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Équipes:</span>
+            <span>3-5 participants</span>
+          </div>
+          <div class="stat-item">
+            <span>Niveau:</span>
+            <span>Intermédiaire à Avancé</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%;">
+          <i class="fas fa-calendar-check"></i>
+          Ajouter à mon calendrier
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cours Section -->
+<section class="courses-section" *ngIf="hackathon.courses && hackathon.courses.length > 0">
+  <div class="container">
+    <div class="courses-header">
+      <h2 class="section-title">Cours recommandés</h2>
+      <p>Améliorez vos compétences avec ces cours en rapport avec le hackathon</p>
+    </div>
+
+    <div class="courses-grid">
+      <div *ngFor="let course of hackathon.courses" class="course-card" style="cursor: pointer">
+        <a style="all: unset;" [href]="'/courses/'+course._id"><div class="course-thumbnail">
+          <img [src]="getImage(course.coverImage!.path)" [alt]="course.title">
+          <span class="course-category">{{ course.categorie!.name || 'Général' }}</span>
+        </div>
+        <div class="course-info">
+          <h3 class="course-title">{{ course.title }}</h3>
+          <p class="course-instructor">Par {{ course.formateur!.firstname }} {{ course.formateur!.lastname }}</p>
+          <div class="course-meta">
+            <div class="course-rating" *ngIf="course.rating > 0">
+              <i class="fas fa-star"></i>
+              {{ course.rating }}
+            </div>
+            <div class="course-price">{{ formatCurrency(course.prix) }}</div>
+          </div>
+        </div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>© 2023 LearnHub - Plateforme d'apprentissage en ligne. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<!-- Modal de participation -->
+<div class="modal" id="participation-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Participer au Hackathon</h2>
+      <button class="close-modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Vous êtes sur le point de vous inscrire au {{ hackathon.title }}.</p>
+      <p>Assurez-vous de respecter les règles et conditions mentionnées. Un email de confirmation vous sera envoyé avec les détails de participation.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="cancel-participation">Annuler</button>
+      <button class="btn btn-primary" id="confirm-participation">Confirmer</button>
+    </div>
+  </div>
+</div>

@@ -14,6 +14,8 @@ import {InstructorDetailsComponent} from './instructors/instructor-details/instr
 import {CourseDetailsComponent} from './courses/course-details/course-details.component';
 import {ChaptersComponent} from './chapters/chapters.component';
 import {TestDetailsComponent} from './chapters/test-details/test-details.component';
+import {HackthonsComponent} from './hackthons/hackthons.component';
+import {HackathonDetailsComponent} from './hackthons/hackathon-details/hackathon-details.component';
 
 const routes: Routes = [
   {
@@ -43,6 +45,8 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'home', component: HomeComponent },
+      { path: 'hackathons', component: HackthonsComponent },
+      { path: 'hackathons/:id', component: HackathonDetailsComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'courses/:id', component: CourseDetailsComponent },
       { path: 'courses/:id/chapters', component: ChaptersComponent },

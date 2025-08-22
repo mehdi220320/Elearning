@@ -35,7 +35,7 @@ const routes: Routes = [
       { path: 'addTest',component:AddTestComponent},
       { path: 'tests',component:TestListComponent},
       { path: 'addhackathon',component:AddHackathonsComponent},
-      { path: 'hackathon',component:HackathonsComponent},
+      { path: 'hackathons',component:HackathonsComponent},
     ]
   }
 ];

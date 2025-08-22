@@ -12,6 +12,9 @@ declare var google:any;
 export class NavbarComponent {
   constructor(private authService: AuthService,
               private router: Router) {}
+  isAdmin():boolean{
+    return this.authService.getUserRole()==='admin';
+  }
   logout(): void {
     this.authService.logout();
 

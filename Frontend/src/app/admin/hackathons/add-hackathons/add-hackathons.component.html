@@ -2,7 +2,7 @@
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">Créer un nouveau hackathon</h1>
-      <a href="#" class="btn btn-outline">
+      <a (click)="goBackOrFallback()" class="btn btn-outline">
         <i class="fas fa-arrow-left"></i>
         Retour
       </a>
@@ -14,133 +14,183 @@
         <p class="form-subtitle">Renseignez les détails de base du hackathon</p>
       </div>
 
-      <form id="hackathon-form">
+      <form id="hackathon-form" #addhackathonForm="ngForm" (ngSubmit)="onSubmit(addhackathonForm)">
         <div class="form-grid">
           <div class="form-group">
             <label for="title" class="form-label">Titre du hackathon <span>*</span></label>
-            <input type="text" id="title" class="form-control" name="title" required placeholder="Ex: Hackathon IA 2023">
+            <input type="text" id="title" class="form-control" name="title" [(ngModel)]="title" required placeholder="Ex: Hackathon IA 2023">
           </div>
 
           <div class="form-group">
             <label for="theme" class="form-label">Thème principal <span>*</span></label>
-            <input type="text" id="theme" class="form-control" name="theme" required placeholder="Ex: Intelligence Artificielle">
+            <select id="theme" class="form-control" name="categoryid" [(ngModel)]="categoryid" (click)="loadCourses()"  required>
+              <option value="">Sélectionnez un theme </option>
+              <option  *ngFor="let category of categories" [value]="category._id" >{{category.name}}</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="start-date" class="form-label">Date de début <span>*</span></label>
-            <input type="datetime-local" id="start-date" class="form-control" name="startDate" required>
+            <input type="datetime-local" id="start-date" class="form-control" name="startDate" [(ngModel)]="startDate" required>
           </div>
 
           <div class="form-group">
             <label for="end-date" class="form-label">Date de fin <span>*</span></label>
-            <input type="datetime-local" id="end-date" class="form-control" name="endDate" required>
+            <input type="datetime-local" id="end-date" class="form-control" name="endDate" [(ngModel)]="endDate" required>
           </div>
 
           <div class="form-group">
             <label for="location" class="form-label">Lieu <span>*</span></label>
-            <input type="text" id="location" class="form-control" name="location" required placeholder="Ex: En ligne ou Paris, France">
+            <input type="text" id="location" class="form-control" name="location" [(ngModel)]="location" required placeholder="Ex: En ligne ou Tunis, Tunisie">
           </div>
 
           <div class="form-group">
             <label for="max-participants" class="form-label">Nombre maximum de participants</label>
-            <input type="number" id="max-participants" class="form-control" name="maxParticipants" min="1" placeholder="Ex: 100">
+            <input type="number" id="max-participants" class="form-control" [(ngModel)]="maxParticipants" name="maxParticipants" min="1" placeholder="Ex: 100">
           </div>
 
           <div class="form-group full-width">
             <label for="short-description" class="form-label">Description courte <span>*</span></label>
-            <textarea id="short-description" class="form-control" name="shortDescription" required placeholder="Une brève description qui apparaîtra sur la page d'accueil"></textarea>
+            <textarea id="short-description" class="form-control" name="shortDescription" [(ngModel)]="shortDescription" required placeholder="Une brève description qui apparaîtra sur la page d'accueil"></textarea>
           </div>
 
           <div class="form-group full-width">
             <label for="description" class="form-label">Description détaillée <span>*</span></label>
-            <textarea id="description" class="form-control" name="description" required placeholder="Description complète du hackathon avec les objectifs, les règles, etc."></textarea>
+            <textarea id="description" class="form-control" name="description" [(ngModel)]="description" required placeholder="Description complète du hackathon avec les objectifs, les règles, etc."></textarea>
+          </div>
+          <div class="form-group full-width">
+            <label for="objectifs" class="form-label">Objectifs du hackathon</label>
+            <div class="skill-input-container">
+              <input type="text" id="objectifs" class="form-control skill-input" placeholder="Objectifs du hackathon." name="objectif"  [(ngModel)]="objectif">
+              <button type="button" class="add-skill-btn" (click)="addobjectif()">Ajouter</button>
+            </div>
+            <div class="objectifs-container" id="skills-tags" >
+              <div class="skill-tag" *ngFor="let objectif of objectifs" (click)="removeobjectif(objectif)">
+                <li>{{objectif}}</li> <i class="fas fa-times-circle "></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="rules" class="form-label">Règles et conditions</label>
+            <div class="skill-input-container">
+              <input type="text" id="rules" class="form-control skill-input" placeholder="Règles et conditions." name="rule"  [(ngModel)]="rule">
+              <button type="button" class="add-skill-btn" (click)="addrule()">Ajouter</button>
+            </div>
+            <div class="objectifs-container" id="skills-tags" >
+              <div class="skill-tag" *ngFor="let rule of rules" (click)="removerule(rule)">
+                <li>{{rule}}</li> <i class="fas fa-times-circle "></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="skills" class="form-label">Compétences</label>
+            <div class="skill-input-container">
+              <input type="text" id="skills" class="form-control skill-input" placeholder="Ajouter une compétence" name="skill"  [(ngModel)]="skill">
+              <button type="button" class="add-skill-btn" (click)="addSkill()">Ajouter</button>
+            </div>
+            <div class="skills-container" id="skills-tags" >
+              <div class="skill-tag" *ngFor="let skill of competences" (click)="removeSkill(skill)">
+                <span>#{{skill}}</span> <i class="fas fa-times-circle "></i>
+              </div>
+            </div>
           </div>
 
           <div class="form-group full-width">
             <label class="form-label">Image de couverture <span>*</span></label>
             <div class="file-upload">
-              <div class="file-upload-btn">
+              <div class="file-upload-btn"  *ngIf="!imagePreview; else previewBlock" class="file-upload-btn" (click)="fileInput.click()" >
                 <div class="file-upload-text">
                   <i class="fas fa-cloud-upload-alt"></i>
                   <span>Cliquez pour télécharger</span>
                   ou glissez-déposez une image
                   <small>(JPEG, PNG - 16:9 recommandé)</small>
                 </div>
-                <input type="file" class="file-upload-input" accept="image/*">
+                <input type="file" class="file-upload-input" accept="image/*" #fileInput type="file" id="thumbnail" (change)="onFileSelected($event)" required>
               </div>
             </div>
+            <ng-template #previewBlock>
+              <div class="file-preview">
+                <img [src]="imagePreview" class="thumbnail-preview" id="file-preview-img" alt="Preview">
+                <div class="file-info">
+                  <div class="file-name" id="file-name">{{fileName}}</div>
+                  <div class="file-size" id="file-size">{{fileSize}}</div>
+                </div>
+                <i class="fas fa-times file-remove" (click)="removeFile()"></i>
+              </div>
+
+            </ng-template>
           </div>
 
-          <div class="form-group full-width">
+          <div class="form-group full-width" *ngIf="courses.length>0">
             <label class="form-label">Cours associés <span>*</span></label>
             <p class="form-subtitle">Sélectionnez les cours qui seront utiles pour participer à ce hackathon</p>
 
             <div class="courses-selection">
-              <div class="course-checkbox">
-                <input type="checkbox" id="course1" name="courses" value="course1">
+              <div class="course-checkbox" *ngFor="let course of courses; let i = index">
+                <input type="checkbox"
+                       id="course-{{i}}"
+                       name="coursesSelected"
+                       [ngModel]="isSelected(course._id)"
+                       (ngModelChange)="toggleCourseSelection(course._id, $event)"
+                       [value]="course._id">
                 <div class="course-info">
-                  <div class="course-title">Introduction à Python</div>
+                  <div class="course-title">{{course.title}}</div>
                   <div class="course-details">
-                    <span>Débutant</span>
-                    <span>15 heures</span>
-                    <span>49,99 €</span>
+                    <span>{{course.niveau}}</span>
+                    <span>{{course.duree}} heures</span>
+                    <span>{{course.prix}}Dt</span>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="form-group full-width" *ngIf="courses.length===0 && categoryid!=='' ">
+            <label class="form-label">Cours associés <span>*</span></label>
 
-              <div class="course-checkbox">
-                <input type="checkbox" id="course2" name="courses" value="course2">
-                <div class="course-info">
-                  <div class="course-title">Machine Learning avancé</div>
-                  <div class="course-details">
-                    <span>Avancé</span>
-                    <span>25 heures</span>
-                    <span>89,99 €</span>
-                  </div>
-                </div>
+            <div class="courses-selection">
+              <div class="no-courses-message">
+                <i class="fas fa-book-open"></i>
+                <h3>Aucun cours disponible</h3>
+                <p>Il n'y a actuellement aucun cours dans le catalogue. Veuillez d'abord créer des cours dans la section "Cours".</p>
+                <a href="/admin/addCourse" class="btn-course btn-outline-course">
+                  <i class="fas fa-plus-circle"></i>
+                  Créer un nouveau cours
+                </a>
               </div>
+            </div>
+          </div>
 
-              <div class="course-checkbox">
-                <input type="checkbox" id="course3" name="courses" value="course3">
-                <div class="course-info">
-                  <div class="course-title">Développement Web Full Stack</div>
-                  <div class="course-details">
-                    <span>Intermédiaire</span>
-                    <span>30 heures</span>
-                    <span>79,99 €</span>
-                  </div>
-                </div>
-              </div>
+          <!-- État 2: Sélectionner un thème d'abord -->
+          <div class="form-group full-width" *ngIf="categoryid===''">
+            <label class="form-label">Cours associés <span>*</span></label>
 
-              <div class="course-checkbox">
-                <input type="checkbox" id="course4" name="courses" value="course4">
-                <div class="course-info">
-                  <div class="course-title">Data Science pour débutants</div>
-                  <div class="course-details">
-                    <span>Débutant</span>
-                    <span>20 heures</span>
-                    <span>69,99 €</span>
-                  </div>
-                </div>
+            <div class="courses-selection">
+              <div class="theme-alert-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Sélectionnez d'abord un thème</h3>
+                <p>Veuillez d'abord choisir un thème pour le hackathon afin de voir les cours correspondants.</p>
               </div>
             </div>
           </div>
 
           <div class="form-group">
             <label for="prizes" class="form-label">Prix à gagner</label>
-            <input type="text" id="prizes" class="form-control" name="prizes" placeholder="Ex: 5000€, Formation gratuite, etc.">
+            <input type="text" id="prizes" class="form-control" name="prizes" required [(ngModel)]="Prizes" placeholder="Ex: 5000Dt, Formation gratuite, etc.">
+          </div>
+          <div class="form-group">
+            <label for="fee" class="form-label">Frais de participation</label>
+            <input
+              type="number"
+              id="fee"
+              class="form-control"
+              name="fee"
+              [(ngModel)]="fee"
+              required
+              placeholder="Ex. : 5000 DT">
           </div>
 
-          <div class="form-group">
-            <label for="status" class="form-label">Statut <span>*</span></label>
-            <select id="status" class="form-control" name="status" required>
-              <option value="">Sélectionnez un statut</option>
-              <option value="planned">Planifié</option>
-              <option value="ongoing">En cours</option>
-              <option value="completed">Terminé</option>
-              <option value="canceled">Annulé</option>
-            </select>
-          </div>
         </div>
 
         <div class="form-group full-width">
@@ -157,7 +207,7 @@
             <i class="fas fa-times"></i>
             Annuler
           </button>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" [disabled]="addhackathonForm.invalid">
             <i class="fas fa-calendar-plus"></i>
             Créer le hackathon
           </button>

@@ -1,28 +1,27 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryService} from '../../services/category.service';
-import {HackathonService} from '../../services/hackathon.service';
-import {Category} from '../../models/Category';
-import {Hackathon} from '../../models/Hackathon';
+import {Hackathon} from '../models/Hackathon';
+import {Category} from '../models/Category';
+import {CategoryService} from '../services/category.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {HackathonService} from '../services/hackathon.service';
 
 @Component({
-  selector: 'app-hackathons',
+  selector: 'app-hackthons',
   standalone: false,
-  templateUrl: './hackathons.component.html',
-  styleUrl: './hackathons.component.css'
+  templateUrl: './hackthons.component.html',
+  styleUrl: './hackthons.component.css'
 })
-export class HackathonsComponent implements OnInit {
+export class HackthonsComponent implements OnInit {
   themes: Category[] = [];
   hackathons: Hackathon[] = [];
   filteredHackathons: Hackathon[] = [];
 
   // Pagination properties
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 9;
   totalPages: number = 1;
 
   // Filter properties
-  statusFilter: string = '';
   themeFilter: string = '';
   searchFilter: string = '';
 
@@ -30,7 +29,7 @@ export class HackathonsComponent implements OnInit {
     private categoryService: CategoryService,
     private hackathonService: HackathonService,
     private sanitizer: DomSanitizer
-) {}
+  ) {}
 
   ngOnInit(): void {
     this.loadThemes();
@@ -55,11 +54,6 @@ export class HackathonsComponent implements OnInit {
   applyFilters(): void {
     // Apply all filters
     this.filteredHackathons = this.hackathons.filter(hackathon => {
-      // Status filter
-      if (this.statusFilter && hackathon.status !== this.statusFilter) {
-        return false;
-      }
-
       // Theme filter
       if (this.themeFilter && hackathon.theme._id !== this.themeFilter) {
         return false;
@@ -70,9 +64,9 @@ export class HackathonsComponent implements OnInit {
         const searchTerm = this.searchFilter.toLowerCase();
         const matchesTitle = hackathon.title.toLowerCase().includes(searchTerm);
         const matchesLocation = hackathon.location.toLowerCase().includes(searchTerm);
-        const matchesDescription = hackathon.description.toLowerCase().includes(searchTerm);
+        const matchesTheme = this.getThemeName(hackathon.theme._id).toLowerCase().includes(searchTerm);
 
-        if (!matchesTitle && !matchesLocation && !matchesDescription) {
+        if (!matchesTitle && !matchesLocation && !matchesTheme) {
           return false;
         }
       }
@@ -85,13 +79,8 @@ export class HackathonsComponent implements OnInit {
 
     // Reset to first page if current page is beyond total pages
     if (this.currentPage > this.totalPages) {
-    this.currentPage = 1;
-  }
-}
-
-  onStatusFilterChange(event: any): void {
-    this.statusFilter = event.target.value;
-    this.applyFilters();
+      this.currentPage = 1;
+    }
   }
 
   onThemeFilterChange(event: any): void {
@@ -105,7 +94,6 @@ export class HackathonsComponent implements OnInit {
   }
 
   refreshData(): void {
-    this.statusFilter = '';
     this.themeFilter = '';
     this.searchFilter = '';
     this.currentPage = 1;
@@ -119,20 +107,29 @@ export class HackathonsComponent implements OnInit {
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
-    this.currentPage = page;
+      this.currentPage = page;
+    }
   }
-}
 
   getPageNumbers(): number[] {
     const pages = [];
-    for (let i = 1; i <= this.totalPages; i++) {
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = startPage + maxVisiblePages - 1;
+
+    if (endPage > this.totalPages) {
+      endPage = this.totalPages;
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
     return pages;
   }
 
   getImage(url: string | null): SafeUrl | string {
-    return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : '/assets/img.png';
+    return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80';
   }
 
   getStatusClass(status: string): string {
@@ -147,7 +144,7 @@ export class HackathonsComponent implements OnInit {
 
   getStatusText(status: string): string {
     switch (status) {
-      case 'scheduled': return 'Planifié';
+      case 'planned': return 'Planifié';
       case 'ongoing': return 'En cours';
       case 'completed': return 'Terminé';
       case 'canceled': return 'Annulé';
@@ -164,7 +161,6 @@ export class HackathonsComponent implements OnInit {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    // Format as "DD-MMM YYYY" or similar based on your preference
     return `${this.formatDate(start)} - ${this.formatDate(end)}`;
   }
 
@@ -176,16 +172,10 @@ export class HackathonsComponent implements OnInit {
     });
   }
 
-//   deleteHackathon(hackathonId: string): void {
-//     if (confirm('Êtes-vous sûr de vouloir supprimer ce hackathon?')) {
-//     this.hackathonService.delete(hackathonId).subscribe({
-//       next: () => {
-//         this.loadHackathons();
-//       },
-//       error: (err) => {
-//         console.error('Error deleting hackathon:', err);
-//       }
-//     });
-//   }
-// }
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount);
+  }
 }

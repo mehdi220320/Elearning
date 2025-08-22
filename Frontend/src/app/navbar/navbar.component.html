@@ -16,14 +16,15 @@
         Formateurs
       </a>
 
-      <a href="hackathons.html">
+      <a routerLink="/hackathons" routerLinkActive="active">
         <i class="fas fa-code"></i>
         Hackathons
       </a>
-      <a href="resources.html">
-        <i class="fas fa-file-alt"></i>
-        Ressources
+      <a href="/admin" *ngIf="isAdmin()">
+        <i class="fas fa-address-card"></i>
+        Admin Panel
       </a>
+
     </div>
 
     <div class="user-profile dropdown">
