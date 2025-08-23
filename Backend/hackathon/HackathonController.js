@@ -54,6 +54,22 @@ class HackathonController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async addParticipant(req,res){
+        try {
+            const hackathon = await HackathonService.addParticipant(req.params.id, req.params.userId);
+            res.status(200).json(hackathon);
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    }
+    static async removeParticipant(req,res){
+        try {
+            const hackathon = await HackathonService.removeParticipant(req.params.id, req.params.userId);
+            res.status(200).json(hackathon);
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    }
 }
 
 module.exports=HackathonController

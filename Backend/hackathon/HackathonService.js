@@ -19,7 +19,7 @@ class HackathonService {
                 throw error("Category Doesn't Exists")
             }
             const hack=new Hackathon(
-                {maxParticipants,title,coverImage,location,
+                {objectifs,rules,skills,maxParticipants,title,coverImage,location,
                 startDate,endDate,shortDescription,
                 description,theme,courses,fee,Prizes});
             return await hack.save();
@@ -38,7 +38,10 @@ class HackathonService {
     }
     static async getAll(){
         try {
-            return await Hackathon.find()
+            return await Hackathon.find().populate({
+                path: "theme",
+                select: "_id name"
+            })
         }catch (e){
             console.error('Error in getAllHackathon:', e.message);
             throw e;
@@ -71,5 +74,67 @@ class HackathonService {
             throw e;
         }
     }
+    static async addParticipant(hackathonId, userId) {
+        try {
+            const hackathon = await Hackathon.findById(hackathonId);
+            if (!hackathon) {
+                throw new Error("Hackathon not found");
+            }
+
+            if (hackathon.participants.includes(userId)) {
+                throw new Error("User already registered in this hackathon");
+            }
+
+            if (hackathon.maxParticipants && hackathon.participants.length >= hackathon.maxParticipants) {
+                throw new Error("Maximum number of participants reached");
+            }
+
+            hackathon.participants.push(userId);
+            if (hackathon.maxParticipants && hackathon.participants.length >= hackathon.maxParticipants) {
+                hackathon.status = "completed"; // ou "full" si tu veux différencier
+            }
+
+            await hackathon.save();
+
+            return await Hackathon.findById(hackathonId)
+                .populate("participants", "firstname lastname email");
+        } catch (e) {
+            console.error("Error in addParticipant:", e.message);
+            throw e;
+        }
+    }
+
+    static async removeParticipant(hackathonId, userId) {
+        try {
+            const hackathon = await Hackathon.findById(hackathonId);
+            if (!hackathon) {
+                throw new Error("Hackathon not found");
+            }
+
+            if (!hackathon.participants.includes(userId)) {
+                throw new Error("User is not registered in this hackathon");
+            }
+            if (hackathon.maxParticipants && hackathon.participants.length < hackathon.maxParticipants) {
+                if (hackathon.startDate > new Date()) {
+                    hackathon.status = "scheduled";
+                } else {
+                    hackathon.status = "ongoing";
+                }
+            }
+
+            hackathon.participants = hackathon.participants.filter(
+                (participantId) => participantId.toString() !== userId.toString()
+            );
+
+            await hackathon.save();
+
+            return await Hackathon.findById(hackathonId)
+                .populate("participants", "firstname lastname email");
+        } catch (e) {
+            console.error("Error in removeParticipant:", e.message);
+            throw e;
+        }
+    }
+
 }
 module.exports = HackathonService;

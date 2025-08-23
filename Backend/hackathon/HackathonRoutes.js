@@ -8,5 +8,7 @@ router.post('/add', [adminAuthorization, checkTokenExists,upload.single('coverIm
 router.get('/all', [adminAuthorization, checkTokenExists], HackathonController.getAll);
 router.get('/:id', [adminAuthorization, checkTokenExists], HackathonController.getById);
 router.delete('/delete/:id', [adminAuthorization, checkTokenExists], HackathonController.deleteHackathonById);
+router.post("/:id/participants/:userId", [adminAuthorization, checkTokenExists], HackathonController.addParticipant);
+router.delete('/:id/participants/:userId', [adminAuthorization, checkTokenExists], HackathonController.removeParticipant);
 
 module.exports = router;

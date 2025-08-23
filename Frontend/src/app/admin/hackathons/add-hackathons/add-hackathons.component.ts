@@ -161,6 +161,9 @@ export class AddHackathonsComponent implements OnInit{
     if (this.selectedFile) {
       formData.append('coverImageFile', this.selectedFile);
     }
+
+
+
     this.hackathonService.add(formData).subscribe({
       next:(response)=>{
         this.isLoading = true;

@@ -70,10 +70,10 @@
         <tbody>
         <tr *ngFor="let hackathon of getPaginatedHackathons()">
           <td>{{ hackathon.title }}</td>
-          <td>{{ getThemeName(hackathon.theme._id) }}</td>
+          <td>{{ hackathon.theme.name }}</td>
           <td>{{ formatDateRange(hackathon.startDate, hackathon.endDate) }}</td>
           <td>{{ hackathon.location }}</td>
-          <td>{{ hackathon.maxParticipants }}</td>
+          <td>{{ hackathon.participants.length+'/'+hackathon.maxParticipants }}</td>
           <td>
               <span class="status-badge" [class]="getStatusClass(hackathon.status)">
                 {{ getStatusText(hackathon.status) }}

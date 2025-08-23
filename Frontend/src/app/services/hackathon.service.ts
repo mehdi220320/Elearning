@@ -19,4 +19,10 @@ export class HackathonService {
   getById(id:any):Observable<Hackathon>{
     return this.http.get<Hackathon>(this.apiUrl+id)
   }
+  addParticipants(hackathonId:any,userId:any):Observable<any>{
+    return this.http.post(this.apiUrl+hackathonId+"/participants/"+userId,{})
+  }
+  removeParticipants(hackathonId:any,userId:any):Observable<any>{
+    return this.http.delete(this.apiUrl+hackathonId+"/participants/"+userId)
+  }
 }

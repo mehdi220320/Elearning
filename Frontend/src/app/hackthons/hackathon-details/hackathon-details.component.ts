@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {HackathonService} from '../../services/hackathon.service';
 import {Hackathon} from '../../models/Hackathon';
+import {AuthService} from '../../services/authServices/auth.service';
 
 @Component({
   selector: 'app-hackathon-details',
@@ -29,11 +30,16 @@ export class HackathonDetailsComponent {
       path: '',
       contentType: ''
     },
-    maxParticipants:0
+    maxParticipants:0,
+    skills:[],
+    rules:[],
+    objectifs:[],
+    participants:[]
   }
   constructor(
     private route:ActivatedRoute,
     private hackathonService:HackathonService,
+    private authService:AuthService,
     private sanitizer:DomSanitizer) {}
 
   ngOnInit(){
@@ -42,7 +48,13 @@ export class HackathonDetailsComponent {
   loadHackathon(){
     this.hackthonId = this.route.snapshot.paramMap.get('id') ;
     this.hackathonService.getById(this.hackthonId).subscribe({
-      next:(response)=>{this.hackathon=response;console.log(this.hackathon)},
+      next:(response)=>{
+        this.hackathon=response;
+        const userId = this.authService.getUserId();
+        if (this.hackathon.participants?.some((p: any) => (p._id ?? p) === userId)) {
+          this.follow = true;
+        }
+      },
       error:(err)=>console.error(err)
     })
   }
@@ -106,5 +118,24 @@ export class HackathonDetailsComponent {
       month: 'short',
       year: 'numeric'
     });
+  }
+  follow:boolean=false;
+  addParticipant(){
+    this.hackathonService.addParticipants(this.hackthonId,this.authService.getUserId()).subscribe({
+      next:()=> {
+        this.follow=true
+        console.log("add success")
+      },
+      error:(err)=>console.log(err)
+    })
+  }
+  removeParticipant(){
+    this.hackathonService.removeParticipants(this.hackthonId,this.authService.getUserId()).subscribe({
+      next:()=> {
+        this.follow=false
+        console.log("remove success")
+      },
+      error:(err)=>console.log(err)
+    })
   }
 }

@@ -30,7 +30,12 @@ const hackathonSchema=new mongoose.Schema({
    maxParticipants:Number,
    objectifs:[String],
    skills:[String],
-   rules:[String]
+   rules:[String],
+   participants:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+   }],
 },{ timestamps: true });
 
 

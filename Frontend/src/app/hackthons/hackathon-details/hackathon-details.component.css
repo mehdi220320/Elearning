@@ -98,7 +98,15 @@
   background-color: #e1f7e3;
   color: #2e8b57;
 }
+.status-scheduled {
+  background-color: #e1e5f7;
+  color: #2e448b;
+}
 
+.status-completed {
+  background-color: #f7e1e1;
+  color: #8b2e3f;
+}
 .hackathon-description {
   margin-bottom: 25px;
   color: #495057;
@@ -130,6 +138,20 @@
   background-color: #4361ee;
   color: white;
 }
+
+
+.btn-retire {
+  background-color: #e63946; /* rouge vif */
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-retire:hover {
+  background-color: #c53030; /* rouge plus sombre au hover */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+}
+
 
 .btn-primary:hover {
   background-color: #3a56d4;

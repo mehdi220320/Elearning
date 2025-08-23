@@ -1,4 +1,5 @@
 import {Course} from './Course';
+import {User} from './User';
 
 export interface Hackathon {
   _id: string;
@@ -21,4 +22,8 @@ export interface Hackathon {
     contentType: string;
   };
   maxParticipants: number;
+  objectifs:string[],
+  skills:string[],
+  rules:string[],
+  participants:User[]
 }
