@@ -313,3 +313,41 @@ textarea.form-control {
     width: 100%;
   }
 }
+/* Styles pour les sections */
+.section-container {
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #f8fafc;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: #4361ee;
+  font-size: 1.1rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.btn-danger {
+  background-color: #f72585;
+  border-color: #f72585;
+}
+
+.btn-danger:hover {
+  background-color: #e91e63;
+  border-color: #e91e63;
+}

@@ -2,18 +2,15 @@
   <div class="container">
     <div class="page-header d-flex justify-content-between align-items-center">
       <h1 class="page-title">Gestion des Ressources</h1>
-
     </div>
 
     <!-- Filters Section -->
     <div class="row mb-3">
-      <!-- Search by Name/Title -->
       <div class="col-md-6">
         <input type="text" class="form-control" placeholder="Rechercher par nom ou titre..."
                [(ngModel)]="searchText" (input)="applyFilters()" />
       </div>
 
-      <!-- Filter by Course -->
       <div class="col-md-4">
         <select class="form-control" [(ngModel)]="selectedCourse" (change)="applyFilters()">
           <option value="">Tous les cours</option>
@@ -23,7 +20,6 @@
         </select>
       </div>
 
-      <!-- Reset Filters -->
       <div class="col-md-2">
         <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
           <i class="fas fa-undo"></i> Réinitialiser
@@ -49,47 +45,43 @@
           <th>Taille</th>
           <th>Date d'ajout</th>
           <th>Télécharger</th>
-          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let chapter of paginatedChapters; let i = index">
-          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td>
-            <strong>{{ chapter.file!.path.split('/').pop() || 'Sans nom' }}</strong>
-            <div class="text-muted" style="font-size: 0.85rem;">
-              {{ chapter.title }}
-            </div>
-          </td>
-          <td>
-              <span class="file-type {{ getFileType(chapter.file!.contentType) }}">
-                <i [ngClass]="getFileIconClass(chapter.file!.path)" ></i>
-                {{ getFileType(chapter.file!.contentType).toUpperCase() }}
-              </span>
-          </td>
-          <td class="file-size">{{ getFileSize(chapter.file!.size) }}</td>
-          <td>{{ chapter.createdAt | date: 'dd/MM/yyyy' }}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-primary"
-                    (click)="downloadFile(chapter)"
-                    [disabled]="!chapter.file">
-              <i class="fas fa-download"></i>
-              Télécharger
-            </button>
-          </td>
-          <td>
-            <div class="action-btns">
-              <button class="action-btn edit-btn" title="Modifier">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn delete-btn" title="Supprimer">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </div>
-          </td>
+          <td colspan="6" class="chapter-title"><strong>{{ chapter.title }}</strong></td>
         </tr>
+
+        <ng-container *ngFor="let chapter of paginatedChapters">
+          <tr *ngFor="let sec of chapter.section">
+            <td></td>
+            <td>
+              <strong>{{ sec.file!.path.split('/').pop() || 'Sans nom' }}</strong>
+              <div class="text-muted" style="font-size: 0.85rem;">
+                {{ sec.title }}
+              </div>
+            </td>
+            <td>
+              <span class="file-type {{ getFileType(sec.file!.contentType || '') }}">
+                <i [ngClass]="getFileIconClass(sec.file!.path || '')"></i>
+                {{ getFileType(sec.file!.contentType || '').toUpperCase() }}
+              </span>
+            </td>
+            <td class="file-size">{{ getFileSize(sec.file!.size || 0) }}</td>
+            <td>{{ chapter.createdAt | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary"
+                      (click)="downloadFile(sec)"
+                      [disabled]="!sec.file">
+                <i class="fas fa-download"></i>
+                Télécharger
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+
         <tr *ngIf="filteredChapters.length === 0">
-          <td colspan="7" class="text-center py-4">Aucune ressource trouvée</td>
+          <td colspan="6" class="text-center py-4">Aucune ressource trouvée</td>
         </tr>
         </tbody>
       </table>
@@ -114,11 +106,3 @@
     </div>
   </div>
 </main>
-
-
-
-
-
-
-
-

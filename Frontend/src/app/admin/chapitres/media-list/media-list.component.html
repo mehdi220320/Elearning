@@ -1,22 +1,25 @@
 <main class="admin-main">
   <div class="container">
     <div class="page-header d-flex justify-content-between align-items-center">
-      <h1 class="page-title">Gestion des Médias Vidéo</h1>
+      <h1 class="page-title">Gestion des Vidéos</h1>
     </div>
 
     <!-- Filters Section -->
     <div class="row mb-4">
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Rechercher par titre ou description..."
-               [(ngModel)]="searchText" (input)="applyFilters()" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Rechercher par titre ou chapitre..."
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+        />
       </div>
 
       <div class="col-md-4">
         <select class="form-control" [(ngModel)]="selectedCourse" (change)="applyFilters()">
           <option value="">Tous les cours</option>
-          <option *ngFor="let course of courses" [value]="course._id">
-            {{ course.title }}
-          </option>
+          <option *ngFor="let course of courses" [value]="course._id">{{ course.title }}</option>
         </select>
       </div>
 
@@ -30,15 +33,15 @@
     <!-- Loading Indicator -->
     <div *ngIf="isLoading" class="text-center my-5">
       <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <span class="visually-hidden">Chargement...</span>
       </div>
     </div>
 
-    <!-- Media Grid -->
+    <!-- Video Grid -->
     <div *ngIf="!isLoading" class="media-grid">
-      <div class="media-card" *ngFor="let chapter of paginatedChapters" (click)="playVideo(chapter)">
-        <div class="media-thumbnail">
-          <img [src]="getVideoThumbnail(chapter.url)" [alt]="chapter.title">
+      <div *ngFor="let video of paginatedVideos" class="media-card">
+        <div class="media-thumbnail" (click)="playVideo(video)">
+          <img [src]="getVideoThumbnail(video.url)" [alt]="video.title" />
           <div class="media-badge video-badge">
             <i class="fas fa-video"></i> VIDÉO
           </div>
@@ -46,21 +49,24 @@
             <i class="fas fa-play"></i>
           </div>
         </div>
+
         <div class="media-info">
-          <h3 class="media-title">{{ chapter.title }}</h3>
+          <h3 class="media-title">{{ video.title }}</h3>
           <div class="media-meta">
-            <span class="media-duration" *ngIf="chapter.dureeVideo">
-              <i class="far fa-clock"></i> {{ chapter.dureeVideo }}
+            <span class="media-duration" *ngIf="video.duration">
+              <i class="far fa-clock"></i> {{ video.duration }} min
             </span>
-            <span class="media-course" *ngIf="chapter.course">
-              <i class="fas fa-book"></i> {{ chapter.course.title }}
+            <span class="media-course" *ngIf="video.chapitre.course">
+              <i class="fas fa-book"></i> {{ video.chapitre.course.title }}
             </span>
           </div>
-          <p class="media-description">{{ chapter.description }}</p>
+          <p class="media-chapter">
+            Chapitre: <strong>{{ video.chapitre.title }}</strong>
+          </p>
         </div>
       </div>
 
-      <div *ngIf="filteredChapters.length === 0" class="col-12 text-center py-5">
+      <div *ngIf="filteredVideos.length === 0" class="col-12 text-center py-5">
         <i class="fas fa-video-slash fa-3x text-muted mb-3"></i>
         <h4 class="text-muted">Aucune vidéo trouvée</h4>
         <p *ngIf="searchText || selectedCourse" class="text-muted">
@@ -70,19 +76,20 @@
     </div>
 
     <!-- Pagination -->
-    <div *ngIf="filteredChapters.length > 0" class="pagination d-flex justify-content-center mt-4">
-      <button class="btn btn-light page-item" (click)="prevPage()" [disabled]="currentPage === 1">
+    <div *ngIf="filteredVideos.length > 0" class="pagination d-flex justify-content-center mt-4 gap-2">
+      <button class="btn btn-light" (click)="prevPage()" [disabled]="currentPage === 1">
         <i class="fas fa-chevron-left"></i>
       </button>
 
-      <button *ngFor="let page of totalPages"
-              class="btn page-item"
-              [ngClass]="{ 'btn-primary': currentPage === page, 'btn-light': currentPage !== page }"
-              (click)="goToPage(page)">
+      <button
+        *ngFor="let page of totalPages"
+        class="btn"
+        [ngClass]="{ 'btn-primary': currentPage === page, 'btn-light': currentPage !== page }"
+        (click)="goToPage(page)">
         {{ page }}
       </button>
 
-      <button class="btn btn-light page-item" (click)="nextPage()" [disabled]="currentPage === totalPages.length">
+      <button class="btn btn-light" (click)="nextPage()" [disabled]="currentPage === totalPages.length">
         <i class="fas fa-chevron-right"></i>
       </button>
     </div>
@@ -105,19 +112,19 @@
       </div>
       <div class="video-info" *ngIf="selectedVideo">
         <h3>{{ selectedVideo.title }}</h3>
-        <p>{{ selectedVideo.description }}</p>
+        <p>Chapitre: {{ selectedVideo.chapitre.title }}</p>
+        <p *ngIf="selectedVideo.chapitre.description">{{ selectedVideo.chapitre.description }}</p>
         <div class="video-meta">
-          <span *ngIf="selectedVideo.dureeVideo">
-            <i class="far fa-clock"></i> {{ selectedVideo.dureeVideo }}
+          <span *ngIf="selectedVideo.duration">
+            <i class="far fa-clock"></i> {{ selectedVideo.duration }} min
           </span>
-          <span *ngIf="selectedVideo.course">
-            <i class="fas fa-book"></i> {{ selectedVideo.course.title }}
+          <span *ngIf="selectedVideo.chapitre.course">
+            <i class="fas fa-book"></i> {{ selectedVideo.chapitre.course.title }}
           </span>
         </div>
       </div>
       <button type="button" (click)="closeVideoPlayer()" class="btn btn-outline close-btn-txt">
-        <i class="fas fa-times"></i>
-        Fermer
+        <i class="fas fa-times"></i> Fermer
       </button>
     </div>
   </div>

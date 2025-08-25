@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Course} from '../models/Course';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
@@ -15,9 +15,9 @@ import {AuthService} from '../services/authServices/auth.service';
   templateUrl: './chapters.component.html',
   styleUrl: './chapters.component.css'
 })
-export class ChaptersComponent {
-  courseId:any=""
-  course:Course= {
+export class ChaptersComponent implements OnInit {
+  courseId: any = "";
+  course: Course = {
     _id: "",
     title: "",
     coverImage: {
@@ -26,43 +26,51 @@ export class ChaptersComponent {
     },
     description: "",
     formateur: {
-      _id:"",
+      _id: "",
       firstname: "",
-      lastname:"",
+      lastname: "",
     },
     categorie: {
       _id: "",
       name: "",
     },
     status: false,
-    prix:0,
+    prix: 0,
     description_detaillee: "",
     niveau: "",
-    duree:"",
+    duree: "",
     langue: "",
     certificat: false,
-    rating:0,
+    rating: 0,
     createdAt: "",
-    learns:[]
-  }
-  chapters:Chapitre[]=[]
-  constructor(private router:Router,
-              private location: Location,
-              private courseService:CourseService,
-              private route:ActivatedRoute,
-              private chapterService:ChapitreService,
-              private testService:TestService,
-              private authService:AuthService,
-              private sanitizer:DomSanitizer) {}
-  tests:any=[]
-  numberTest=2;
-  testsPagination:any=[]
-  loadTests(id:any): void {
-    this.tests=[]
+    learns: []
+  };
+
+  chapitres: Chapitre[] = [];
+  currentChapitreIndex: number = 0;
+  currentSectionIndex: number = 0;
+
+  tests: any[] = [];
+  numberTest = 2;
+  testsPagination: any[] = [];
+
+  constructor(
+    private router: Router,
+    private location: Location,
+    private courseService: CourseService,
+    private route: ActivatedRoute,
+    private chapterService: ChapitreService,
+    private testService: TestService,
+    private authService: AuthService,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  loadTests(id: any): void {
+    this.tests = [];
     this.testService.getAllTestsByChapter(id).subscribe({
       next: (response) => {
         this.tests = response.data.tests;
-        this.testsPagination=this.tests.slice(0,this.numberTest)
+        this.testsPagination = this.tests.slice(0, this.numberTest);
       },
       error: (err) => {
         console.error('Erreur lors du chargement des tests', err);
@@ -70,33 +78,34 @@ export class ChaptersComponent {
     });
   }
 
-  loadData(){
-    this.courseId = this.route.snapshot.paramMap.get('id') ;
-    this.courseService.getById(this.courseId).subscribe(
-      {
-        next:(response)=>{
-          this.course=response
-        },error:(err)=>{console.error(err)}
-      }
-    )
-    this.chapterService.getChaptersByCourse(this.courseId).subscribe(
-      {
-        next:(response)=>{
-          this.chapters=response
-          this.loadTests(this.chapters[0]._id)
-        },error:(err)=>{console.error(err)}
+  loadData() {
+    this.courseId = this.route.snapshot.paramMap.get('id');
+    this.courseService.getById(this.courseId).subscribe({
+      next: (response) => {
+        this.course = response;
+      },
+      error: (err) => { console.error(err); }
+    });
 
-      }
-    )
-
-
+    this.chapterService.getChaptersByCourse(this.courseId).subscribe({
+      next: (response) => {
+        this.chapitres = response;
+        if (this.chapitres.length > 0 && this.chapitres[0].section.length > 0) {
+          this.loadTests(this.chapitres[0]._id);
+        }
+      },
+      error: (err) => { console.error(err); }
+    });
   }
-  ngOnInit(){
-    this.loadData()
+
+  ngOnInit() {
+    this.loadData();
   }
+
   getImage(url: string | null): SafeUrl | string {
     return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : '/assets/coverImage.png';
   }
+
   goBackOrFallback() {
     if (window.history.length > 1) {
       this.location.back();
@@ -104,40 +113,65 @@ export class ChaptersComponent {
       this.router.navigate(['/admin/instructors']);
     }
   }
-  currentChapterIndex: number = 0;
 
-  previousChapter(): void {
-    if (this.currentChapterIndex > 0) {
-      this.currentChapterIndex--;
+  previousChapitre(): void {
+    if (this.currentChapitreIndex > 0) {
+      this.currentChapitreIndex--;
+      this.currentSectionIndex = 0;
+      this.loadTests(this.chapitres[this.currentChapitreIndex]._id);
     }
-    this.loadTests(this.chapters[this.currentChapterIndex]._id)
-
   }
 
-  nextChapter(): void {
-    if (this.currentChapterIndex < this.chapters.length - 1) {
-      this.currentChapterIndex++;
+  nextChapitre(): void {
+    if (this.currentChapitreIndex < this.chapitres.length - 1) {
+      this.currentChapitreIndex++;
+      this.currentSectionIndex = 0;
+      this.loadTests(this.chapitres[this.currentChapitreIndex]._id);
     }
-    this.loadTests(this.chapters[this.currentChapterIndex]._id)
+  }
 
-  }
-  afficherPlus(){
-    this.numberTest+=3;
-    this.testsPagination=this.tests.slice(0,this.numberTest)
-  }
-  goToChapter(index: number): void {
-    if (index >= 0 && index < this.chapters.length) {
-      this.currentChapterIndex = index;
+  previousSection(): void {
+    if (this.currentSectionIndex > 0) {
+      this.currentSectionIndex--;
     }
-    this.loadTests(this.chapters[this.currentChapterIndex]._id)
+  }
 
+  nextSection(): void {
+    const currentChapitre = this.chapitres[this.currentChapitreIndex];
+    if (this.currentSectionIndex < currentChapitre.section.length - 1) {
+      this.currentSectionIndex++;
+    }
+  }
+
+  afficherPlus() {
+    this.numberTest += 3;
+    this.testsPagination = this.tests.slice(0, this.numberTest);
+  }
+
+  goToChapitre(index: number): void {
+    if (index >= 0 && index < this.chapitres.length) {
+      this.currentChapitreIndex = index;
+      this.currentSectionIndex = 0;
+      this.loadTests(this.chapitres[this.currentChapitreIndex]._id);
+    }
+  }
+
+  goToSection(chapitreIndex: number, sectionIndex: number): void {
+    if (chapitreIndex >= 0 && chapitreIndex < this.chapitres.length) {
+      this.currentChapitreIndex = chapitreIndex;
+      const chapitre = this.chapitres[chapitreIndex];
+      if (sectionIndex >= 0 && sectionIndex < chapitre.section.length) {
+        this.currentSectionIndex = sectionIndex;
+      }
+    }
   }
 
   playVideo(url: any): SafeResourceUrl {
-    return  this.sanitizer.bypassSecurityTrustResourceUrl(
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
       this.getEmbedUrl(url)
     );
   }
+
   private getEmbedUrl(url: string): string {
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
       const videoId = this.extractYouTubeId(url);
@@ -145,14 +179,14 @@ export class ChaptersComponent {
     }
     return url;
   }
+
   private extractYouTubeId(url: string): string {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : '';
   }
 
-  lastScore(results: any[]) :any{
-
+  lastScore(results: any[]): any {
     const userResultItems = results.filter(x =>
       x.user._id === this.authService.getUserId() &&
       x.completedAt
@@ -163,7 +197,23 @@ export class ChaptersComponent {
     return userResultItems.reduce((latest, current) => {
       return new Date(current.completedAt) > new Date(latest.completedAt) ? current : latest;
     });
-
   }
 
+  getCurrentSection() {
+    if (this.chapitres.length > 0 && this.chapitres[this.currentChapitreIndex].section.length > 0) {
+      return this.chapitres[this.currentChapitreIndex].section[this.currentSectionIndex];
+    }
+    return null;
+  }
+
+  getTotalSections(): number {
+    if (this.chapitres.length === 0) return 0;
+    return this.chapitres.reduce((total, chapitre) => total + chapitre.section.length, 0);
+  }
+
+  getCompletedSections(): number {
+    // Implémentez votre logique pour suivre les sections complétées
+    // Pour l'instant, retourne simplement le nombre de sections vues
+    return this.currentChapitreIndex * 3 + this.currentSectionIndex + 1;
+  }
 }

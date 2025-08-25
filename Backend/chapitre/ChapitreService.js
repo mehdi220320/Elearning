@@ -1,106 +1,77 @@
 const Chapitre=require('./Chapitre')
 const Course=require('../courses/Course')
-class ChapitreService{
-    static async addChapitre(title,description,file,url,courseId,nombrePage,dureeVideo ){
+class ChapitreService {
+    static async addChapitre(title, description, courseId, sections) {
         try {
-            const course=await Course.findById(courseId)
+            const course = await Course.findById(courseId);
+            if (!course) throw new Error("The course does not exist.");
 
-            if(!course){
-                throw new Error("The course does not exist.")
-            }
-            const chapitre = await Chapitre.findOne({ title: title, course: course });
+            const existing = await Chapitre.findOne({ title, course });
+            if (existing) throw new Error("Chapitre already exists");
 
-            if(chapitre){
-                throw new Error("Chapitre already exists")
-            }
-            let data;
-            if (file){data={title,description,file,url,course,nombrePage,dureeVideo }}
-            else { data={title,description,url,course,dureeVideo }}
+            const data = {
+                title,
+                description,
+                course,
+                section: sections || []
+            };
 
-            const newChapitre=await new Chapitre(data);
-
-
+            const newChapitre = new Chapitre(data);
             return await newChapitre.save();
-        }catch (e){
+        } catch (e) {
             throw e;
         }
     }
-    static async getAll(){
-        try {
-            return await Chapitre.find().populate({
-                path: "course",
-                select: "_id title"
-            });
-        }catch (e) {
-            console.error('Error in getAll chapters:', e.message);
-            throw e;
-        }
+
+    static async getAll() {
+        return await Chapitre.find().populate({
+            path: "course",
+            select: "_id title"
+        });
     }
+
     static async getRessources() {
-        try {
-            return await Chapitre.find({ file: { $exists: true } })
-                .populate({
-                    path: "course",
-                    select: "_id title"
-                })
-                .sort({ createdAt: -1 });
-        } catch (e) {
-            console.error('Error fetching Ressources of chapters:', e.message);
-            throw new Error('Error fetching Ressources of chapters:');
-        }
-    }
-    static async getMedias(){
-        try {
-            return await Chapitre.find({ url: { $exists: true } })
-                .populate({
-                    path: "course",
-                    select: "_id title"
-                })
-                .sort({ createdAt: -1 });
-        } catch (e) {
-            console.error('Error fetching Media of chapters:', e.message);
-            throw new Error('Error fetching Media of chapters:');
-        }
-    }
-    static async getbycourse(id){
-        try {
-            return await Chapitre.find({course:id})
-        }catch (e) {
-            console.error('Error in getAll chapters:', e.message);
-            throw e;
-        }
-    }
-    static async VideoDuration(id){
-        try {
-            const chapters= await Chapitre.find({course:id})
-            let total=0;
-            for(let chap of chapters){
-                if(chap.dureeVideo){
-                    total=total+chap.dureeVideo
-                }
-            }
-            return total;
-        }catch (e) {
-            console.error('Error in getAll chapters:', e.message);
-            throw e;
-        }
-    }
-    static async NumberOfDocumments(id){
-        try {
-            const chapters= await Chapitre.find({course:id})
-            let total=0;
-            for(let chap of chapters){
-                if(chap.file){
-                    total=total+1
-                }
-            }
-            return total;
-        }catch (e) {
-            console.error('Error in getAll chapters:', e.message);
-            throw e;
-        }
+        // chapters having at least one section with a file
+        return await Chapitre.find({ "section.file": { $exists: true } })
+            .populate({ path: "course", select: "_id title" })
+            .sort({ createdAt: -1 });
     }
 
+    static async getMedias() {
+        // chapters having at least one section with a url
+        return await Chapitre.find({ "section.url": { $exists: true, $ne: null } })
+            .populate({ path: "course", select: "_id title" })
+            .sort({ createdAt: -1 });
+    }
+
+    static async getbycourse(id) {
+        return await Chapitre.find({ course: id });
+    }
+
+    static async VideoDuration(id) {
+        const chapters = await Chapitre.find({ course: id });
+        let total = 0;
+        for (let chap of chapters) {
+            if (chap.section?.length) {
+                for (let sec of chap.section) {
+                    if (sec.dureeVideo) total += sec.dureeVideo;
+                }
+            }
+        }
+        return total;
+    }
+
+    static async NumberOfDocuments(id) {
+        const chapters = await Chapitre.find({ course: id });
+        let total = 0;
+        for (let chap of chapters) {
+            if (chap.section?.length) {
+                for (let sec of chap.section) {
+                    if (sec.file) total += 1;
+                }
+            }
+        }
+        return total;
+    }
 }
-
 module.exports=ChapitreService

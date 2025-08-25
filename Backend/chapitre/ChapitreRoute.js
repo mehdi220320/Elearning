@@ -2,9 +2,13 @@ const express = require('express');
 const ChapitreController=require('./ChapitreController')
 const router = express.Router();
 const { adminAuthorization, checkTokenExists } = require('../middlewares/authMiddleware');
-const upload = require('../middlewares/uploadFileMiddleware');
+const uploadMultiple = require('../middlewares/uploadMultiple');
 
-router.post('/add', [adminAuthorization, checkTokenExists,upload.single('file')], ChapitreController.addChapitre);
+router.post(
+    '/add',
+    [adminAuthorization, checkTokenExists, uploadMultiple.array('files')],
+    ChapitreController.addChapitre
+);
 router.get('/all', [adminAuthorization, checkTokenExists], ChapitreController.getAll);
 router.get('/course/:id', [adminAuthorization, checkTokenExists], ChapitreController.getByCourseId);
 router.get('/course/dureeVideos/:id', [adminAuthorization, checkTokenExists], ChapitreController.getVideoDurationByCourseId);

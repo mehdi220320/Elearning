@@ -13,109 +13,107 @@ import {Router} from '@angular/router';
   styleUrl: './add-chapitre.component.css'
 })
 export class AddChapitreComponent {
-  courses:Course[]=[]
-  url:string=""
-  duree:string=""
-  nbpages:string="";
+  courses: Course[] = [];
+  description: string = "";
+  title: string = "";
+  coursId: string = "";
+  error: string | null = "";
 
-  description:string=""
-  title:string="";
-  coursId:string="";
-   error: string |null ="";
-  constructor(private courseService:CourseService,
-              private location: Location,
-              private router:Router,
-              private chapiterService:ChapitreService) {
-  }
-
-  ngOnInit(){
-    this.loadData()
-  }
-
-  active=[true,false,false]
-  isLoading: boolean=false;
-  activate(index:number){
-    for (let i = 0; i < 3; i++) {
-      if(i===index){
-        this.active[i]=true;
-      }else this.active[i]=false
-      switch (index) {
-        case 0:
-          this.nbpages = "";
-          this.selectedFile = null;
-          break;
-
-        case 1:
-          this.url = "";
-          this.duree = "";
-          break;
-
-        default:
-          break;
-      }
-
+  sections: Section[] = [
+    {
+      title: '',
+      description: '',
+      type: 'video',
+      url: '',
+      duree: '',
+      nbpages: '',
+      selectedFile: null,
+      filename: '',
+      filesize: 0
     }
+  ];
+
+  constructor(
+    private courseService: CourseService,
+    private location: Location,
+    private router: Router,
+    private chapiterService: ChapitreService
+  ) {}
+
+  ngOnInit() {
+    this.loadData();
   }
-  loadData(): void {
-    this.courseService.getAll().subscribe({
-      next: (response: Course[]) => {
-        this.courses = response;
-      },
-      error: (err) => console.error(err),
+
+  isLoading: boolean = false;
+
+  addSection() {
+    this.sections.push({
+      title: '',
+      description: '',
+      type: 'video',
+      url: '',
+      duree: '',
+      nbpages: '',
+      selectedFile: null,
+      filename: '',
+      filesize: 0
     });
   }
-  selectedFile: File | null = null;
-  fileMetadata: { path: string; contentType: string ,size:number,name:string } | null = null;
-  filename="";
-  filesize:any="";
-  onFileSelected(event: Event): void {
+
+  removeSection(index: number) {
+    if (this.sections.length > 1) this.sections.splice(index, 1);
+  }
+
+  changeSectionType(index: number, type: string) {
+    this.sections[index].type = type;
+    if (type === 'video') {
+      this.sections[index].nbpages = '';
+      this.sections[index].selectedFile = null;
+    } else if (type === 'pdf') {
+      this.sections[index].url = '';
+      this.sections[index].duree = '';
+    }
+  }
+
+  loadData(): void {
+    this.courseService.getAll().subscribe({
+      next: (response: Course[]) => this.courses = response,
+      error: (err) => console.error(err)
+    });
+  }
+
+  onFileSelected(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-
-      if (file.size > 10 * 1024 * 1024) { // 10MB max
-        alert('Le fichier dépasse la taille maximale de 10MB.');
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Le fichier dépasse 10MB.');
         return;
       }
-
-      this.selectedFile = file;
-      this.filename=this.selectedFile?.name
-      this.filesize=this.selectedFile?.size
-      // Prepare metadata for backend
-      this.fileMetadata = {
-        path: file.name,
-        contentType: file.type,
-        size:file.size,
-        name:this.filename
-      };
+      this.sections[index].selectedFile = file;
+      this.sections[index].filename = file.name;
+      this.sections[index].filesize = file.size;
     }
   }
 
-  removeFile(): void {
-    this.selectedFile = null;
-    this.fileMetadata = null;
-
-    // Optional: Clear file input manually
-    const fileInput = document.getElementById('pdf-file') as HTMLInputElement;
+  removeFile(index: number): void {
+    this.sections[index].selectedFile = null;
+    this.sections[index].filename = '';
+    this.sections[index].filesize = 0;
+    const fileInput = document.getElementById(`pdf-file-${index}`) as HTMLInputElement;
     if (fileInput) fileInput.value = '';
   }
+
   getFileIconClass(file: File | null): string {
     if (!file) return '';
-
     const ext = file.name.split('.').pop()?.toLowerCase();
-
     switch (ext) {
-      case 'pdf':
-        return 'fas fa-file-pdf text-danger';
+      case 'pdf': return 'fas fa-file-pdf text-danger';
       case 'doc':
-      case 'docx':
-        return 'fas fa-file-word text-primary';
-      case 'txt':
-        return 'fas fa-file-alt text-secondary';
-      case 'csv':
-        return 'fas fa-file-csv text-success';
-      default:
-        return 'fas fa-file text-muted';
+      case 'docx': return 'fas fa-file-word text-primary';
+      case 'txt': return 'fas fa-file-alt text-secondary';
+      case 'csv': return 'fas fa-file-csv text-success';
+      default: return 'fas fa-file text-muted';
     }
   }
 
@@ -124,25 +122,37 @@ export class AddChapitreComponent {
       this.error = "Veuillez remplir tous les champs obligatoires correctement";
       return;
     }
-    const formData = new FormData();
 
-    if(this.url!==""){    formData.append('url', this.url);}
-    if(this.duree!==""){        formData.append('dureeVideo', this.duree);}
-    if(this.nbpages!==""){        formData.append('nombrePage', this.nbpages);}
+    const formData = new FormData();
     formData.append('title', this.title);
     formData.append('courseId', this.coursId);
     formData.append('description', this.description);
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile);
-    }
+
+    // Prepare sections metadata (without files)
+    const sectionsData = this.sections.map(section => ({
+      title: section.title,
+      description: section.description,
+      url: section.url,
+      dureeVideo: section.duree,
+      nombrePage: section.nbpages
+    }));
+    formData.append('sections', JSON.stringify(sectionsData));
+
+    // Attach all files under the same field 'files'
+    this.sections.forEach(section => {
+      if (section.selectedFile) {
+        formData.append('files', section.selectedFile);
+      }
+    });
+
     this.isLoading = true;
     this.error = null;
+
     this.chapiterService.add(formData).subscribe({
       next: (response) => {
         this.isLoading = false;
         alert("Le chapitre a été ajouté avec succès !");
         this.router.navigate(['/admin/chapters']);
-
       },
       error: (err) => {
         console.error(err);
@@ -160,12 +170,21 @@ export class AddChapitreComponent {
       }
     });
   }
-  goBackOrFallback() {
-    if (window.history.length > 1) {
-      this.location.back();
-    } else {
-      this.router.navigate(['/admin/chapters']);
-    }
-  }
 
+  goBackOrFallback() {
+    if (window.history.length > 1) this.location.back();
+    else this.router.navigate(['/admin/chapters']);
+  }
+}
+
+interface Section {
+  title: string;
+  description: string;
+  type: string; // video, pdf, both
+  url: string;
+  duree: string; // mapped to backend dureeVideo
+  nbpages: string; // mapped to backend nombrePage
+  selectedFile: File | null;
+  filename: string;
+  filesize: number;
 }

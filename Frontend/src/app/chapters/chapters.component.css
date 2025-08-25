@@ -837,3 +837,127 @@
     gap: 8px;
   }
 }
+/* Section Navigation */
+.section-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.section-counter {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Sections List */
+.sections-card {
+  padding: 16px 0;
+}
+
+.section-count {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.sections-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.section-list-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.section-list-item:last-child {
+  border-bottom: none;
+}
+
+.section-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.section-list-item.active {
+  background-color: #e8f0fe;
+  border-left: 3px solid #4285f4;
+}
+
+.section-icon {
+  color: #5f6368;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  min-width: 20px;
+}
+
+.section-info {
+  flex: 1;
+}
+
+.section-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #3c4043;
+}
+
+.section-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: #5f6368;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section-navigation {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .section-counter {
+    order: -1;
+  }
+
+  .sections-list {
+    max-height: 300px;
+  }
+}
+
+/* Improved active states */
+.chapter-list-item.active .chapter-icon,
+.section-list-item.active .section-icon {
+  color: #4285f4;
+}
+
+/* Scrollbar styling */
+.chapters-list::-webkit-scrollbar,
+.sections-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chapters-list::-webkit-scrollbar-track,
+.sections-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.chapters-list::-webkit-scrollbar-thumb,
+.sections-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.chapters-list::-webkit-scrollbar-thumb:hover,
+.sections-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

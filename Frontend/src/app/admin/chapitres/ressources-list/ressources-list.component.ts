@@ -29,7 +29,7 @@ export class RessourcesListComponent {
   loadChapters(): void {
     this.isLoading = true;
     this.chapitreService.getChaptersWithRessouces().subscribe({
-      next: (response) => {
+      next: (response: Chapitre[]) => {
         this.chapitresWR = response;
         this.filteredChapters = response;
         this.extractCourses();
@@ -57,7 +57,7 @@ export class RessourcesListComponent {
 
     this.filteredChapters = this.chapitresWR.filter(chap => {
       const matchesSearch = chap.title.toLowerCase().includes(search) ||
-        chap.file?.path.toLowerCase().includes(search);
+        chap.section.some(sec => sec.file && sec.file.path.toLowerCase().includes(search));
       const matchesCourse = this.selectedCourse === '' ||
         (chap.course && chap.course._id === this.selectedCourse);
       return matchesSearch && matchesCourse;
@@ -72,16 +72,15 @@ export class RessourcesListComponent {
     this.applyFilters();
   }
 
-  downloadFile(chapter: Chapitre): void {
-    if (!chapter.file) return;
+  downloadFile(section: { file?: any }): void {
+    if (!section.file) return;
 
-    const fileName = chapter.file.path.split('/').pop() || 'resource';
-    saveAs(chapter.file.path, fileName);
+    const fileName = section.file.path.split('/').pop() || 'resource';
+    saveAs(section.file.path, fileName);
   }
 
   getFileType(contentType: string): string {
     if (!contentType) return 'file';
-
     if (contentType.includes('pdf')) return 'pdf';
     if (contentType.includes('word')) return 'word';
     if (contentType.includes('excel') || contentType.includes('spreadsheet')) return 'excel';
@@ -89,22 +88,17 @@ export class RessourcesListComponent {
     if (contentType.includes('csv')) return 'csv';
     return 'file';
   }
-  getFileIconClass(file: any ): string {
-    if (!file) return '';
-    const ext = file.split('.').pop()?.toLowerCase();
 
+  getFileIconClass(filePath: string): string {
+    if (!filePath) return '';
+    const ext = filePath.split('.').pop()?.toLowerCase();
     switch (ext) {
-      case 'pdf':
-        return 'fas fa-file-pdf text-danger';
+      case 'pdf': return 'fas fa-file-pdf text-danger';
       case 'doc':
-      case 'docx':
-        return 'fas fa-file-word text-primary';
-      case 'txt':
-        return 'fas fa-file-alt text-secondary';
-      case 'csv':
-        return 'fas fa-file-csv text-success';
-      default:
-        return 'fas fa-file text-muted';
+      case 'docx': return 'fas fa-file-word text-primary';
+      case 'txt': return 'fas fa-file-alt text-secondary';
+      case 'csv': return 'fas fa-file-csv text-success';
+      default: return 'fas fa-file text-muted';
     }
   }
 

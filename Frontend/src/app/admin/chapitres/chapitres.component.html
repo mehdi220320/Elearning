@@ -38,18 +38,17 @@
       <table class="chapters-table table table-striped">
         <thead>
         <tr>
-          <th>#</th>
+          <th>#id</th>
           <th>Titre</th>
           <th>Cours</th>
-          <th>Type de contenu</th>
-          <th>Durée/Pages</th>
+          <th>Nombre des sections</th>
           <th>Date de création</th>
           <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let chapter of paginatedChapters; let i = index">
-          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td>{{ chapter._id }}</td>
           <td>
             <strong>{{ chapter.title }}</strong>
             <div class="text-muted" style="font-size: 0.85rem;">
@@ -58,16 +57,9 @@
           </td>
           <td>{{ chapter.course.title }}</td>
           <td>
-              <span *ngIf="chapter.file" class="content-type">
-                <i [ngClass]="getFileIconClass(chapter.file!.path)" ></i>File
-              </span>
-            <span *ngIf="chapter.url !== ''" class="content-type">
-                <i class="fas fa-video text-primary"></i> Vidéo
-              </span>
+              {{chapter.section.length}}
           </td>
-          <td>
-            {{ getHoursPagesStr(chapter.nombrePage, chapter.dureeVideo) }}
-          </td>
+
           <td>{{ chapter.createdAt | date: 'dd/MM/yyyy' }}</td>
           <td>
             <div class="action-btns">
