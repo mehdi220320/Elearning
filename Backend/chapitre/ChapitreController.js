@@ -10,7 +10,6 @@ class ChapitreController {
                 parsedSections = typeof sections === "string" ? JSON.parse(sections) : sections;
             }
 
-            // Handle files if provided (e.g., multer multiple)
             if (req.files && req.files.length > 0) {
                 parsedSections = parsedSections.map((sec, idx) => {
                     const file = req.files[idx];

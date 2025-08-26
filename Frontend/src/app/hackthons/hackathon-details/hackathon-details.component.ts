@@ -43,6 +43,7 @@ export class HackathonDetailsComponent {
     private sanitizer:DomSanitizer) {}
 
   ngOnInit(){
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadHackathon()
   }
   loadHackathon(){

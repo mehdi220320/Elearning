@@ -30,14 +30,29 @@ const allowedFileTypes = [
     'application/rtf',
     'application/vnd.ms-powerpoint',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    'application/json'
+    'application/json',
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/svg+xml',
+    'image/bmp',
+    'image/tiff'
 ];
 
 const fileFilter = (req, file, cb) => {
+    // Check if the file type is in the allowed list
     if (allowedFileTypes.includes(file.mimetype)) {
         cb(null, true);
-    } else {
-        cb(new Error('Invalid file type. Only document files are allowed!'), false);
+    }
+    // Additional check for image types that might have variations
+    else if (file.mimetype.startsWith('image/')) {
+        // Allow any image type that starts with 'image/'
+        cb(null, true);
+    }
+    else {
+        cb(new Error('Invalid file type. Only document files and images are allowed!'), false);
     }
 };
 

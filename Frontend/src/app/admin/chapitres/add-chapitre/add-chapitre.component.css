@@ -351,3 +351,14 @@ textarea.form-control {
   background-color: #e91e63;
   border-color: #e91e63;
 }
+.section-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-outline.active {
+  background-color: #f8f9fa;
+  border-color: #007bff;
+  color: #007bff;
+}

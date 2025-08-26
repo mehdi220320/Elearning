@@ -47,6 +47,7 @@ export class TestDetailsComponent {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadTest();
   }
 
@@ -75,6 +76,7 @@ export class TestDetailsComponent {
   selectAnswer(optionIndex: number): void {
     const currentQuestionId = this.test.questions[this.currentQuestionIndex]._id;
     this.userResponses[currentQuestionId] = optionIndex;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   isSelected(optionIndex: number): boolean {

@@ -32,6 +32,7 @@ export class HackthonsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadThemes();
     this.loadHackathons();
   }

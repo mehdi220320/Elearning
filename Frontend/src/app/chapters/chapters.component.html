@@ -8,12 +8,11 @@
         </button>
         <a (click)="goBackOrFallback()" style="cursor: pointer" class="breadcrumb-link">{{course.categorie.name}}</a>
         <span class="divider">/</span>
-        <span class="current-chapter" *ngIf="chapitres.length > 0">
-          {{chapitres[currentChapitreIndex].title}} - Section {{currentSectionIndex + 1}}
-        </span>
+        <span class="current-chapter">{{course.title}}</span>
       </div>
     </div>
     <h1 class="course-title">{{course.title}}</h1>
+    <p class="course-description">{{course.description}}</p>
   </div>
 </div>
 
@@ -22,10 +21,10 @@
   <div class="progress-card">
     <div class="progress-header">
       <div class="progress-title">Votre progression</div>
-      <div class="progress-percent">{{ (getCompletedSections() / getTotalSections() * 100) | number:'1.0-0' }}% complété</div>
+      <div class="progress-percent">{{ (currentChapitreIndex + 1) / chapitres.length * 100 | number:'1.0-0' }}% complété</div>
     </div>
     <div class="progress-bar">
-      <div class="progress-fill" [style.width]="(getCompletedSections() / getTotalSections() * 100) + '%'"></div>
+      <div class="progress-fill" [style.width]="(currentChapitreIndex + 1) / chapitres.length * 100 + '%'"></div>
     </div>
   </div>
 </div>
@@ -35,190 +34,127 @@
   <div class="chapter-grid">
     <!-- Main Content -->
     <main class="chapter-content">
-      <div class="content-card">
-        <h1 class="chapter-title" *ngIf="chapitres.length > 0 && getCurrentSection()">
-          {{chapitres[currentChapitreIndex].title}} - {{getCurrentSection()!.title}}
-        </h1>
+      <!-- Affichage de tous les chapitres -->
+      <div  class="chapitre-container">
+        <div class="content-card">
+          <h1 class="chapitre-title">Chapter {{currentChapitreIndex + 1}} : {{chapitres[currentChapitreIndex].title}}</h1>
+          <h3 class="description-title">À propos du chapitre</h3>
+          <p class="chapitre-description" *ngIf="chapitres[currentChapitreIndex].description">{{chapitres[currentChapitreIndex].description}}</p>
 
-        <!-- Section Navigation -->
-        <div class="section-navigation" *ngIf="chapitres.length > 0">
-          <button class="nav-button prev" (click)="previousSection()" [disabled]="currentSectionIndex === 0">
-            <i class="fas fa-chevron-left"></i>
-            <span>Section précédente</span>
-          </button>
-          <div class="section-counter">
-            Section {{currentSectionIndex + 1}}/{{chapitres[currentChapitreIndex].section.length}}
-          </div>
-          <button class="nav-button next" (click)="nextSection()"
-                  [disabled]="currentSectionIndex === chapitres[currentChapitreIndex].section.length - 1">
-            <span>Section suivante</span>
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-
-        <div class="media-container" *ngIf="getCurrentSection()?.url">
-          <div class="video-wrapper">
-            <iframe
-              class="video-player"
-              [src]="playVideo(getCurrentSection()?.url)"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
-            </iframe>
-          </div>
-        </div>
-
-        <!-- PDF Viewer -->
-        <div class="media-container"
-             *ngIf="getCurrentSection()?.file?.path && getCurrentSection()?.file?.contentType === 'application/pdf'">
-          <div class="pdf-wrapper">
-            <iframe class="pdf-viewer" [src]="getImage(getCurrentSection()?.file!.path)"></iframe>
-          </div>
-        </div>
-
-        <!-- Resources -->
-        <div class="sidebar-card resources-card" *ngIf="getCurrentSection()">
-          <h3 class="card-title">Ressources</h3>
-          <div class="resources-list">
-            <a *ngIf="getCurrentSection()?.file?.path"
-               [href]="getCurrentSection()?.file!.path"
-               target="_blank"
-               class="resource-item">
-              <div class="resource-icon pdf">
-                <i class="fas fa-file-pdf"></i>
-              </div>
-              <span class="resource-name">Notes ({{getCurrentSection()?.file!.name}})</span>
-            </a>
-            <a *ngIf="getCurrentSection()?.url"
-               [href]="getCurrentSection()?.url"
-               target="_blank"
-               class="resource-item">
-              <div class="resource-icon link">
-                <i class="fas fa-video"></i>
-              </div>
-              <span class="resource-name">Vidéo de la section</span>
-            </a>
-            <a href="#" class="resource-item">
-              <div class="resource-icon code">
-                <i class="fas fa-file-code"></i>
-              </div>
-              <span class="resource-name">Code source</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Section Description -->
-        <div class="chapter-description" *ngIf="getCurrentSection()">
-          <h3 class="description-title">À propos de cette section</h3>
-          <div [innerHTML]="getCurrentSection()!.description"></div>
-        </div>
-
-        <!-- Tests Section -->
-        <div class="tests-section" *ngIf="tests.length>0">
-          <div class="tests-list">
-            <h3 class="tests-title">
-              <i class="fas fa-graduation-cap"></i>
-              Tests disponibles
-            </h3>
-            <!-- Test Item -->
-            <div class="test-item" *ngFor="let test of testsPagination">
-              <div class="test-info">
-                <div class="test-header">
-                  <div class="test-icon">
-                    <i class="fas fa-brain"></i>
-                  </div>
-                  <h4 class="test-title">{{test.title}}</h4>
-                </div>
-                <div class="test-details">
-                  <div class="test-detail">
-                    <span class="detail-icon"><i class="fas fa-trophy"></i></span>
-                    Score minimum: {{test.passingScore}}%
-                  </div>
-                  <div class="test-detail">
-                    <span class="detail-icon"><i class="fas fa-question-circle"></i></span>
-                    {{test.questions.length}} questions
-                  </div>
-                  <div class="test-detail">
-                    <span class="detail-icon"><i class="fas fa-clock"></i></span>
-                    {{test.timeLimit}} minutes
-                  </div>
-                </div>
-                <div *ngIf="lastScore(test.results)!==null" [ngClass]="lastScore(test.results).score<test.passingScore ? 'score-badge-fail': 'score-badge'">
-                  <i class="fas fa-star"></i>
-                  Dernier score: {{lastScore(test.results).score}}%
-                </div>
-              </div>
-              <button class="start-test-btn" [routerLink]="'/courses/'+courseId+'/chapitres/'+chapitres[currentChapitreIndex]._id+'/test/'+test._id">
-                <i class="fas fa-play-circle"></i> Commencer
-              </button>
+          <!-- Sections pour chaque chapitre -->
+          <div *ngFor="let section of chapitres[currentChapitreIndex].section; let sectionIndex = index" class="section-container">
+            <h2 class="section-title">Unité {{sectionIndex+1}}: {{section.title}}</h2>
+            <div class="section-description mb-3" *ngIf="section.description">
+              <div [innerHTML]="section.description"></div>
             </div>
-          </div>
+            <!-- Media Container -->
+            <div class="media-container" *ngIf="section.url">
+              <div class="video-wrapper">
+                <iframe
+                  class="video-player"
+                  [src]="playVideo(section.url)"
+                  frameborder="0"
+                  allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+            <div *ngIf="section.file?.path && section.file?.contentType?.startsWith('image')"
+                 class="responsive-image-container">
+              <div class="image-aspect-ratio">
+                <img [src]="getImage(section.file!.path)"
+                     class="responsive-image"
+                     alt="Image preview"
+                     loading="lazy">
+              </div>
+            </div>
+            <!-- PDF File Options -->
+            <div class="file-options" *ngIf="section.file?.path && section.file?.contentType === 'application/pdf'">
+              <div class="file-card">
+                <div class="file-icon">
+                  <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="file-info">
+                  <h4>Document PDF</h4>
+                  <p>{{section.file.name}} </p>
+                </div>
+                <div class="file-actions">
+                  <a [href]="section.file.path" download class="download-btn">
+                    <i class="fas fa-download"></i> Télécharger
+                  </a>
+                  <button (click)="openPdfViewer(section.file.path,section.file.name)" class="view-btn">
+                    <i class="fas fa-eye"></i> Lire
+                  </button>
+                </div>
+              </div>
+            </div>
 
-          <!-- Show more/less button if there are more than 2 tests -->
-          <div class="show-more-container" *ngIf="testsPagination.length<tests.length">
-            <button class="show-more-btn" (click)="afficherPlus()">
-              Afficher plus
+            <!-- PDF Viewer Modal -->
+
+            <!-- Section Description -->
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Tests Section -->
+      <div class="tests-section">
+        <div class="tests-header">
+          <h2><i class="fas fa-graduation-cap"></i> Tests du cours</h2>
+          <p>Évaluez vos connaissances avec ces tests</p>
+        </div>
+
+        <div class="tests-list">
+          <!-- Test Item -->
+          <div class="test-item" *ngFor="let test of testsPagination">
+            <div class="test-info">
+              <div class="test-header">
+                <div class="test-icon">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <h4 class="test-title">{{test.title}}</h4>
+              </div>
+              <div class="test-details">
+                <div class="test-detail">
+                  <span class="detail-icon"><i class="fas fa-trophy"></i></span>
+                  Score minimum: {{test.passingScore}}%
+                </div>
+                <div class="test-detail">
+                  <span class="detail-icon"><i class="fas fa-question-circle"></i></span>
+                  {{test.questions.length}} questions
+                </div>
+                <div class="test-detail">
+                  <span class="detail-icon"><i class="fas fa-clock"></i></span>
+                  {{test.timeLimit}} minutes
+                </div>
+              </div>
+              <div *ngIf="lastScore(test.results)!==null" [ngClass]="lastScore(test.results).score<test.passingScore ? 'score-badge-fail': 'score-badge'">
+                <i class="fas fa-star"></i>
+                Dernier score: {{lastScore(test.results).score}}%
+              </div>
+            </div>
+            <button class="start-test-btn" [routerLink]="'/courses/'+courseId+'/chapters/'+chapitres[currentChapitreIndex]._id+'/test/'+test._id">
+              <i class="fas fa-play-circle"></i> Commencer
             </button>
           </div>
         </div>
 
-        <div class="no-reviews" *ngIf="tests.length === 0">
-          <div class="no-reviews-illustration">
+        <!-- Pagination pour les tests -->
+        <div class="pagination" *ngIf="tests.length > 0">
+          <button class="pagination-btn" (click)="afficherPlus()" *ngIf="testsPagination.length < tests.length">
+            Afficher plus de tests
+          </button>
+          <div class="pagination-info" *ngIf="testsPagination.length > 0">
+            Affichage de {{testsPagination.length}} sur {{tests.length}} tests
+          </div>
+        </div>
+
+        <div class="no-tests" *ngIf="tests.length === 0">
+          <div class="no-tests-illustration">
             <i class="fas fa-file-alt"></i>
           </div>
-          <h3>Aucun Test pour le moment</h3>
-        </div>
-
-        <!-- Chapter Navigation -->
-        <div class="chapter-navigation">
-          <button class="nav-button prev" (click)="previousChapitre()" [disabled]="currentChapitreIndex === 0">
-            <i class="fas fa-chevron-left"></i>
-            <span>Chapitre précédent</span>
-          </button>
-          <div class="chapter-counter">
-            Chapitre {{currentChapitreIndex + 1}}/{{chapitres.length}}
-          </div>
-          <button class="nav-button next" (click)="nextChapitre()" [disabled]="currentChapitreIndex === chapitres.length - 1">
-            <span>Chapitre suivant</span>
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Comments Section -->
-      <div class="comments-card">
-        <div class="comments-header">
-          <h3 class="comments-title">
-            <i class="far fa-comments"></i> Discussions
-          </h3>
-          <button class="show-all">Voir tout</button>
-        </div>
-
-        <div class="comment-form">
-          <div class="user-avatar">Y</div>
-          <div class="form-group">
-            <textarea placeholder="Ajouter un commentaire..." class="comment-input"></textarea>
-            <button class="submit-button">Publier</button>
-          </div>
-        </div>
-
-        <div class="comments-list">
-          <div class="comment">
-            <div class="comment-avatar">JD</div>
-            <div class="comment-body">
-              <div class="comment-header">
-                <span class="comment-author">Jean Dupont</span>
-                <span class="comment-time">Il y a 2 jours</span>
-              </div>
-              <div class="comment-text">
-                Excellent chapitre ! Les explications sont très claires.
-              </div>
-              <div class="comment-actions">
-                <button class="action-button"><i class="far fa-thumbs-up"></i> 12</button>
-                <button class="action-button"><i class="far fa-comment"></i> Répondre</button>
-              </div>
-            </div>
-          </div>
+          <h3>Aucun test disponible pour le moment</h3>
+          <p>Revenez plus tard pour évaluer vos connaissances.</p>
         </div>
       </div>
     </main>
@@ -228,7 +164,7 @@
       <!-- Chapters List -->
       <div class="sidebar-card chapters-card">
         <div class="card-header">
-          <h3 class="card-title">Contenu du cours</h3>
+          <h3 class="card-title">Plan du cours</h3>
           <span class="chapter-count">{{chapitres.length}} chapitres</span>
         </div>
         <div class="chapters-list">
@@ -237,74 +173,62 @@
                [class.active]="i === currentChapitreIndex"
                (click)="goToChapitre(i)">
             <div class="chapter-icon">
-              <i class="far" [class.fa-play-circle]="i !== currentChapitreIndex" [class.fas.fa-play-circle]="i === currentChapitreIndex"></i>
+              <i class="far" [class.fa-play-circle]="i !== currentChapitreIndex"
+                 [class.fas]="i === currentChapitreIndex"
+                 [class.fa-check-circle]="i < currentChapitreIndex"></i>
             </div>
             <div class="chapter-info">
-              <h4 class="chapter-name">{{chapitre.title}}</h4>
+              <h4 class="chapter-name">Chapter {{i + 1}}: {{chapitre.title}}</h4>
               <div class="chapter-meta">
                 <span class="meta-item"><i class="far fa-list-alt"></i> {{chapitre.section.length}} sections</span>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sections List -->
-      <div class="sidebar-card sections-card" *ngIf="chapitres.length > 0">
-        <div class="card-header">
-          <h3 class="card-title">Sections du chapitre</h3>
-          <span class="section-count">{{chapitres[currentChapitreIndex].section.length}} sections</span>
-        </div>
-        <div class="sections-list">
-          <div class="section-list-item"
-               *ngFor="let section of chapitres[currentChapitreIndex].section; let j = index"
-               [class.active]="j === currentSectionIndex"
-               (click)="goToSection(currentChapitreIndex, j)">
-            <div class="section-icon">
-              <i class="far" [class.fa-play-circle]="j !== currentSectionIndex" [class.fas.fa-play-circle]="j === currentSectionIndex"></i>
-            </div>
-            <div class="section-info">
-              <h5 class="section-name">{{section.title}}</h5>
-              <div class="section-meta">
-                <span class="meta-item" *ngIf="section.dureeVideo > 0">
-                  <i class="far fa-clock"></i> {{section.dureeVideo}} min
-                </span>
-                <span class="meta-item" *ngIf="section.nombrePage > 0">
-                  <i class="far fa-file-alt"></i> {{section.nombrePage}} pages
-                </span>
+            <div class="chapter-status">
+              <div class="progress-circle" [style.--progress]="(i < currentChapitreIndex) ? 100 : (i === currentChapitreIndex) ? (currentSectionIndex / chapitre.section.length * 100) : 0">
+                <span>{{ (i < currentChapitreIndex) ? 100 : (i === currentChapitreIndex) ? (currentSectionIndex / chapitre.section.length * 100 | number:'1.0-0') : 0 }}%</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Resources -->
-      <div class="sidebar-card resources-card" *ngIf="getCurrentSection()">
-        <h3 class="card-title">Ressources</h3>
-        <div class="resources-list">
-          <a *ngIf="getCurrentSection()!.file!.path"
-             [href]="getCurrentSection()!.file.path"
-             target="_blank"
-             class="resource-item">
-            <div class="resource-icon pdf">
-              <i class="fas fa-file-pdf"></i>
-            </div>
-            <span class="resource-name">Notes ({{getCurrentSection()!.file.name}})</span>
-          </a>
-          <a *ngIf="getCurrentSection()!.url" [href]="getCurrentSection()!.url" target="_blank" class="resource-item">
-            <div class="resource-icon link">
-              <i class="fas fa-video"></i>
-            </div>
-            <span class="resource-name">Vidéo de la section</span>
-          </a>
-          <a href="#" class="resource-item">
-            <div class="resource-icon code">
-              <i class="fas fa-file-code"></i>
-            </div>
-            <span class="resource-name">Code source</span>
-          </a>
+      <!-- Course Info -->
+      <div class="sidebar-card course-info-card">
+        <h3 class="card-title">Informations du cours</h3>
+        <div class="course-info">
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <span>Durée: {{course.duree}}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Niveau: {{course.niveau}}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-language"></i>
+            <span>Langue: {{course.langue}}</span>
+          </div>
+          <div class="info-item" *ngIf="course.certificat">
+            <i class="fas fa-award"></i>
+            <span>Certificat inclus</span>
+          </div>
         </div>
       </div>
     </aside>
+  </div>
+</div>
+
+
+<div class="pdf-modal" *ngIf="showPdfViewer ">
+  <div class="pdf-modal-content">
+    <div class="pdf-modal-header">
+      <h3>{{currentPdfName}}</h3>
+      <button class="close-btn" (click)="closePdfViewer()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="pdf-viewer-container">
+      <iframe class="pdf-viewer" [src]="currentPdfUrl"></iframe>
+    </div>
   </div>
 </div>

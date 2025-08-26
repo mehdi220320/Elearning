@@ -19,6 +19,7 @@ import {ToastrModule} from 'ngx-toastr';
 import { TestListComponent } from './chapitres/test-list/test-list.component';
 import { HackathonsComponent } from './hackathons/hackathons.component';
 import { AddHackathonsComponent } from './hackathons/add-hackathons/add-hackathons.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AddHackathonsComponent } from './hackathons/add-hackathons/add-hackatho
     TestListComponent,
     HackathonsComponent,
     AddHackathonsComponent,
+    TruncatePipe,
   ],
   imports: [
     CommonModule,

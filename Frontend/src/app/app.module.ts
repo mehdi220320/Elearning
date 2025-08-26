@@ -24,39 +24,42 @@ import { HackathonDetailsComponent } from './hackthons/hackathon-details/hackath
 import { FirstLettersPipe } from './pipes/first-letters.pipe';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    SignupComponent,
-    LandingpageComponent,
-    HomeComponent,
-    ForgetpasswordComponent,
-    NavbarComponent,
-    CoursesComponent,
-    InstructorsComponent,
-    InstructorDetailsComponent,
-    CourseDetailsComponent,
-    TruncatePipe,
-    ChaptersComponent,
-    TestDetailsComponent,
-    HackthonsComponent,
-    HackathonDetailsComponent,
-    FirstLettersPipe
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: authInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        LoginComponent,
+        SignupComponent,
+        LandingpageComponent,
+        HomeComponent,
+        ForgetpasswordComponent,
+        NavbarComponent,
+        CoursesComponent,
+        InstructorsComponent,
+        InstructorDetailsComponent,
+        CourseDetailsComponent,
+        TruncatePipe,
+        ChaptersComponent,
+        TestDetailsComponent,
+        HackthonsComponent,
+        HackathonDetailsComponent,
+        FirstLettersPipe
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule
+    ],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: authInterceptor,
+            multi: true
+        }
+    ],
+    exports: [
+        TruncatePipe
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

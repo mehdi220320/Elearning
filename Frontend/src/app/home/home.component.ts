@@ -36,6 +36,7 @@ export class HomeComponent {
   }
 
   ngOnInit(){
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadData()
   }
   loadData(): void {

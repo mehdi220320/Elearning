@@ -30,6 +30,7 @@ export class CoursesComponent {
   constructor(private coursService: CourseService, private sanitizer: DomSanitizer,private rateService:RatingService) {}
 
   ngOnInit() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadData();
   }
 

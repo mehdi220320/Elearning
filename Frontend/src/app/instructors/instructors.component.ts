@@ -30,6 +30,7 @@ export class InstructorsComponent {
               private sanitizer:DomSanitizer) {}
 
   ngOnInit() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadInstructors();
     this.loadCategories();
   }

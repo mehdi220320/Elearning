@@ -41,7 +41,7 @@
           <th>#id</th>
           <th>Titre</th>
           <th>Cours</th>
-          <th>Nombre des sections</th>
+          <th>Nombre des unités</th>
           <th>Date de création</th>
           <th>Actions</th>
         </tr>
@@ -50,9 +50,9 @@
         <tr *ngFor="let chapter of paginatedChapters; let i = index">
           <td>{{ chapter._id }}</td>
           <td>
-            <strong>{{ chapter.title }}</strong>
+            <strong>{{ chapter.title|truncate : 35 }}</strong>
             <div class="text-muted" style="font-size: 0.85rem;">
-              {{ chapter.description }}
+              {{ chapter.description | truncate:45}}
             </div>
           </td>
           <td>{{ chapter.course.title }}</td>

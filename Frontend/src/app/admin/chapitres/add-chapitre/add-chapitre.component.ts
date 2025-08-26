@@ -29,7 +29,8 @@ export class AddChapitreComponent {
       nbpages: '',
       selectedFile: null,
       filename: '',
-      filesize: 0
+      filesize: 0,
+      hideContent: false // Nouvelle propriété pour masquer/afficher le contenu
     }
   ];
 
@@ -56,7 +57,8 @@ export class AddChapitreComponent {
       nbpages: '',
       selectedFile: null,
       filename: '',
-      filesize: 0
+      filesize: 0,
+      hideContent: false // Par défaut, le contenu est masqué
     });
   }
 
@@ -64,12 +66,16 @@ export class AddChapitreComponent {
     if (this.sections.length > 1) this.sections.splice(index, 1);
   }
 
+  toggleContentSection(index: number) {
+    this.sections[index].hideContent = !this.sections[index].hideContent;
+  }
+
   changeSectionType(index: number, type: string) {
     this.sections[index].type = type;
     if (type === 'video') {
       this.sections[index].nbpages = '';
       this.sections[index].selectedFile = null;
-    } else if (type === 'pdf') {
+    } else if (type === 'pdf' || type === 'image') {
       this.sections[index].url = '';
       this.sections[index].duree = '';
     }
@@ -100,19 +106,36 @@ export class AddChapitreComponent {
     this.sections[index].selectedFile = null;
     this.sections[index].filename = '';
     this.sections[index].filesize = 0;
-    const fileInput = document.getElementById(`pdf-file-${index}`) as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    // Réinitialiser les deux types d'inputs de fichiers (pdf et image)
+    const pdfFileInput = document.getElementById(`pdf-file-${index}`) as HTMLInputElement;
+    const imageFileInput = document.getElementById(`image-file-${index}`) as HTMLInputElement;
+    if (pdfFileInput) pdfFileInput.value = '';
+    if (imageFileInput) imageFileInput.value = '';
   }
 
   getFileIconClass(file: File | null): string {
     if (!file) return '';
     const ext = file.name.split('.').pop()?.toLowerCase();
+
+    // Vérifier d'abord si c'est une image
+    if (file.type.startsWith('image/')) {
+      return 'fas fa-file-image text-info';
+    }
+
+    // Ensuite vérifier les autres types
     switch (ext) {
       case 'pdf': return 'fas fa-file-pdf text-danger';
       case 'doc':
       case 'docx': return 'fas fa-file-word text-primary';
       case 'txt': return 'fas fa-file-alt text-secondary';
       case 'csv': return 'fas fa-file-csv text-success';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'bmp':
+      case 'webp':
+      case 'svg': return 'fas fa-file-image text-info';
       default: return 'fas fa-file text-muted';
     }
   }
@@ -132,6 +155,7 @@ export class AddChapitreComponent {
     const sectionsData = this.sections.map(section => ({
       title: section.title,
       description: section.description,
+      type: section.type, // Ajout du type de section
       url: section.url,
       dureeVideo: section.duree,
       nombrePage: section.nbpages
@@ -177,14 +201,17 @@ export class AddChapitreComponent {
   }
 }
 
+
 interface Section {
   title: string;
   description: string;
   type: string; // video, pdf, both
   url: string;
   duree: string; // mapped to backend dureeVideo
-  nbpages: string; // mapped to backend nombrePage
+  nbpages: string;
   selectedFile: File | null;
   filename: string;
   filesize: number;
+  hideContent: boolean;
+
 }

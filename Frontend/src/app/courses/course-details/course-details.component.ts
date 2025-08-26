@@ -161,6 +161,7 @@ export class CourseDetailsComponent {
     });
   }
   ngOnInit(){
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadData()
     console.log(this.authService.getUserId())
 

@@ -70,6 +70,7 @@ export class InstructorDetailsComponent {
   ) {
   }
   ngOnInit(){
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadData();
   }
   loadRatings() {
