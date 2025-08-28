@@ -133,9 +133,9 @@ export class HackthonsComponent implements OnInit {
     return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80';
   }
 
-  getStatusClass(status: string): string {
+  getStatusClass(status : string): string {
     switch (status) {
-      case 'planned': return 'status-planned';
+      case 'scheduled': return 'status-planned';
       case 'ongoing': return 'status-ongoing';
       case 'completed': return 'status-completed';
       case 'canceled': return 'status-canceled';

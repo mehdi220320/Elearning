@@ -37,7 +37,7 @@
           <div class="course-meta">
             <div class="course-rating">
               <i class="fas fa-star"></i>
-              {{course.rating}}
+              {{course.rating | number:'1.1-1'}}
             </div>
             <div *ngIf="course.prix" class="course-price">{{course.prix +" Dt"}}</div>
             <div *ngIf="!course.prix" class="course-price-free">Gratuit</div>
@@ -52,74 +52,44 @@
   <section>
     <h2 class="section-title">
       Hackathons à venir
-      <a href="/courses">
+      <a href="/hackathons">
         Voir tout
         <i class="fas fa-arrow-right"></i>
       </a>
     </h2>
 
     <div class="hackathons-list">
-      <!-- Hackathon 1 -->
-      <div class="hackathon-card">
+      <div class="hackathon-card" *ngFor="let hack of hackathons">
         <div class="hackathon-header">
           <div class="hackathon-date">
-            <div class="day">15</div>
-            <div class="month">Juin</div>
+            <div class="day">{{ hack.startDate | date:'dd' }}</div>
+            <div class="month">{{ hack.startDate | date:'MMMM' }}</div>
+
           </div>
           <div>
-            <h3 class="hackathon-title">Hackathon IA & Santé</h3>
+            <h3 class="hackathon-title">{{hack.title}}</h3>
             <p class="hackathon-location">
               <i class="fas fa-map-marker-alt"></i>
-              En ligne
+              {{hack.location}}
             </p>
           </div>
         </div>
         <div class="hackathon-body">
           <p class="hackathon-description">
-            Participez à notre hackathon de 48 heures pour développer des solutions innovantes en IA appliquée à la santé.
+            {{hack.description}}
           </p>
           <p class="hackathon-prize">
-            <i class="fas fa-trophy"></i> Prix: €5,000
+            <i class="fas fa-trophy"></i> {{hack.Prizes}}
           </p>
         </div>
         <div class="hackathon-footer">
           <p class="participants-count">
-            <i class="fas fa-users"></i> 124 participants
+            <i class="fas fa-users"></i> {{hack.maxParticipants}} participants
           </p>
-          <button class="join-btn">Participer</button>
+          <button class="join-btn" [routerLink]="'hackathons/'+hack._id">Participer</button>
         </div>
       </div>
 
-      <!-- Hackathon 2 -->
-      <div class="hackathon-card">
-        <div class="hackathon-header">
-          <div class="hackathon-date">
-            <div class="day">30</div>
-            <div class="month">Juin</div>
-          </div>
-          <div>
-            <h3 class="hackathon-title">Hackathon Développement Durable</h3>
-            <p class="hackathon-location">
-              <i class="fas fa-map-marker-alt"></i>
-              Paris, France
-            </p>
-          </div>
-        </div>
-        <div class="hackathon-body">
-          <p class="hackathon-description">
-            Créez des solutions technologiques pour répondre aux défis du développement durable et de l'écologie.
-          </p>
-          <p class="hackathon-prize">
-            <i class="fas fa-trophy"></i> Prix: €3,000
-          </p>
-        </div>
-        <div class="hackathon-footer">
-          <p class="participants-count">
-            <i class="fas fa-users"></i> 87 participants
-          </p>
-          <button class="join-btn">Participer</button>
-        </div>
-      </div>
     </div>
   </section>
 

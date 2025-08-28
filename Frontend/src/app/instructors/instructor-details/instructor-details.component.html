@@ -109,7 +109,7 @@
                 <div class="course-meta">
                   <div class="course-rating">
                     <i class="fas fa-star"></i>
-                    {{ course.rating|| '0.0' }}
+                    {{ course.rating| number:'1.1-1' }}
                   </div>
                   <div class="course-price" *ngIf="course.prix > 0">
                     {{ course.prix | currency:'EUR' }}

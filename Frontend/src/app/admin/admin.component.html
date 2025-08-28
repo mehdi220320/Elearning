@@ -146,10 +146,10 @@
       <div class="user-profile dropdown">
         <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="d-flex align-items-center">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin">
+            <img [src]="getImageUser()" >
             <div class="user-info">
-              <p class="name mb-0">Admin User</p>
-              <p class="role mb-0">Super Admin</p>
+              <p class="name mb-0">{{email| truncate:10}}</p>
+              <p class="role mb-0">Admin</p>
             </div>
             <i class="fas fa-chevron-down ms-2"></i>
           </div>

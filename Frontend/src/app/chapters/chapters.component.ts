@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Course} from '../models/Course';
+import {Comment} from '../models/Comment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {CourseService} from '../services/course.service';
@@ -8,6 +9,7 @@ import {Chapitre} from '../models/Chapitres';
 import {ChapitreService} from '../services/chapitre.service';
 import {TestService} from '../services/test.service';
 import {AuthService} from '../services/authServices/auth.service';
+import { formatDistanceToNow } from 'date-fns';
 
 @Component({
   selector: 'app-chapters',
@@ -51,7 +53,7 @@ export class ChaptersComponent implements OnInit {
   currentSectionIndex: number = 0;
   showPdfViewer: boolean = false;
   currentPdfUrl: SafeUrl = '';
-
+  userPicture:string | null="";
   tests: any[] = [];
   numberTest = 2;
   testsPagination: any[] = [];
@@ -94,6 +96,7 @@ export class ChaptersComponent implements OnInit {
         this.chapitres = response;
         if (this.chapitres.length > 0 && this.chapitres[0].section.length > 0) {
           this.loadTests(this.chapitres[0]._id);
+          this.loadComments()
         }
       },
       error: (err) => { console.error(err); }
@@ -102,6 +105,7 @@ export class ChaptersComponent implements OnInit {
 
   ngOnInit() {
     window.scrollTo({ top: 0, behavior: 'instant' });
+    this.userPicture=this.authService.getUserPicture()
     this.loadData();
   }
 
@@ -117,38 +121,8 @@ export class ChaptersComponent implements OnInit {
     }
   }
 
-  previousChapitre(): void {
-    if (this.currentChapitreIndex > 0) {
-      this.currentChapitreIndex--;
-      this.currentSectionIndex = 0;
-      this.showPdfViewer = false;
-      this.loadTests(this.chapitres[this.currentChapitreIndex]._id);
-    }
-  }
 
-  nextChapitre(): void {
-    if (this.currentChapitreIndex < this.chapitres.length - 1) {
-      this.currentChapitreIndex++;
-      this.currentSectionIndex = 0;
-      this.showPdfViewer = false;
-      this.loadTests(this.chapitres[this.currentChapitreIndex]._id);
-    }
-  }
 
-  previousSection(): void {
-    if (this.currentSectionIndex > 0) {
-      this.currentSectionIndex--;
-      this.showPdfViewer = false;
-    }
-  }
-
-  nextSection(): void {
-    const currentChapitre = this.chapitres[this.currentChapitreIndex];
-    if (this.currentSectionIndex < currentChapitre.section.length - 1) {
-      this.currentSectionIndex++;
-      this.showPdfViewer = false;
-    }
-  }
 
   afficherPlus() {
     this.numberTest += 3;
@@ -167,16 +141,6 @@ export class ChaptersComponent implements OnInit {
   }
 
 
-  // goToSection(chapitreIndex: number, sectionIndex: number): void {
-  //   if (chapitreIndex >= 0 && chapitreIndex < this.chapitres.length) {
-  //     this.currentChapitreIndex = chapitreIndex;
-  //     const chapitre = this.chapitres[chapitreIndex];
-  //     if (sectionIndex >= 0 && sectionIndex < chapitre.section.length) {
-  //       this.currentSectionIndex = sectionIndex;
-  //       this.showPdfViewer = false;
-  //     }
-  //   }
-  // }
 
   playVideo(url: any): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -210,26 +174,8 @@ export class ChaptersComponent implements OnInit {
       return new Date(current.completedAt) > new Date(latest.completedAt) ? current : latest;
     });
   }
-  //
-  // getCurrentSection() {
-  //   if (this.chapitres.length > 0 &&
-  //     this.chapitres[this.currentChapitreIndex].section.length > 0 &&
-  //     this.currentSectionIndex < this.chapitres[this.currentChapitreIndex].section.length) {
-  //     return this.chapitres[this.currentChapitreIndex].section[this.currentSectionIndex];
-  //   }
-  //   return null;
-  // }
-  //
-  // getTotalSections(): number {
-  //   if (this.chapitres.length === 0) return 0;
-  //   return this.chapitres.reduce((total, chapitre) => total + chapitre.section.length, 0);
-  // }
-  //
-  // getCompletedSections(): number {
-  //   return this.currentChapitreIndex * 3 + this.currentSectionIndex + 1;
-  // }
+
   currentPdfName:string="";
-  // Nouvelle fonction pour ouvrir le lecteur PDF
   openPdfViewer(filePath: string,fileName:string): void {
     this.currentPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
     this.currentPdfName=fileName;
@@ -241,5 +187,88 @@ export class ChaptersComponent implements OnInit {
     this.showPdfViewer = false;
     this.currentPdfUrl = "";
     this.currentPdfName="";
+  }
+  description:string="";
+  comments:Comment[]=[]
+  addComment(){
+    if(this.description!==""){
+      this.chapterService.addComment(this.authService.getUserId(),this.chapitres[this.currentChapitreIndex]._id,this.description).subscribe({
+        next:(response)=>{this.loadComments();this.description=""},
+        error:(err)=>console.error(err)
+      })
+    }
+  }
+  addLike(commentId: any) {
+    this.chapterService.addLikes(this.authService.getUserId(), commentId).subscribe({
+      next: (response) => {
+        this.comments.forEach((x: Comment) => {
+          if (x._id === commentId ) {
+            x.likes.push(this.authService.getUserId());
+          }
+        });
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+  removeLike(commentId: any) {
+    this.chapterService.removeLikes(this.authService.getUserId(), commentId).subscribe({
+      next: (response) => {
+        const userId = this.authService.getUserId();
+        this.comments.forEach((x: Comment) => {
+          if (x._id === commentId) {
+            x.likes = x.likes.filter((like: any) => like !== userId);
+          }
+        });
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+  pressedAllComments=false;
+  commentsPagination:Comment[]=[]
+  VoirAllComment(){
+    this.pressedAllComments=true
+    this.commentsPagination=this.comments
+    this.loadComments()
+  }
+  loadComments() {
+    this.chapterService.getCommentsByCHapterId(this.chapitres[this.currentChapitreIndex]._id).subscribe({
+      next: (response) => {
+        this.comments = response.sort((a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        if(!this.pressedAllComments){
+          this.commentsPagination = this.comments.slice(0, 2);
+        }else{
+          this.commentsPagination = this.comments;
+
+        }
+      },
+      error: (err) => console.error(err)
+    });
+  }  getImageUser(url: string  | null): SafeUrl | string {
+    return url ?
+      this.sanitizer.bypassSecurityTrustResourceUrl(url) :
+      '/assets/img.png';
+  }
+  getRelativeTime(date: string | Date): string {
+    return formatDistanceToNow(new Date(date), { addSuffix: true });
+  }
+  isLike(likes:any):boolean{
+    return likes.includes(this.authService.getUserId());
+  }
+
+  isCurrentUser(_id: any):boolean {
+    return this.authService.getUserId()===_id
+  }
+
+  deleteComment(id: any) {
+    this.chapterService.deleteComment(id).subscribe({
+      next:(res)=>{this.loadComments()},
+      error:(err)=>{console.error(err)}
+    })
   }
 }

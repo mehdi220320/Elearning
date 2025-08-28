@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const userRoutes = require('./user/user.routes')
 const AuthRoutes = require('./auth/auth.routes')
 const ChapitreRoutes = require('./chapitre/ChapitreRoute')
+const CommentRoutes = require('./chapitre/comments/CommentRoutes')
 const categoryRoutes=require('./categories/CategoryRoutes')
 const instructorRouter=require('./instructor/InstructorRouter')
 const courseRouter=require('./courses/CourseRouter')
@@ -13,7 +14,7 @@ const hackathonRouter=require('./hackathon/HackathonRoutes')
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-
+require('./scheduler/scheduler');
 const uploadsDir = path.join(__dirname, 'uploads');
 
 if (!fs.existsSync(uploadsDir)) {
@@ -38,6 +39,7 @@ app.use('/category', categoryRoutes)
 app.use('/instructor', instructorRouter)
 app.use('/course', courseRouter)
 app.use('/chapitre', ChapitreRoutes)
+app.use('/chapitre/comments', CommentRoutes)
 app.use('/rate', ratingRouter)
 app.use('/tests', testRouter)
 app.use('/hackathon', hackathonRouter)

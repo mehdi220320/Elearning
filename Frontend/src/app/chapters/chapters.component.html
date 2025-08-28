@@ -218,6 +218,58 @@
   </div>
 </div>
 
+<div class="container">
+  <div class="comments-section">
+    <div class="comments-card">
+      <div class="comments-header">
+        <h3 class="comments-title">
+          <i class="far fa-comments"></i> Discussions
+        </h3>
+<!--        <button class="show-all">Voir tout</button>-->
+      </div>
+
+      <div class="comment-form">
+        <div class="user-avatar"><img [src]="getImageUser(userPicture)" class="user-avatar"></div>
+        <div class="form-group">
+          <textarea placeholder="Ajouter un commentaire..." class="comment-input" name="description" [(ngModel)]="description"></textarea>
+          <button class="submit-button" (click)="addComment()">Publier</button>
+        </div>
+      </div>
+
+      <div class="comments-list">
+        <div class="comment" *ngFor="let comment of commentsPagination">
+          <div class="comment-avatar"><img [src]="getImageUser(comment.user.picture)" class="user-avatar"></div>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-author">{{comment.user.firstname +" "+comment.user.lastname}}</span>
+              <span class="comment-time">{{ getRelativeTime(comment.createdAt) }}</span>
+            </div>
+            <div class="comment-text">
+              {{comment.description}}
+            </div>
+            <div class="comment-actions">
+              <button class="action-button" *ngIf="!isLike(comment.likes)" (click)="addLike(comment._id)"><i class="far fa-thumbs-up"></i> {{comment.likes.length}}</button>
+              <button class="action-button" *ngIf="isLike(comment.likes)" (click)="removeLike(comment._id)"><i class="far fa-thumbs-up" style="color: blue"></i> {{comment.likes.length}}</button>
+
+
+              <button class="action-button delete-button" *ngIf="isCurrentUser(comment.user._id)" (click)="deleteComment(comment._id)">
+                <i class="far fa-trash-alt"></i> Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="pagination" *ngIf="comments.length > 0">
+          <button class="pagination-btn" (click)="VoirAllComment()" *ngIf="!pressedAllComments && commentsPagination.length>2">
+            Afficher plus de comments
+          </button>
+          <div class="pagination-info" *ngIf="commentsPagination.length > 0">
+            Affichage de {{commentsPagination.length}} sur {{comments.length}} comments
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="pdf-modal" *ngIf="showPdfViewer ">
   <div class="pdf-modal-content">

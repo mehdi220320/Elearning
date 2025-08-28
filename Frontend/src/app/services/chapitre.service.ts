@@ -3,6 +3,7 @@ import {environment} from '../models/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Chapitre} from '../models/Chapitres';
+import {Comment} from '../models/Comment';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,19 @@ export class ChapitreService {
   getnbDocummentsByCourse(id:any):Observable<number>{
     return this.http.get<number>(this.apiUrl+"course/nbDocumments/"+id);
   }
-
+  addComment(userId:any,chapterId:any,description:any):Observable<Comment>{
+    return this.http.post<Comment>(this.apiUrl+"comments/add", {userId,chapterId,description})
+  }
+  addLikes(userId:any,commentId:any):Observable<any>{
+    return this.http.post(this.apiUrl+"comments/addLike", {userId,commentId})
+  }
+  removeLikes(userId:any,commentId:any):Observable<any>{
+    return this.http.delete(this.apiUrl+"comments/removeLike/"+userId+"/"+commentId, )
+  }
+  getCommentsByCHapterId(chapterId:any):Observable<Comment[]>{
+    return this.http.get<Comment[]>(this.apiUrl+"comments/chapter/"+chapterId);
+  }
+  deleteComment(commentId:any):Observable<any>{
+    return this.http.delete(this.apiUrl+"comments/delete/"+commentId, )
+  }
 }

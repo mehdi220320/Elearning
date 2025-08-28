@@ -3,6 +3,7 @@ import {SidebarService} from './services/sidebar.service';
 import {AuthService} from '../services/authServices/auth.service';
 import {NavigationEnd, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 declare var google:any;
 
 @Component({
@@ -14,6 +15,7 @@ declare var google:any;
 export class AdminComponent {
   constructor(private authService: AuthService,
               private sidebarService: SidebarService,
+              private sanitizer:DomSanitizer,
               private router: Router) {}
   logout(): void {
     this.authService.logout();
@@ -49,6 +51,17 @@ export class AdminComponent {
       !(event.target as HTMLElement).closest('.submenu')) {
       this.sidebarService.closeAllDropdowns();
     }
+  }
+  email:any=""
+  picture:any=""
+  ngOnInit(){
+    this.picture=  this.authService.getUserPicture() ? this.authService.getUserPicture() : "";
+    this.email=  this.authService.getUserEmail() ? this.authService.getUserEmail() : "";
+  }
+  getImageUser(): SafeUrl | string {
+    return this.picture!=="" ?
+      this.sanitizer.bypassSecurityTrustResourceUrl(this.picture) :
+      '/assets/img.png';
   }
 
 

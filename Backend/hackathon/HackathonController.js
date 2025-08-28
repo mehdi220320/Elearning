@@ -70,6 +70,22 @@ class HackathonController {
             res.status(400).json({ error: e.message });
         }
     }
+    static async getNextHackathons(req,res){
+        try {
+            const hacks= await HackathonService.nextHackathons()
+            const hacksWithImageUrls = hacks.map(hack => ({
+                ...hack.toObject(),
+                coverImage: {
+                    ...hack.coverImage,
+                    path: `http://${req.get('host')}/uploads/${path.basename(hack.coverImage.path)}`
+                }
+            }));
+            res.send(hacksWithImageUrls);
+        }catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
 }
 
 module.exports=HackathonController

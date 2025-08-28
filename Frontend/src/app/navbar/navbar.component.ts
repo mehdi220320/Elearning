@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AuthService} from '../services/authServices/auth.service';
 import {Router} from '@angular/router';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 declare var google:any;
 
 @Component({
@@ -11,9 +12,19 @@ declare var google:any;
 })
 export class NavbarComponent {
   constructor(private authService: AuthService,
-              private router: Router) {}
+              private router: Router,
+              private  sanitizer:DomSanitizer) {}
   isAdmin():boolean{
     return this.authService.getUserRole()==='admin';
+  }
+  picture:any=""
+  ngOnInit(){
+    this.picture=  this.authService.getUserPicture() ? this.authService.getUserPicture() : ""
+  }
+  getImageUser(): SafeUrl | string {
+    return this.picture!=="" ?
+      this.sanitizer.bypassSecurityTrustResourceUrl(this.picture) :
+      '/assets/img.png';
   }
   logout(): void {
     this.authService.logout();
@@ -36,4 +47,6 @@ export class NavbarComponent {
     });
 
   }
+
 }
+

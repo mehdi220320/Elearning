@@ -36,17 +36,38 @@ class HackathonService {
             throw e;
         }
     }
-    static async getAll(){
+    static async getAll() {
         try {
-            return await Hackathon.find().populate({
+            return  await Hackathon.find().populate({
                 path: "theme",
                 select: "_id name"
-            })
-        }catch (e){
+            });
+        } catch (e) {
             console.error('Error in getAllHackathon:', e.message);
             throw e;
         }
     }
+
+    static async updateStatus() {
+        try {
+            let hackathons=await Hackathon.find();
+            for (const h of hackathons) {
+                const now = new Date();
+                if (h.startDate <= now && h.endDate >= now && h.status !== "canceled" && h.status !=="completed") {
+                    h.status = "ongoing";
+                } else if (h.endDate < now && h.status !== "canceled") {
+                    h.status = "completed";
+                }
+                await h.save();
+            }
+            return hackathons;
+        } catch (e) {
+            console.error("Error in updateStatus:", e.message);
+            throw e;
+        }
+    }
+
+
     static async getById(id){
         try {
             return await Hackathon.findById(id)
@@ -103,7 +124,6 @@ class HackathonService {
             throw e;
         }
     }
-
     static async removeParticipant(hackathonId, userId) {
         try {
             const hackathon = await Hackathon.findById(hackathonId);
@@ -135,6 +155,19 @@ class HackathonService {
             throw e;
         }
     }
-
+    static async nextHackathons() {
+        try {
+            return await Hackathon.find({
+                startDate: { $gt: new Date() }
+            }) .sort({ startDate: 1 })
+                .populate({
+                path: "theme",
+                select: "_id name"
+            });
+        } catch (e) {
+            console.error('Error in nextHackathons:', e.message);
+            throw e;
+        }
+    }
 }
 module.exports = HackathonService;

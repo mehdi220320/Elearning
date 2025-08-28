@@ -25,4 +25,7 @@ export class HackathonService {
   removeParticipants(hackathonId:any,userId:any):Observable<any>{
     return this.http.delete(this.apiUrl+hackathonId+"/participants/"+userId)
   }
+  getNextHackathons():Observable<Hackathon[]>{
+    return this.http.get<Hackathon[]>(this.apiUrl+"next")
+  }
 }

@@ -84,6 +84,10 @@ export class AuthService {
     const decoded = this.getDecodedToken();
     return decoded?.userId || null;
   }
+  getUserPicture(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.picture || null;
+  }
   getUserEmail(): string | null {
     const decoded = this.getDecodedToken();
     return decoded?.email || null;

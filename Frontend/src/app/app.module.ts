@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +22,13 @@ import { TestDetailsComponent } from './chapters/test-details/test-details.compo
 import { HackthonsComponent } from './hackthons/hackthons.component';
 import { HackathonDetailsComponent } from './hackthons/hackathon-details/hackathon-details.component';
 import { FirstLettersPipe } from './pipes/first-letters.pipe';
+// 👇 Import Angular locale API
+import { registerLocaleData } from '@angular/common';
+// 👇 Import la locale française
+import localeFr from '@angular/common/locales/fr';
 
+// 👇 Enregistre la locale française AVANT de bootstrap l'app
+registerLocaleData(localeFr);
 @NgModule({
     declarations: [
         AppComponent,
@@ -55,6 +61,10 @@ import { FirstLettersPipe } from './pipes/first-letters.pipe';
             provide: HTTP_INTERCEPTORS,
             useClass: authInterceptor,
             multi: true
+        },
+        {
+          provide: LOCALE_ID,
+          useValue: 'fr'
         }
     ],
     exports: [
