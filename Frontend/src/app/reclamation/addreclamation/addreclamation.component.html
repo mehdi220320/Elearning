@@ -1,0 +1,115 @@
+
+<section class="hero-banner">
+  <div class="container hero-content">
+    <h1 class="hero-title">Signaler un problème</h1>
+    <p class="hero-subtitle">Votre feedback est essentiel pour nous aider à améliorer votre expérience. Décrivez-nous votre problème en détail et nous le résoudrons au plus vite.</p>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="container main-content">
+  <div class="complaint-form">
+    <form id="reclamationForm" #addreclamationForm="ngForm" (ngSubmit)="onSubmit(addreclamationForm)">
+      <div class="form-group">
+        <label for="sujet"><i class="fas fa-heading"></i> Sujet de la réclamation *</label>
+        <input type="text" id="sujet" class="form-control" placeholder="Ex: Problème d'accès au cours, Paiement non validé..." name="sujet" [(ngModel)]="sujet" required>
+      </div>
+
+      <div class="form-group">
+        <label for="type"><i class="fas fa-tag"></i> Type de réclamation *</label>
+        <select id="type" class="form-control" name="type" [(ngModel)]="type" required>
+          <option value="">Sélectionnez le type</option>
+          <option value="Problème technique">Problème technique</option>
+          <option value="Problème de contenu">Problème de contenu</option>
+          <option value="Problème de paiement">Problème de paiement</option>
+          <option value="Problème d'accès">Problème d'accès</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+
+      <div class="form-control mb-4">
+        <label for="type">
+          <i class="fas fa-tag" style="color: black"></i>
+          La réclamation est à propos de
+        </label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="depends"
+              value="hackathon"
+              (click)="toggleRadio('hackathon')"
+              [checked]="depends === 'hackathon'">
+            <span>Hackathon</span>
+          </label>
+
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="depends"
+              value="course"
+              (click)="toggleRadio('course')"
+              [checked]="depends === 'course'">
+            <span>Cours</span>
+          </label>
+
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="depends"
+              value="both"
+              (click)="toggleRadio('both')"
+              [checked]="depends === 'both'">
+            <span>Les deux</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="depends==='both' || depends==='course' ">
+        <label for="cours"><i class="fas fa-book-open"></i> Cours concerné (le cas échéant)</label>
+        <select id="cours" class="form-control"   name="course" [(ngModel)]="course" required>
+          <option value="">Sélectionnez un cours</option>
+          <option  *ngFor="let course of courses"  [value]="course._id">{{course.title}}</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="depends==='both' || depends==='hackathon'">
+        <label for="hackathon"><i class="fas fa-code"></i> Hackathons concerné (le cas échéant)</label>
+        <select id="hackathon" class="form-control" name="hackathon" [(ngModel)]="hackathon" required>
+          <option value="">Sélectionnez un hackathon</option>
+          <option *ngFor="let hackathon of hackathons"  [value]="hackathon._id" >{{hackathon.title}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="description"><i class="fas fa-align-left"></i> Description détaillée *</label>
+        <textarea id="description" class="form-control" placeholder="Décrivez votre problème de manière détaillée..." name="description" [(ngModel)]="description" required></textarea>
+      </div>
+
+
+      <button type="submit" class="btn" [disabled]="addreclamationForm.invalid"><i class="fas fa-paper-plane"></i> Soumettre la réclamation</button>
+      <button *ngIf="isLoading" class="btn btn-outline d-flex justify-content-center my-1" style="border: none;font-family: 'Bold Italic Art';font-weight: bold" disabled>
+        <span style="margin-right: 10px">Chargement...</span>
+        <div class="spinner-border text-primary" role="status">
+        </div>
+      </button>
+    </form>
+  </div>
+
+  <div class="faq-section">
+    <h2 class="faq-title">Questions Fréquentes</h2>
+
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-question-circle"></i> Combien de temps faut-il pour traiter une réclamation?</div>
+      <p>Nous nous engageons à traiter toutes les réclamations dans un délai de 48 heures ouvrables.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-question-circle"></i> Puis-je suivre l'état d'avancement de ma réclamation?</div>
+      <p>Oui, vous recevrez des notifications par email à chaque étape du traitement de votre réclamation.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-question-circle"></i> Que faire si je n'ai pas reçu de réponse?</div>
+      <p>Si vous n'avez pas reçu de réponse après 48 heures, veuillez nous recontacter à support&#64;learnhub.com.</p>
+    </div>
+  </div>
+</main>

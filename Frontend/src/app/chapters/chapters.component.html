@@ -259,7 +259,7 @@
           </div>
         </div>
         <div class="pagination" *ngIf="comments.length > 0">
-          <button class="pagination-btn" (click)="VoirAllComment()" *ngIf="!pressedAllComments && commentsPagination.length>2">
+          <button class="pagination-btn" (click)="VoirAllComment()" *ngIf="!pressedAllComments && comments.length>2">
             Afficher plus de comments
           </button>
           <div class="pagination-info" *ngIf="commentsPagination.length > 0">

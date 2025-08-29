@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="header">
+    <a style="cursor: pointer" (click)="goBackOrFallback()" class="back-button">
+      <i class="fas fa-arrow-left"></i> Retour
+    </a>
+    <h1 class="page-title">Détails de la Réclamation</h1>
+    <span class="status-badge status-pending" *ngIf="!reclamation.seen">En attente</span>
+    <span class="status-badge status-resolved" *ngIf="reclamation.seen">Traité</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-info-circle"></i> Informations générales
+    </div>
+    <div class="card-body">
+      <div class="detail-row">
+        <div class="detail-label">Sujet</div>
+        <div class="detail-value">{{reclamation.sujet}}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Type</div>
+        <div class="detail-value">
+          <span class="type-badge type-course">{{reclamation.type}}</span>
+        </div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Date de création</div>
+        <div class="detail-value">  {{ reclamation.createdAt | date:'dd/MM/yyyy HH:mm' }}
+        </div>
+      </div>
+
+      <div class="detail-row" *ngIf="test(reclamation.updatedAt)">
+        <div class="detail-label">Dernière mise à jour</div>
+        <div class="detail-value">{{ reclamation.updatedAt | date:'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-user"></i> Informations utilisateur
+    </div>
+    <div class="card-body">
+      <div class="detail-row">
+        <div class="detail-label">Nom complet</div>
+        <div class="detail-value">{{reclamation.creator.firstname+" "+reclamation.creator.lastname}}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Email</div>
+        <div class="detail-value">{{reclamation.creator.email}}</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Téléphone</div>
+        <div class="detail-value">+216 {{reclamation.creator.phone}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="test(reclamation.cours) ">
+    <div class="card-header">
+      <i class="fas fa-book"></i> Cours concerné
+    </div>
+    <div class="card-body">
+      <div class="detail-row">
+        <div class="detail-label">Titre du cours</div>
+        <div class="detail-value">{{reclamation.cours.title}}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">ID du cours</div>
+        <div class="detail-value">{{reclamation.cours._id}}</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Date de création</div>
+        <div class="detail-value">{{ reclamation.cours.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="test(reclamation.hackathon) ">
+    <div class="card-header">
+      <i class="fas fa-book"></i> Hackathon concerné
+    </div>
+    <div class="card-body">
+      <div class="detail-row">
+        <div class="detail-label">Titre du hackathon</div>
+        <div class="detail-value">{{reclamation.hackathon.title}}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">ID du hackathon</div>
+        <div class="detail-value">{{reclamation.hackathon._id}}</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Date de création</div>
+        <div class="detail-value">{{ reclamation.hackathon.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-align-left"></i> Description
+    </div>
+    <div class="card-body">
+      <div class="description-box">
+        <p>{{reclamation.description}}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="action-buttons" *ngIf="!reclamation.seen">
+  <button class="btn btn-cancel"  (click)="goBackOrFallback()">Annuler</button>
+  <button class="btn btn-resolve" (click)="markerSeen()">Traiter la réclamation</button>
+</div>
+

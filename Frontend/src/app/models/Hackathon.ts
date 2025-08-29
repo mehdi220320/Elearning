@@ -25,5 +25,6 @@ export interface Hackathon {
   objectifs:string[],
   skills:string[],
   rules:string[],
-  participants:User[]
+  participants:User[],
+  createdAt:string
 }

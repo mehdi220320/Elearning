@@ -20,6 +20,8 @@ import { TestListComponent } from './chapitres/test-list/test-list.component';
 import { HackathonsComponent } from './hackathons/hackathons.component';
 import { AddHackathonsComponent } from './hackathons/add-hackathons/add-hackathons.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { ReclamationsComponent } from './reclamations/reclamations.component';
+import { ReclamationDetailsComponent } from './reclamations/reclamation-details/reclamation-details.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     HackathonsComponent,
     AddHackathonsComponent,
     TruncatePipe,
+    ReclamationsComponent,
+    ReclamationDetailsComponent,
   ],
   imports: [
     CommonModule,

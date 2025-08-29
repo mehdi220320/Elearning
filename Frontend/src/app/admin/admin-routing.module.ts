@@ -15,6 +15,8 @@ import {AddTestComponent} from './chapitres/add-test/add-test.component';
 import {TestListComponent} from './chapitres/test-list/test-list.component';
 import {AddHackathonsComponent} from './hackathons/add-hackathons/add-hackathons.component';
 import {HackathonsComponent} from './hackathons/hackathons.component';
+import {ReclamationsComponent} from './reclamations/reclamations.component';
+import {ReclamationDetailsComponent} from './reclamations/reclamation-details/reclamation-details.component';
 
 const routes: Routes = [
   {
@@ -36,6 +38,8 @@ const routes: Routes = [
       { path: 'tests',component:TestListComponent},
       { path: 'addhackathon',component:AddHackathonsComponent},
       { path: 'hackathons',component:HackathonsComponent},
+      { path: 'reclamations',component:ReclamationsComponent},
+      { path: 'reclamations/:id',component:ReclamationDetailsComponent},
     ]
   }
 ];

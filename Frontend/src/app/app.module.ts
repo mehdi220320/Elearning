@@ -26,6 +26,8 @@ import { FirstLettersPipe } from './pipes/first-letters.pipe';
 import { registerLocaleData } from '@angular/common';
 // 👇 Import la locale française
 import localeFr from '@angular/common/locales/fr';
+import { AddreclamationComponent } from './reclamation/addreclamation/addreclamation.component';
+import { MyreclamationsComponent } from './reclamation/myreclamations/myreclamations.component';
 
 // 👇 Enregistre la locale française AVANT de bootstrap l'app
 registerLocaleData(localeFr);
@@ -47,7 +49,9 @@ registerLocaleData(localeFr);
         TestDetailsComponent,
         HackthonsComponent,
         HackathonDetailsComponent,
-        FirstLettersPipe
+        FirstLettersPipe,
+        AddreclamationComponent,
+        MyreclamationsComponent
     ],
     imports: [
         BrowserModule,

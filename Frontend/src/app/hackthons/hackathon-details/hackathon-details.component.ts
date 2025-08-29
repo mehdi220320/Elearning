@@ -14,6 +14,7 @@ import {AuthService} from '../../services/authServices/auth.service';
 export class HackathonDetailsComponent {
   hackthonId:any="";
   hackathon:Hackathon={
+    createdAt:"",
     _id:'',
     title:'',
     location:'',

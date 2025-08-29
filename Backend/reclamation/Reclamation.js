@@ -19,7 +19,7 @@ const reclamationSchema=new mongoose.Schema({
         required: false
     },
     description:String,
-
+    seen:{type:Boolean,default:false}
 },{ timestamps: true });
 
 

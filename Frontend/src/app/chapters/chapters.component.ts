@@ -135,6 +135,8 @@ export class ChaptersComponent implements OnInit {
       this.currentSectionIndex = 0;
       this.showPdfViewer = false;
       this.loadTests(this.chapitres[this.currentChapitreIndex]._id);
+      this.pressedAllComments=false
+      this.loadComments();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
