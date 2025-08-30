@@ -28,7 +28,7 @@ export class CoursComponent implements OnInit {
   draftCourses = 0;
   popularCourses = 0;
 
-  constructor(private courseService: CourseService, private sanitizer: DomSanitizer) {}
+  constructor(private courseService: CourseService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -98,14 +98,43 @@ export class CoursComponent implements OnInit {
   getImage(url: string | null): SafeUrl | string {
     return url ? this.sanitizer.bypassSecurityTrustResourceUrl(url) : '/assets/img.png';
   }
-  isArchive(id:any){
+
+  isArchive(id: any) {
     this.courseService.isArchive(id).subscribe({
-      next:(res)=>{
+      next: (res) => {
         console.log(res)
         this.loadData()
-      },error:(err)=>console.error(err)
+      }, error: (err) => console.error(err)
     })
   }
 
+  delete(_id: any) {
+    // Enhanced confirmation message in French
+    const confirmationMessage = "Êtes-vous sûr de vouloir supprimer ce cours ?\n\n" +
+      "⚠️ Attention : Cette action supprimera également :\n" +
+      "• Tous les chapitres inclus dans ce cours\n" +
+      "• Tous les tests associés\n" +
+      // "• Les progressions des étudiants\n\n" +
+      "Cette action est irréversible.";
+
+    if (confirm(confirmationMessage)) {
+      this.courseService.deleteById(_id).subscribe({
+        next: (res) => {
+          // Remove from local array
+          this.courses = this.courses.filter((x: Course) => x._id !== _id);
+          // Refresh filtered courses
+          this.filterCourses();
+          // Recalculate stats
+          this.calculateStats();
+
+          console.log('Cours supprimé avec succès', res);
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression:', err);
+          alert('Erreur lors de la suppression du cours. Veuillez réessayer.');
+        }
+      });
+    }
+  }
 }
 

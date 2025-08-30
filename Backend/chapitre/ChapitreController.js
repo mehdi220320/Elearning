@@ -125,6 +125,16 @@ class ChapitreController {
             res.status(500).json({ error: e.message });
         }
     }
+    static async getById(req, res) {
+        try {
+            const id = req.params.id;
+            const chapter = await ChapitreService.getById(id);
+
+            res.status(200).send(chapter);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 
     static async getVideoDurationByCourseId(req, res) {
         try {

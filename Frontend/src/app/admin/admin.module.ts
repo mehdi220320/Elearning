@@ -22,6 +22,11 @@ import { AddHackathonsComponent } from './hackathons/add-hackathons/add-hackatho
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { ReclamationsComponent } from './reclamations/reclamations.component';
 import { ReclamationDetailsComponent } from './reclamations/reclamation-details/reclamation-details.component';
+import { UpdateCourseComponent } from './cours/update-course/update-course.component';
+import { UpdateChapterComponent } from './chapitres/update-chapter/update-chapter.component';
+import { UpdateInstructorComponent } from './instructors/update-instructor/update-instructor.component';
+import { UpdateHackathonComponent } from './hackathons/update-hackathon/update-hackathon.component';
+import { UpdateTestComponent } from './chapitres/update-test/update-test.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +48,11 @@ import { ReclamationDetailsComponent } from './reclamations/reclamation-details/
     TruncatePipe,
     ReclamationsComponent,
     ReclamationDetailsComponent,
+    UpdateCourseComponent,
+    UpdateChapterComponent,
+    UpdateInstructorComponent,
+    UpdateHackathonComponent,
+    UpdateTestComponent,
   ],
   imports: [
     CommonModule,

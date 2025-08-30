@@ -77,17 +77,17 @@ class TestService {
         }
 
         // Vérifier la cohérence chapitre/cours si l'un des deux est modifié
-        if (updateData.chapter || updateData.course) {
-            const chapter = await Chapter.findById(updateData.chapter || test.chapter);
-            if (!chapter) {
-                throw new AppError('Chapitre non trouvé', 404);
-            }
-
-            const courseId = updateData.course || test.course;
-            if (chapter.course.toString() !== courseId.toString()) {
-                throw new AppError('Le chapitre ne fait pas partie du cours sélectionné', 400);
-            }
-        }
+        // if (updateData.chapter || updateData.course) {
+        //     const chapter = await Chapter.findById(updateData.chapter || test.chapter);
+        //     if (!chapter) {
+        //         throw new AppError('Chapitre non trouvé', 404);
+        //     }
+        //
+        //     const courseId = updateData.course || test.course;
+        //     if (chapter.course.toString() !== courseId.toString()) {
+        //         throw new AppError('Le chapitre ne fait pas partie du cours sélectionné', 400);
+        //     }
+        // }
 
         // Ajouter l'utilisateur qui a fait la modification
         updateData.updatedBy = userId;
@@ -108,7 +108,9 @@ class TestService {
         }
         return test;
     }
-
+    static async deleteTestsByChapter(id) {
+        return await Test.deleteMany({ chapter: id });
+    }
     static  getQuestion(questions,id){
         for(let q of questions){
             if(q._id==id) {

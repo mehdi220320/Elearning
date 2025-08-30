@@ -23,7 +23,7 @@ export class InstructorsComponent implements OnInit{
   constructor(
     private instructorService: InstructorService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadInstructors();
@@ -41,18 +41,35 @@ export class InstructorsComponent implements OnInit{
       }
     });
   }
-  deleteInstructor(id:string){
-    this.instructorService.deleteById(id).subscribe({
-      next:(response)=>{
-        console.log(response);
-        console.log("instructor deleted successfully");
-        this.instructors=[]
-        this.loadInstructors()
-      },error:(err)=>{
-        console.error(err)
-      }
-    })
+
+  deleteInstructor(id: string) {
+    // Enhanced confirmation message in French
+    const confirmationMessage = "Êtes-vous sûr de vouloir supprimer ce formateur ?\n\n" +
+      "⚠️ Attention : Cette action supprimera également :\n" +
+      "• Tous les cours créés par ce formateur\n" +
+      "• Tous les chapitres de ces cours\n" +
+      "• Tous les tests et évaluations associés\n" +
+      "• Les progressions des étudiants dans ces cours\n\n" +
+      "Cette action est irréversible.";
+
+    if (confirm(confirmationMessage)) {
+      this.instructorService.deleteById(id).subscribe({
+        next: (response) => {
+          console.log(response);
+          console.log("Formateur supprimé avec succès");
+          // Remove from local arrays instead of reloading all data
+          this.instructors = this.instructors.filter(instructor => instructor._id !== id);
+          this.filteredInstructors = this.filteredInstructors.filter(instructor => instructor._id !== id);
+          this.updatePagination();
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Erreur lors de la suppression du formateur. Veuillez réessayer.');
+        }
+      });
+    }
   }
+
   getImage(url: string | null): SafeUrl | string {
     return url ?
       this.sanitizer.bypassSecurityTrustResourceUrl(url) :
@@ -128,5 +145,4 @@ export class InstructorsComponent implements OnInit{
       this.updatePagination();
     }
   }
-
 }

@@ -169,5 +169,55 @@ class HackathonService {
             throw e;
         }
     }
+    static async updateHackathon(id, updateData, coverImageFile) {
+        try {
+            // Récupération du hackathon existant
+            const hackathon = await Hackathon.findById(id);
+            if (!hackathon) throw new Error("Hackathon not found");
+
+            // Mettre à jour les champs simples
+            const fields = [
+                "title", "location", "startDate", "endDate",
+                "shortDescription", "description", "fee", "Prizes",
+                "maxParticipants", "objectifs", "skills", "rules"
+            ];
+
+            fields.forEach(field => {
+                if (updateData[field] !== undefined) {
+                    hackathon[field] = updateData[field];
+                }
+            });
+
+            // Mettre à jour le thème si fourni
+            if (updateData.theme) {
+                const theme = await Category.findById(updateData.theme);
+                if (!theme) throw new Error("Category doesn't exist");
+                hackathon.theme = theme;
+            }
+
+            // Mettre à jour les cours si fournis
+            if (updateData.courses && updateData.courses.length > 0) {
+                const courses = [];
+                for (let courseId of updateData.courses) {
+                    const course = await Course.findById(courseId);
+                    if (!course) throw new Error("Course " + courseId + " doesn't exist");
+                    courses.push(course);
+                }
+                hackathon.courses = courses;
+            }
+
+            // Mettre à jour l'image si fournie
+            if (coverImageFile) {
+                hackathon.coverImage = { path: coverImageFile.path, contentType: coverImageFile.mimetype };
+            }
+
+            // Sauvegarder et retourner le hackathon mis à jour
+            return await hackathon.save();
+        } catch (e) {
+            console.error("Error in updateHackathon:", e.message);
+            throw e;
+        }
+    }
+
 }
 module.exports = HackathonService;

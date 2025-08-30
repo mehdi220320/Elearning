@@ -176,16 +176,17 @@ export class HackathonsComponent implements OnInit {
     });
   }
 
-//   deleteHackathon(hackathonId: string): void {
-//     if (confirm('Êtes-vous sûr de vouloir supprimer ce hackathon?')) {
-//     this.hackathonService.delete(hackathonId).subscribe({
-//       next: () => {
-//         this.loadHackathons();
-//       },
-//       error: (err) => {
-//         console.error('Error deleting hackathon:', err);
-//       }
-//     });
-//   }
-// }
+  deleteHackathon(hackathonId: string): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce hackathon?')) {
+    this.hackathonService.deleteHackathon(hackathonId).subscribe({
+      next: () => {
+        this.loadHackathons();
+      },
+      error: (err) => {
+        console.error('Error deleting hackathon:', err);
+      }
+    });
+  }
+}
+
 }

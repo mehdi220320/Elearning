@@ -105,5 +105,64 @@ class CourseController{
             res.status(500).json({ error: e.message });
         }
     }
+    static async update(req, res) {
+        try {
+            const id = req.params.id;
+            const updates = req.body;
+            const coverImageFile = req.file;
+
+            // If there's a new image, add it to the updates
+            if (coverImageFile) {
+                updates.coverImage = {
+                    path: coverImageFile.path,
+                    contentType: coverImageFile.mimetype
+                };
+            }
+
+            // Handle learns array if provided as string
+            if (updates.learns && typeof updates.learns === 'string') {
+                try {
+                    updates.learns = JSON.parse(updates.learns);
+                } catch (e) {
+                    // If parsing fails, treat as a single value array
+                    updates.learns = [updates.learns];
+                }
+            }
+
+            const updatedCourse = await CourseService.update(id, updates);
+
+            // Generate the full URL for the cover image
+            if (updatedCourse.coverImage?.path) {
+                updatedCourse.coverImage.path = `http://${req.get('host')}/uploads/${path.basename(updatedCourse.coverImage.path)}`;
+            }
+
+            res.status(200).json({
+                message: "Course updated successfully",
+                course: updatedCourse
+            });
+        } catch (error) {
+            if (error.message.includes("not found")) {
+                res.status(404).json({ error: error.message });
+            } else if (error.name === "ValidationError") {
+                res.status(400).json({ error: "Invalid data: " + error.message });
+            } else if (error.message.includes("already exists")) {
+                res.status(409).json({ error: error.message });
+            } else {
+                console.error('Server error:', error);
+                res.status(500).json({ error: "A server error occurred" });
+            }
+        }
+    }
+    static async deleteById(req,res){
+        try {
+            const id= req.params.id;
+            await CourseService.deleteCourseId(id);
+            res.status(201).json({
+                message: "Course "+id+" has been deleted successfully"});
+        }catch (e){
+            res.status(500).json({ error: error.message });
+
+        }
+    }
 }
 module.exports=CourseController

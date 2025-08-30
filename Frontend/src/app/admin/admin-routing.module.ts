@@ -17,6 +17,10 @@ import {AddHackathonsComponent} from './hackathons/add-hackathons/add-hackathons
 import {HackathonsComponent} from './hackathons/hackathons.component';
 import {ReclamationsComponent} from './reclamations/reclamations.component';
 import {ReclamationDetailsComponent} from './reclamations/reclamation-details/reclamation-details.component';
+import {UpdateCourseComponent} from './cours/update-course/update-course.component';
+import {UpdateInstructorComponent} from './instructors/update-instructor/update-instructor.component';
+import {UpdateHackathonComponent} from './hackathons/update-hackathon/update-hackathon.component';
+import {UpdateTestComponent} from './chapitres/update-test/update-test.component';
 
 const routes: Routes = [
   {
@@ -28,15 +32,19 @@ const routes: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'courses', component: CoursComponent },
       { path: 'addCourse', component: AddCourComponent },
+      { path: 'updateCourse/:id', component: UpdateCourseComponent },
       { path: 'instructors', component: InstructorsComponent },
       { path: 'addinstructor', component: AddInstructorComponent },
+      { path: 'updateinstructor/:id', component: UpdateInstructorComponent },
       { path: 'addChapitre', component: AddChapitreComponent },
       { path: 'chapters', component: ChapitresComponent },
       { path: 'ressources', component: RessourcesListComponent },
       { path: 'medias', component: MediaListComponent },
       { path: 'addTest',component:AddTestComponent},
+      { path: 'updateTest/:id',component:UpdateTestComponent},
       { path: 'tests',component:TestListComponent},
       { path: 'addhackathon',component:AddHackathonsComponent},
+      { path: 'updatehackathon/:id',component:UpdateHackathonComponent},
       { path: 'hackathons',component:HackathonsComponent},
       { path: 'reclamations',component:ReclamationsComponent},
       { path: 'reclamations/:id',component:ReclamationDetailsComponent},

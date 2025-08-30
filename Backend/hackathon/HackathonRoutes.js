@@ -11,5 +11,6 @@ router.get('/:id', [adminAuthorization, checkTokenExists], HackathonController.g
 router.delete('/delete/:id', [adminAuthorization, checkTokenExists], HackathonController.deleteHackathonById);
 router.post("/:id/participants/:userId", [adminAuthorization, checkTokenExists], HackathonController.addParticipant);
 router.delete('/:id/participants/:userId', [adminAuthorization, checkTokenExists], HackathonController.removeParticipant);
+router.put('/update/:id', [adminAuthorization, checkTokenExists, upload.single('coverImageFile')], HackathonController.updateHackathon);
 
 module.exports = router;

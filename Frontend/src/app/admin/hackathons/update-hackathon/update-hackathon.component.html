@@ -1,0 +1,182 @@
+<main class="admin-main">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Modifier le hackathon</h1>
+      <a (click)="goBackOrFallback()" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i>
+        Retour
+      </a>
+    </div>
+
+    <div class="form-card">
+      <div class="form-header">
+        <h2 class="form-title">Informations du hackathon</h2>
+        <p class="form-subtitle">Modifiez les détails du hackathon existant</p>
+      </div>
+
+      <form id="hackathon-form" #updateHackathonForm="ngForm" (ngSubmit)="onSubmit(updateHackathonForm)">
+        <div class="form-grid">
+          <!-- Titre -->
+          <div class="form-group">
+            <label for="title" class="form-label">Titre du hackathon <span>*</span></label>
+            <input type="text" id="title" class="form-control" name="title" [(ngModel)]="title" required placeholder="Ex: Hackathon IA 2023">
+          </div>
+
+          <!-- Thème -->
+          <div class="form-group">
+            <label for="theme" class="form-label">Thème principal <span>*</span></label>
+            <select id="theme" class="form-control" name="categoryid" [(ngModel)]="categoryid" (click)="loadCourses()" required>
+              <option value="">Sélectionnez un theme </option>
+              <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
+            </select>
+          </div>
+
+          <!-- Dates -->
+          <div class="form-group">
+            <label for="start-date" class="form-label">Date de début <span>*</span></label>
+            <input type="datetime-local" id="start-date" class="form-control" name="startDate" [(ngModel)]="startDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="end-date" class="form-label">Date de fin <span>*</span></label>
+            <input type="datetime-local" id="end-date" class="form-control" name="endDate" [(ngModel)]="endDate" required>
+          </div>
+
+          <!-- Lieu et max participants -->
+          <div class="form-group">
+            <label for="location" class="form-label">Lieu <span>*</span></label>
+            <input type="text" id="location" class="form-control" name="location" [(ngModel)]="location" required placeholder="Ex: En ligne ou Tunis, Tunisie">
+          </div>
+
+          <div class="form-group">
+            <label for="max-participants" class="form-label">Nombre maximum de participants</label>
+            <input type="number" id="max-participants" class="form-control" [(ngModel)]="maxParticipants" name="maxParticipants" min="1" placeholder="Ex: 100">
+          </div>
+
+          <!-- Descriptions -->
+          <div class="form-group full-width">
+            <label for="short-description" class="form-label">Description courte <span>*</span></label>
+            <textarea id="short-description" class="form-control" name="shortDescription" [(ngModel)]="shortDescription" required placeholder="Une brève description"></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="description" class="form-label">Description détaillée <span>*</span></label>
+            <textarea id="description" class="form-control" name="description" [(ngModel)]="description" required placeholder="Description complète"></textarea>
+          </div>
+
+          <!-- Objectifs -->
+          <div class="form-group full-width">
+            <label for="objectifs" class="form-label">Objectifs du hackathon</label>
+            <div class="skill-input-container">
+              <input type="text" id="objectifs" class="form-control skill-input" placeholder="Objectifs du hackathon." name="objectif" [(ngModel)]="objectif">
+              <button type="button" class="add-skill-btn" (click)="addobjectif()">Ajouter</button>
+            </div>
+            <div class="objectifs-container">
+              <div class="skill-tag" *ngFor="let objectif of objectifs" (click)="removeobjectif(objectif)">
+                <li>{{objectif}}</li> <i class="fas fa-times-circle"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Règles -->
+          <div class="form-group full-width">
+            <label for="rules" class="form-label">Règles et conditions</label>
+            <div class="skill-input-container">
+              <input type="text" id="rules" class="form-control skill-input" placeholder="Règles et conditions." name="rule" [(ngModel)]="rule">
+              <button type="button" class="add-skill-btn" (click)="addrule()">Ajouter</button>
+            </div>
+            <div class="objectifs-container">
+              <div class="skill-tag" *ngFor="let rule of rules" (click)="removerule(rule)">
+                <li>{{rule}}</li> <i class="fas fa-times-circle"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compétences -->
+          <div class="form-group full-width">
+            <label for="skills" class="form-label">Compétences</label>
+            <div class="skill-input-container">
+              <input type="text" id="skills" class="form-control skill-input" placeholder="Ajouter une compétence" name="skill" [(ngModel)]="skill">
+              <button type="button" class="add-skill-btn" (click)="addSkill()">Ajouter</button>
+            </div>
+            <div class="skills-container">
+              <div class="skill-tag" *ngFor="let skill of competences" (click)="removeSkill(skill)">
+                <span>#{{skill}}</span> <i class="fas fa-times-circle"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image de couverture -->
+          <div class="form-group full-width">
+            <label class="form-label">Image de couverture</label>
+            <div class="file-upload">
+              <div *ngIf="!imagePreview; else previewBlock" class="file-upload-btn" (click)="fileInput.click()">
+                <div class="file-upload-text">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Cliquez pour télécharger</span>
+                  ou glissez-déposez une image
+                  <small>(JPEG, PNG - 16:9 recommandé)</small>
+                </div>
+                <input type="file" class="file-upload-input" accept="image/*" #fileInput (change)="onFileSelected($event)">
+              </div>
+            </div>
+            <ng-template #previewBlock>
+              <div class="file-preview">
+                <img [src]="imagePreview" class="thumbnail-preview" alt="Preview">
+                <div class="file-info">
+                  <div class="file-name">{{fileName}}</div>
+                  <div class="file-size">{{fileSize}}</div>
+                </div>
+                <i class="fas fa-times file-remove" (click)="removeFile()"></i>
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Cours associés -->
+          <div class="form-group full-width" *ngIf="courses.length>0">
+            <label class="form-label">Cours associés</label>
+            <p class="form-subtitle">Sélectionnez les cours utiles pour ce hackathon</p>
+            <div class="courses-selection">
+              <div class="course-checkbox" *ngFor="let course of courses; let i = index">
+                <input type="checkbox"
+                       id="course-{{i}}"
+                       [ngModel]="isSelected(course._id)"
+                       (ngModelChange)="toggleCourseSelection(course._id, $event)"
+                       [value]="course._id">
+                <div class="course-info">
+                  <div class="course-title">{{course.title}}</div>
+                  <div class="course-details">
+                    <span>{{course.niveau}}</span>
+                    <span>{{course.duree}} heures</span>
+                    <span>{{course.prix}} Dt</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prix et frais -->
+          <div class="form-group">
+            <label for="prizes" class="form-label">Prix à gagner</label>
+            <input type="text" id="prizes" class="form-control" [(ngModel)]="Prizes" name="prizes" required placeholder="Ex: 5000Dt, Formation gratuite, etc.">
+          </div>
+          <div class="form-group">
+            <label for="fee" class="form-label">Frais de participation</label>
+            <input type="number" id="fee" class="form-control" [(ngModel)]="fee" name="fee" required placeholder="Ex. : 50 DT">
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" (click)="goBackOrFallback()">
+            <i class="fas fa-times"></i> Annuler
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="updateHackathonForm.invalid">
+            <i class="fas fa-edit"></i> Mettre à jour le hackathon
+          </button>
+        </div>
+      </form>
+    </div>
+
+</div>
+</main>

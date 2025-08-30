@@ -1,5 +1,6 @@
 const Chapitre=require('./Chapitre')
 const Course=require('../courses/Course')
+const TestService=require('../test/TestService')
 class ChapitreService {
     static async addChapitre(title, description, courseId, sections) {
         try {
@@ -24,30 +25,45 @@ class ChapitreService {
     }
 
     static async getAll() {
-        return await Chapitre.find().populate({
-            path: "course",
-            select: "_id title"
-        });
+        try {
+            return await Chapitre.find().populate({
+                path: "course",
+                select: "_id title"
+            });
+        } catch (e) {
+            throw e;
+        }
+
     }
 
     static async getRessources() {
-        // chapters having at least one section with a file
-        return await Chapitre.find({ "section.file": { $exists: true } })
-            .populate({ path: "course", select: "_id title" })
-            .sort({ createdAt: -1 });
+        try {
+            // chapters having at least one section with a file
+            return await Chapitre.find({ "section.file": { $exists: true } })
+                .populate({ path: "course", select: "_id title" })
+                .sort({ createdAt: -1 });
+        } catch (e) {
+            throw e;
+        }
     }
 
     static async getMedias() {
-        // chapters having at least one section with a url
-        return await Chapitre.find({ "section.url": { $exists: true, $ne: null } })
-            .populate({ path: "course", select: "_id title" })
-            .sort({ createdAt: -1 });
+        try {
+            // chapters having at least one section with a url
+            return await Chapitre.find({ "section.url": { $exists: true, $ne: null } })
+                .populate({ path: "course", select: "_id title" })
+                .sort({ createdAt: -1 });
+        } catch (e) {
+            throw e;
+        }
     }
 
     static async getbycourse(id) {
         return await Chapitre.find({ course: id });
     }
-
+    static async getById(id){
+        return await Chapitre.findById(id);
+    }
     static async VideoDuration(id) {
         const chapters = await Chapitre.find({ course: id });
         let total = 0;
@@ -73,5 +89,17 @@ class ChapitreService {
         }
         return total;
     }
+    static async deleteChaptersByCourseId(id) {
+        try {
+            const chapters = await Chapitre.find({ course: id });
+            await Promise.all(
+                chapters.map(chapter => TestService.deleteTestsByChapter(chapter._id))
+            );
+            await Chapitre.deleteMany({ course: id });
+        } catch (e) {
+            throw e;
+        }
+    }
+
 }
 module.exports=ChapitreService

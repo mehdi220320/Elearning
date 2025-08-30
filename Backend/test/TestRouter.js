@@ -8,7 +8,7 @@ router.post('/create', [adminAuthorization, checkTokenExists], TestController.cr
 router.get('/all', [checkTokenExists], TestController.getAllTests);
 router.get('/:id', [checkTokenExists], TestController.getTest);
 router.get('/chapter/:id', [checkTokenExists], TestController.getTestsByChapter);
-router.patch('/update/:id', [adminAuthorization, checkTokenExists], TestController.updateTest);
+router.put('/update/:id', [adminAuthorization, checkTokenExists], TestController.updateTest);
 router.delete('/delete/:id', [adminAuthorization, checkTokenExists], TestController.deleteTest);
 
 router.post('/submit/:id', [checkTokenExists, upload.single('attachment')], TestController.submitTest);

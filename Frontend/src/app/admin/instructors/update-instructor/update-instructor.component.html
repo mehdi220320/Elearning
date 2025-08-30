@@ -1,0 +1,172 @@
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Mettre à jour un formateur</h1>
+    <a (click)="goBackOrFallback()" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i>
+      Retour
+    </a>
+  </div>
+
+  <div class="form-card">
+    <div class="form-header">
+      <h2 class="form-title">Informations personnelles</h2>
+      <p class="form-subtitle">Modifiez les informations du formateur</p>
+    </div>
+
+    <form id="instructor-form" #updateInstructorForm="ngForm" (ngSubmit)="onSubmit(updateInstructorForm)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstname" class="form-label">Prénom <span>*</span></label>
+          <input type="text" id="firstname" name="firstname" class="form-control" [(ngModel)]="firstname" required>
+        </div>
+
+        <div class="form-group">
+          <label for="lastname" class="form-label">Nom <span>*</span></label>
+          <input type="text" id="lastname" class="form-control" name="lastname"  [(ngModel)]="lastname" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email <span>*</span></label>
+          <input type="email" id="email" class="form-control"
+                 placeholder="Adresse email"
+                 pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+                 name="email"  [(ngModel)]="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label">Téléphone</label>
+          <input type="tel" id="phone" class="form-control"
+                 placeholder="Téléphone Tunisien"
+                 pattern="^(\+216|00216|0)?[2459][0-9]{7}$"
+                 name="phone"  [(ngModel)]="phone">
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Photo de profil</label>
+          <div class="file-upload">
+            <div class="file-upload-btn"  *ngIf="!imagePreview; else previewBlock" class="file-upload-btn" (click)="fileInput.click()" >
+              <div class="file-upload-text">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Cliquez pour télécharger</span>
+                ou glissez-déposez une image
+                <small>(JPEG, PNG - Max 2MB)</small>
+              </div>
+
+              <input type="file" class="file-upload-input" accept="image/*" #fileInput type="file" id="thumbnail" (change)="onFileSelected($event)" required>
+            </div>
+          </div>
+          <ng-template #previewBlock>
+            <div class="file-preview">
+              <img [src]="imagePreview" class="thumbnail-preview" id="file-preview-img" alt="Preview">
+              <div class="file-info">
+                <div class="file-name" id="file-name">{{fileName}}</div>
+                <div class="file-size" id="file-size">{{fileSize}}</div>
+              </div>
+              <i class="fas fa-times file-remove" (click)="removeFile()"></i>
+            </div>
+
+          </ng-template>
+
+        </div>
+        <div class="form-group full-width">
+          <label for="bio" class="form-label">Biographie <span>*</span></label>
+          <textarea id="bio" class="form-control" name="biographie"  [(ngModel)]="biographie" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="experience" class="form-label">Année d'expérience</label>
+          <input type="number" id="experience" class="form-control"
+                 placeholder="Année d'expérience"
+                 name="experience" [(ngModel)]="experience">
+        </div>
+        <div class="form-group">
+          <label for="adresse" class="form-label">Adresse</label>
+          <input type="text" id="adresse" class="form-control"
+                 placeholder="Adresse complète du formateur"
+                 name="adresse" [(ngModel)]="adresse">
+        </div>
+
+        <div class="form-group ">
+          <label for="specialty" class="form-label">Spécialité <span>*</span></label>
+          <input type="text" id="specialty" class="form-control" name="speciality"  [(ngModel)]="speciality" required>
+        </div>
+        <div class="form-group">
+          <label for="category" class="form-label">Catégorie <span>*</span></label>
+          <div class="select-with-add">
+            <select id="category" class="form-control" name="categoryId" [(ngModel)]="categoryId" required >
+              <option value="" disabled >Sélectionnez une catégorie</option>
+              <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
+            </select>
+            <button type="button" class="add-btn" id="add-category-btn" title="Ajouter une nouvelle categorie" data-bs-toggle="modal" data-bs-target="#myModal">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="skills" class="form-label">Compétences</label>
+          <div class="skill-input-container">
+            <input type="text" id="skills" class="form-control skill-input" placeholder="Ajouter une compétence" name="skill"  [(ngModel)]="skill">
+            <button type="button" class="add-skill-btn" (click)="addSkill()">Ajouter</button>
+          </div>
+          <div class="skills-container" id="skills-tags" >
+            <div class="skill-tag" *ngFor="let skill of Competences" (click)="removeSkill(skill)">
+              <span>#{{skill}}</span> <i class="fas fa-times-circle "></i>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="form-group full-width">
+          <label for="social-links" class="form-label">Liens sociaux</label>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="linkedin" class="form-label">
+                <i class="fab fa-linkedin"></i> LinkedIn
+              </label>
+              <input type="url" id="linkedin" class="form-control" name="LinkedIn"  [(ngModel)]="LinkedIn"  placeholder="https://linkedin.com/in/username">
+            </div>
+            <div class="form-group">
+              <label for="twitter" class="form-label">
+                <i class="fab fa-twitter"></i> Twitter
+              </label>
+              <input type="url" id="twitter" class="form-control" name="Twitter"  [(ngModel)]="Twitter"  placeholder="https://twitter.com/username">
+            </div>
+            <div class="form-group">
+              <label for="github" class="form-label">
+                <i class="fab fa-github"></i> GitHub
+              </label>
+              <input type="url" id="github" class="form-control" name="GitHub"  [(ngModel)]="GitHub"  placeholder="https://github.com/username">
+            </div>
+            <div class="form-group">
+              <label for="website" class="form-label">
+                <i class="fas fa-globe"></i> Site web
+              </label>
+              <input type="url" id="website" class="form-control" name="Site_web"  [(ngModel)]="Site_web"  placeholder="https://votresite.com">
+            </div>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <div class="error-container " *ngIf="error">
+            <div class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ error }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" routerLink="/admin/instructors">
+          <i class="fas fa-times"></i>
+          Annuler
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="updateInstructorForm.invalid">
+          <i class="fas fa-save"></i>
+          Mettre à jour le formateur
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

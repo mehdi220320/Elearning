@@ -30,4 +30,10 @@ export class CourseService {
   getCoursesByCategorie(categorie:any):Observable<any>{
     return this.http.get<any>(this.apiUrl+"category/"+ categorie)
   }
+  update(id: string, data: FormData): Observable<any> {
+    return this.http.put(this.apiUrl + "update/" + id, data)
+  }
+  deleteById(id:any):Observable<any>{
+    return this.http.delete(this.apiUrl+"delete/"+id)
+  }
 }

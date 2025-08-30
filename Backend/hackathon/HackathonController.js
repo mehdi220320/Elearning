@@ -85,6 +85,18 @@ class HackathonController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async updateHackathon(req, res) {
+        try {
+            const id = req.params.id;
+            const updatedHackathon = await HackathonService.updateHackathon(id, req.body, req.file);
+            res.status(200).json({
+                message: "Hackathon updated successfully",
+                hackathon: updatedHackathon
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 
 }
 

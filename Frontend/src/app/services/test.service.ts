@@ -111,7 +111,7 @@ export class TestService {
 
   // Update a test
   updateTest(testId: string, updateData: Partial<Test>): Observable<Test> {
-    return this.http.patch<Test>(`${this.apiUrl}/update/${testId}`, updateData, { headers: this.getHeaders() })
+    return this.http.put<Test>(`${this.apiUrl}/update/${testId}`, updateData, { headers: this.getHeaders() })
       .pipe(
         catchError(this.handleError)
       );

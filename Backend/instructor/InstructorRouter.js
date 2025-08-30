@@ -8,5 +8,6 @@ router.post('/add', [adminAuthorization, checkTokenExists,upload.single('picture
 router.get('/all',  checkTokenExists, instructorController.getAll);
 router.get('/:id',  checkTokenExists, instructorController.getInstructorByid);
 router.delete('/delete/:id', [adminAuthorization, checkTokenExists], instructorController.deleteInstructor);
+router.put('/update/:id', [adminAuthorization, checkTokenExists, upload.single('picture')], instructorController.updateInstructor);
 
 module.exports = router;

@@ -25,4 +25,7 @@ export class InstructorService {
   deleteById(id:string):Observable<any>{
     return this.http.delete(this.apiUrl+"delete/"+id)
   }
+  updateInstructor(id: string, instructorData: any): Observable<any> {
+    return this.http.put(this.apiUrl + "update/" + id, instructorData);
+  }
 }

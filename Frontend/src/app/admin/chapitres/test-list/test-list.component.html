@@ -40,10 +40,14 @@
       </span>
           </td>
           <td class="actions">
-            <button class="btn-action btn-view" (click)="viewTest(test._id)">
-              <i class="fas fa-eye"></i>
+            <button class="btn-action btn-view"
+                    [routerLink]="
+                                  '/courses/' + test.course +
+                                  '/chapters/' + test.chapter +
+                                  '/test/' + test._id">
+                  <i class="fas fa-eye"></i>
             </button>
-            <button class="btn-action btn-edit" (click)="editTest(test._id)">
+            <button class="btn-action btn-edit" [routerLink]="'/admin/updateTest/'+test._id">
               <i class="fas fa-edit"></i>
             </button>
             <button class="btn-action btn-delete" (click)="confirmDelete(test._id)">
