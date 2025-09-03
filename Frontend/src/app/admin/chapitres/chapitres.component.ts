@@ -118,5 +118,18 @@ export class ChapitresComponent {
         return 'fas fa-file text-muted';
     }
   }
-
+  deleteChapterById(id: any, title: string,course:string) {
+    if (
+      confirm(`Voulez-vous vraiment supprimer le chapitre « ${title} » du cours « ${course} » ?\n\nCette action est irréversible.`)
+    ) {
+      this.chapitreService.deleteChapterId(id).subscribe({
+        next: (response) => {
+          console.log('Chapitre supprimé avec succès');
+          this.loadChapters()
+          // Actualiser les données ou afficher un toast de confirmation
+        },
+        error: (err) => console.error('Erreur de suppression:', err)
+      });
+    }
+  }
 }

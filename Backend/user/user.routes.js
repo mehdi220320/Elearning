@@ -8,8 +8,24 @@ const { adminAuthorization,checkTokenExists } = require('../middlewares/authMidd
 
 router.get('/all',[adminAuthorization,checkTokenExists],async (req,res)=>{
     try {
-        const  users = await User.find()
+        const  users = await User.find({role:'user'})
         res.send(users)
+    }catch (e){
+        res.send(e)
+    }
+})
+router.get('/admins',[adminAuthorization,checkTokenExists],async (req,res)=>{
+    try {
+        const  users = await User.find({role:'admin'})
+        res.send(users)
+    }catch (e){
+        res.send(e)
+    }
+})
+router.get('/numberOfUsers',[adminAuthorization,checkTokenExists],async (req,res)=>{
+    try {
+        const  users = await User.find()
+        res.send(users.length)
     }catch (e){
         res.send(e)
     }
@@ -61,8 +77,8 @@ router.put('/isActive/:id', [adminAuthorization, checkTokenExists], async (req, 
 router.delete('/delete/:id',[adminAuthorization,checkTokenExists],async (req,res)=>
 {
     try {
-        await  User.deleteOne({ _id: req.params.id });
-        if (result.deletedCount === 0) {
+        const result= await  User.findByIdAndDelete( req.params.id);
+        if (!result) {
             return res.status(404).send({ error: "User not found" });
         }
         res.status(200).send({message:"user deleted successfully"})

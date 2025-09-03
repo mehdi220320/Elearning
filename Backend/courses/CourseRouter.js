@@ -6,6 +6,8 @@ const upload = require('../middlewares/uploadMiddleware');
 
 router.post('/add', [adminAuthorization, checkTokenExists,upload.single('coverImage')], courseController.add);
 router.get('/all',  checkTokenExists, courseController.getAll);
+router.get('/newest',  checkTokenExists, courseController.newestCourses);
+router.get('/dashboard/numberCoursesActive',  checkTokenExists, courseController.numberCourseActive);
 router.get('/instructor/:id',  checkTokenExists, courseController.getCoursesByInstructor);
 router.get('/:id',  checkTokenExists, courseController.getById);
 router.get('/category/:id',  checkTokenExists, courseController.getCoursesByCategorie);

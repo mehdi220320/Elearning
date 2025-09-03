@@ -1,1 +1,306 @@
-<p>update-chapter works!</p>
+<div class="container">
+  <div class="form-header">
+    <div class="form-icon">
+      <i class="fas" [class.fa-plus]="!isEditMode" [class.fa-edit]="isEditMode"></i>
+    </div>
+    <h1 class="form-title">{{ isEditMode ? 'Modifier le chapitre' : 'Ajouter un nouveau chapitre' }}</h1>
+    <p class="form-subtitle">{{ isEditMode ? 'Modifiez les informations de ce chapitre' : 'Complétez les informations pour ce chapitre' }}</p>
+  </div>
+
+  <div class="form-card">
+    <form id="chapter-form" #addchapitreForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="chapter-title" class="form-label">Titre du chapitre <span>*</span></label>
+        <input type="text" id="chapter-title" class="form-control" name="title" [(ngModel)]="title" required placeholder="Ex: Introduction à Python">
+      </div>
+      <div class="form-group">
+        <label for="cours" class="form-label">Cours <span>*</span></label>
+        <div class="select-with-add">
+          <select id="cours" class="form-control" name="coursId" [(ngModel)]="coursId" required>
+            <option value="" disabled>Sélectionnez un cours</option>
+            <option *ngFor="let course of courses" [value]="course._id" [selected]="course._id === coursId">
+              {{course.title}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="chapter-description" class="form-label">Description</label>
+        <textarea id="chapter-description" class="form-control" name="description" [(ngModel)]="description" placeholder="Décrivez le contenu de ce chapitre"></textarea>
+      </div>
+
+      <!-- Boucle sur les sections -->
+      <div *ngFor="let section of sections; let i = index" class="section-container">
+        <div class="section-header">
+          <h3>Unité {{i + 1}}</h3>
+          <div class="section-actions">
+            <button
+              type="button"
+              class="btn btn-outline btn-sm"
+              (click)="toggleContentSection(i)"
+              [class.active]="!section.hideContent">
+              <i class="fas" [class.fa-eye]="section.hideContent" [class.fa-eye-slash]="!section.hideContent"></i>
+              {{ section.hideContent ? 'Ajouter du contenu' : 'Masquer le contenu' }}
+            </button>
+            <button *ngIf="sections.length > 1" type="button" class="btn btn-danger btn-sm" (click)="removeSection(i)">
+              <i class="fas fa-trash"></i> Supprimer
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" [for]="'section-title-' + i">Titre du Unité <span>*</span></label>
+          <input type="text" [id]="'section-title-' + i" class="form-control" [name]="'title-'+i" [(ngModel)]="section.title" required placeholder="Ex: Introduction à Python">
+          <label [for]="'section-description-' + i" class="form-label">Description</label>
+          <textarea [id]="'section-description-' + i" class="form-control" [name]="'description-'+i" [(ngModel)]="section.description" placeholder="Décrivez le contenu de ce chapitre"></textarea>
+
+          <!-- Conteneur pour le contenu (vidéo/ressources) avec ngIf -->
+          <div *ngIf="!section.hideContent">
+            <label class="form-label mt-1">Type de contenu <span>*</span></label>
+            <div class="content-tabs">
+              <button
+                type="button"
+                class="tab-btn"
+                [class.active]="section.type === 'video'"
+                (click)="changeSectionType(i, 'video')">
+                Vidéo
+              </button>
+
+              <button
+                type="button"
+                class="tab-btn"
+                [class.active]="section.type === 'pdf'"
+                (click)="changeSectionType(i, 'pdf')">
+                Ressources
+              </button>
+
+              <button
+                type="button"
+                class="tab-btn"
+                [class.active]="section.type === 'both'"
+                (click)="changeSectionType(i, 'both')">
+                Les deux
+              </button>
+            </div>
+
+            <!-- Contenu Vidéo -->
+            <div class="tab-content" [class.active]="section.type === 'video'">
+              <div class="form-group">
+                <label [for]="'video-url-' + i" class="form-label">Lien de la vidéo <span>*</span></label>
+                <div class="video-input-container">
+                  <i class="fas fa-link"></i>
+                  <input
+                    type="url"
+                    [id]="'video-url-' + i"
+                    class="form-control video-input"
+                    [name]="'url-' + i"
+                    [(ngModel)]="section.url"
+                    [required]="section.type === 'video' || section.type === 'both'"
+                    placeholder="https://example.com/video">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'video-duration-' + i" class="form-label">Durée de la vidéo</label>
+                <div class="duration-input">
+                  <input
+                    type="number"
+                    [id]="'video-duration-' + i"
+                    class="form-control"
+                    min="1"
+                    [name]="'duree-' + i"
+                    [(ngModel)]="section.duree"
+                    [required]="section.type === 'video' || section.type === 'both'"
+                    placeholder="15">
+                  <span class="duration-unit">minutes</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contenu PDF -->
+            <div class="tab-content" [class.active]="section.type === 'pdf'">
+              <div class="form-group">
+                <label class="form-label">Fichier <span>*</span></label>
+                <div class="file-upload">
+                  <div class="file-upload-btn">
+                    <div class="file-upload-text">
+                      <i class="fas fa-file-pdf"></i>
+                      <span>Cliquez pour télécharger</span>
+                      ou glissez-déposez un fichier "PDF DOC TXT CSV ..."
+                      <small>(Max 10MB)</small>
+                    </div>
+
+                    <input
+                      type="file"
+                      class="file-upload-input"
+                      [id]="'pdf-file-' + i"
+                      [required]="section.type === 'pdf' || section.type === 'both'"
+                      (change)="onFileSelected($event, i)"
+                      accept=".pdf,.txt,.doc,.docx,.csv,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv">
+                  </div>
+                </div>
+
+                <!-- Afficher le fichier existant -->
+                <div class="file-preview" *ngIf="section.existingFile">
+                  <i [ngClass]="getFileIconClass(section)" style="font-size: 2.5rem;"></i>
+                  <div class="file-info">
+                    <div class="file-name">{{ section.existingFile.name }}</div>
+                    <div class="file-size">{{ (section.existingFile.size / 1024).toFixed(2) }} KB</div>
+                    <div class="file-status">Fichier existant</div>
+                  </div>
+                  <i class="fas fa-times file-remove" (click)="removeFile(i)"></i>
+                </div>
+
+                <!-- Afficher le nouveau fichier sélectionné -->
+                <div class="file-preview" *ngIf="section.selectedFile && !section.existingFile">
+                  <i [ngClass]="getFileIconClass(section)" style="font-size: 2.5rem;"></i>
+                  <div class="file-info">
+                    <div class="file-name">{{ section.filename }}</div>
+                    <div class="file-size">{{ (section.filesize / 1024).toFixed(2) }} KB</div>
+                  </div>
+                  <i class="fas fa-times file-remove" (click)="removeFile(i)"></i>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'page-count-' + i" class="form-label">Nombre de pages</label>
+                <input
+                  type="number"
+                  [id]="'page-count-' + i"
+                  class="form-control"
+                  min="1"
+                  [name]="'nbpages-' + i"
+                  [(ngModel)]="section.nbpages"
+                  [required]="section.type === 'pdf' || section.type === 'both'"
+                  placeholder="Ex: 12">
+              </div>
+            </div>
+
+            <!-- Contenu Mixte (Vidéo + PDF) -->
+            <div class="tab-content" [class.active]="section.type === 'both'">
+              <div class="form-group">
+                <label [for]="'both-video-url-' + i" class="form-label">Lien de la vidéo <span>*</span></label>
+                <div class="video-input-container">
+                  <i class="fas fa-link"></i>
+                  <input
+                    type="url"
+                    [id]="'both-video-url-' + i"
+                    class="form-control video-input"
+                    [name]="'url-' + i"
+                    [required]="section.type === 'both'"
+                    [(ngModel)]="section.url"
+                    placeholder="https://example.com/video">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'both-video-duration-' + i" class="form-label">Durée de la vidéo</label>
+                <div class="duration-input">
+                  <input
+                    type="number"
+                    [id]="'both-video-duration-' + i"
+                    class="form-control"
+                    [name]="'duree-' + i"
+                    [required]="section.type === 'both'"
+                    [(ngModel)]="section.duree"
+                    min="1"
+                    placeholder="15">
+                  <span class="duration-unit">minutes</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Fichier <span>*</span></label>
+                <div class="file-upload">
+                  <div class="file-upload-btn">
+                    <div class="file-upload-text">
+                      <i class="fas fa-file-pdf"></i>
+                      <span>Cliquez pour télécharger</span>
+                      ou glissez-déposez un fichier "PDF DOC TXT CSV ..."
+                      <small>(Max 10MB)</small>
+                    </div>
+
+                    <input
+                      type="file"
+                      class="file-upload-input"
+                      [id]="'both-pdf-file-' + i"
+                      [required]="section.type === 'both'"
+                      (change)="onFileSelected($event, i)"
+                      accept=".pdf,.txt,.doc,.docx,.csv,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv">
+                  </div>
+                </div>
+
+                <!-- Afficher le fichier existant -->
+                <div class="file-preview" *ngIf="section.existingFile">
+                  <i [ngClass]="getFileIconClass(section)" style="font-size: 2.5rem;"></i>
+                  <div class="file-info">
+                    <div class="file-name">{{ section.existingFile.name }}</div>
+                    <div class="file-size">{{ (section.existingFile.size / 1024).toFixed(2) }} KB</div>
+                    <div class="file-status">Fichier existant</div>
+                  </div>
+                  <i class="fas fa-times file-remove" (click)="removeFile(i)"></i>
+                </div>
+
+                <!-- Afficher le nouveau fichier sélectionné -->
+                <div class="file-preview" *ngIf="section.selectedFile && !section.existingFile">
+                  <i [ngClass]="getFileIconClass(section)" style="font-size: 2.5rem;"></i>
+                  <div class="file-info">
+                    <div class="file-name">{{ section.filename }}</div>
+                    <div class="file-size">{{ (section.filesize / 1024).toFixed(2) }} KB</div>
+                  </div>
+                  <i class="fas fa-times file-remove" (click)="removeFile(i)"></i>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'both-page-count-' + i" class="form-label">Nombre de pages</label>
+                <input
+                  type="number"
+                  [id]="'both-page-count-' + i"
+                  class="form-control"
+                  min="1"
+                  [name]="'nbpages-' + i"
+                  [required]="section.type === 'both'"
+                  [(ngModel)]="section.nbpages"
+                  placeholder="Ex: 12">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton pour ajouter une nouvelle section -->
+      <div class="form-group">
+        <button type="button" class="btn btn-outline" (click)="addSection()">
+          <i class="fas fa-plus"></i> Ajouter une Unité
+        </button>
+      </div>
+
+      <div class="form-group full-width">
+        <div class="error-container" *ngIf="error">
+          <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" (click)="goBackOrFallback()" class="btn btn-outline">
+          <i class="fas fa-times"></i>
+          Annuler
+        </button>
+        <button *ngIf="!isLoading" type="submit" class="btn btn-primary" [disabled]="!isFormValid()">
+          <i class="fas" [class.fa-save]="!isEditMode" [class.fa-edit]="isEditMode"></i>
+          {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }} le chapitre
+        </button>
+        <button *ngIf="isLoading" class="btn btn-outline d-flex justify-content-center my-1" style="border: none;font-family: 'Bold Italic Art';font-weight: bold" disabled>
+          <span style="margin-right: 10px">Chargement...</span>
+          <div class="spinner-border text-primary" role="status">
+          </div>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

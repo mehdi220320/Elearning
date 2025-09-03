@@ -11,8 +11,9 @@ router.get('/course/dureeVideos/:id', [adminAuthorization, checkTokenExists], Ch
 router.get('/course/nbDocumments/:id', [adminAuthorization, checkTokenExists], ChapitreController.getNumberOfDocumentsByCourseId);
 router.get('/ressources', [adminAuthorization, checkTokenExists], ChapitreController.getRessources);
 router.get('/medias', [adminAuthorization, checkTokenExists], ChapitreController.getMedia);
-// router.delete('/delete/:id', [adminAuthorization, checkTokenExists], instructorController.deleteInstructor);
+router.delete('/delete/:id', [adminAuthorization, checkTokenExists], ChapitreController.deleteChapterById);
 // router.put('/isArchive/:id',[adminAuthorization, checkTokenExists], courseController.isArchive);
-router.get('/:id', [adminAuthorization, checkTokenExists], ChapitreController.getById);
+router.get('/id/:id', [adminAuthorization, checkTokenExists], ChapitreController.getById);
+router.put('/update/:id', [adminAuthorization, checkTokenExists, uploadMultiple.array('files')], ChapitreController.updateChapitre);
 
 module.exports = router;

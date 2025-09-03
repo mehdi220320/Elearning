@@ -15,6 +15,12 @@ export class CourseService {
   getAll():Observable<any>{
     return this.http.get<any>(this.apiUrl+"all")
   }
+  numberCoursesActive():Observable<any>{
+    return this.http.get<any>(this.apiUrl+"dashboard/numberCoursesActive")
+  }
+  newest():Observable<any>{
+    return this.http.get<any>(this.apiUrl+"newest")
+  }
   add(data:any):Observable<any>{
     return this.http.post(this.apiUrl+"add",data)
   }

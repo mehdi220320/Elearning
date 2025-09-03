@@ -92,6 +92,23 @@ class ReclamationService{
             throw e;
         }
     }
+    static async newest(){
+        try {
+            return await Reclamation.find().populate({
+                path: "creator",
+                select: "_id lastname firstname "
+            }).populate({
+                path: "cours",
+                select: "_id title "
+            }).populate({
+                path: "hackathon",
+                select: "_id title "
+            }).sort({ createdAt: -1 });
+        }catch (e){
+            console.error('Error in getAllReclamation:', e.message);
+            throw e;
+        }
+    }
     static async getById(id){
         try {
             return await Reclamation.findById(id).populate({

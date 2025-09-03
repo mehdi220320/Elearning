@@ -6,6 +6,7 @@ const Token = require('./Token');
 const router = express.Router();
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { adminAuthorization, checkTokenExists } = require('../middlewares/authMiddleware');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -203,6 +204,93 @@ router.get("/tokenExpired/:token",async (req,res)=>{
 
     }catch (e){
         res.status(500).send({ message: 'error : ',e });
+    }
+});
+router.post('/register-admin', [checkTokenExists,adminAuthorization], async (req, res) => {
+    try {
+        const { firstname, lastname, email, password, phone } = req.body;
+
+        // Check if user already exists
+        let user = await User.findOne({ email });
+        if (user) {
+            return res.status(400).send({ message: "User already exists" });
+        }
+
+        // Create new admin user
+        user = new User({
+            firstname,
+            lastname,
+            email,
+            phone,
+            password,
+            role: 'admin' // Set role to admin
+        });
+
+        await user.save();
+
+        // Send email with credentials
+        const mailOptions = {
+            from: process.env.EMAIL_USERNAME,
+            to: email,
+            subject: 'Your Admin Account Credentials',
+            text: `Dear ${firstname} ${lastname},\n\nYour admin account has been successfully created.\n\nLogin Details:\nEmail: ${email}\nPassword: ${password}\n\nPlease change your password after first login for security reasons.\n\nBest regards,\nAdministration Team`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #333;">Admin Account Created Successfully</h2>
+                    <p>Dear <strong>${firstname} ${lastname}</strong>,</p>
+                    <p>Your admin account has been successfully created.</p>
+                    
+                    <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #007bff; margin: 20px 0;">
+                        <h3 style="color: #333; margin-top: 0;">Login Details:</h3>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>Password:</strong> ${password}</p>
+                    </div>
+                    
+                    <p style="color: #d9534f; font-weight: bold;">⚠️ For security reasons, please change your password after your first login.</p>
+                    
+                    <p>Best regards,<br>Administration Team</p>
+                    
+                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                    <p style="font-size: 12px; color: #777;">This is an automated message. Please do not reply to this email.</p>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        res.status(201).send({
+            message: "Admin user created successfully and credentials sent via email",
+            user: {
+                _id: user._id,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phone: user.phone,
+                role: user.role
+            }
+        });
+
+    } catch (e) {
+        console.error('Admin registration error:', e);
+
+        // If user was created but email failed, provide info
+        if (user && user._id) {
+            return res.status(201).send({
+                message: "Admin user created but email failed to send. Please provide credentials manually.",
+                user: {
+                    _id: user._id,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                    phone: user.phone,
+                    role: user.role,
+                    password: password // Include password in response for manual delivery
+                },
+                warning: "Email delivery failed"
+            });
+        }
+
+        res.status(500).send({ message: e.message });
     }
 });
 module.exports = router;

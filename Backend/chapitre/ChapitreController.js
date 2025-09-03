@@ -155,5 +155,69 @@ class ChapitreController {
             res.status(500).json({ error: e.message });
         }
     }
+    static async updateChapitre(req, res) {
+        try {
+            const { id } = req.params;
+            const { title, description, sections } = req.body;
+
+            let parsedSections = [];
+            if (sections) {
+                parsedSections = typeof sections === "string" ? JSON.parse(sections) : sections;
+            }
+
+            // Traitement des fichiers si fournis
+            if (req.files && req.files.length > 0) {
+                parsedSections = parsedSections.map((sec, idx) => {
+                    const file = req.files[idx];
+                    if (file) {
+                        sec.file = {
+                            path: file.path,
+                            contentType: file.mimetype,
+                            size: file.size,
+                            name: file.originalname || file.filename
+                        };
+                    }
+                    return sec;
+                });
+            }
+
+            const updateData = {
+                title,
+                description,
+                sections: parsedSections
+            };
+
+            const updatedChapitre = await ChapitreService.updateChapitre(
+                id,
+                updateData
+            );
+
+            res.status(200).json({
+                message: "Chapitre mis à jour avec succès",
+                chapitre: updatedChapitre
+            });
+        } catch (error) {
+            if (error.message.includes("Chapitre not found")) {
+                res.status(404).json({ error: error.message });
+            } else if (error.message.includes("already exists")) {
+                res.status(409).json({ error: error.message });
+            } else if (error.name === "ValidationError") {
+                res.status(400).json({ error: "Données invalides : " + error.message });
+            } else {
+                console.error("Erreur serveur :", error);
+                res.status(500).json({ error: "Une erreur serveur s'est produite" });
+            }
+        }
+    }
+    static async deleteChapterById(req,res){
+        try {
+            const id = req.params.id;
+            const chapter = await ChapitreService.deleteChapterById(id);
+
+            res.status(200).send(chapter);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 }
 module.exports=ChapitreController

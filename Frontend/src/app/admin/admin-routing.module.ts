@@ -21,6 +21,9 @@ import {UpdateCourseComponent} from './cours/update-course/update-course.compone
 import {UpdateInstructorComponent} from './instructors/update-instructor/update-instructor.component';
 import {UpdateHackathonComponent} from './hackathons/update-hackathon/update-hackathon.component';
 import {UpdateTestComponent} from './chapitres/update-test/update-test.component';
+import {UpdateChapterComponent} from './chapitres/update-chapter/update-chapter.component';
+import {CreateAdminComponent} from './admins/create-admin/create-admin.component';
+import {AdminsComponent} from './admins/admins.component';
 
 const routes: Routes = [
   {
@@ -37,6 +40,7 @@ const routes: Routes = [
       { path: 'addinstructor', component: AddInstructorComponent },
       { path: 'updateinstructor/:id', component: UpdateInstructorComponent },
       { path: 'addChapitre', component: AddChapitreComponent },
+      { path: 'updateChapitre/:id', component: UpdateChapterComponent },
       { path: 'chapters', component: ChapitresComponent },
       { path: 'ressources', component: RessourcesListComponent },
       { path: 'medias', component: MediaListComponent },
@@ -48,6 +52,8 @@ const routes: Routes = [
       { path: 'hackathons',component:HackathonsComponent},
       { path: 'reclamations',component:ReclamationsComponent},
       { path: 'reclamations/:id',component:ReclamationDetailsComponent},
+      { path: 'createAdmin',component:CreateAdminComponent},
+      { path: 'admins',component:AdminsComponent},
     ]
   }
 ];

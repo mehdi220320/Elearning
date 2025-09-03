@@ -1,0 +1,69 @@
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.action-btn {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #e1f0ff;
+  color: #3a56d4;
+}
+
+.edit-btn:hover {
+  background-color: #3a56d4;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #ffe1e1;
+  color: #f72585;
+}
+
+.delete-btn:hover {
+  background-color: #f72585;
+  color: white;
+}
+
+.view-btn {
+  background-color: #e1f7e3;
+  color: #2e8b57;
+}
+
+.view-btn:hover {
+  background-color: #2e8b57;
+  color: white;
+}
+.status-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-planned {
+  background-color: #e1f0ff;
+  color: #3a56d4;
+}
+
+.status-ongoing {
+  background-color: #e1f7e3;
+  color: #2e8b57;
+}
+
+.status-completed {
+  background-color: #f1f3f5;
+  color: #6c757d;
+}
+
+.status-canceled {
+  background-color: #ffe1e1;
+  color: #f72585;
+}

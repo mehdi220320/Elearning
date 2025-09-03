@@ -63,10 +63,11 @@
           <td>{{ chapter.createdAt | date: 'dd/MM/yyyy' }}</td>
           <td>
             <div class="action-btns">
-              <button class="action-btn edit-btn" title="Modifier">
+              <button class="action-btn edit-btn" [routerLink]="'/admin/updateChapitre/'+chapter._id" title="Modifier">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="action-btn delete-btn" title="Supprimer">
+              <button class="action-btn delete-btn" title="Supprimer"
+                      (click)="deleteChapterById(chapter._id, chapter.title,chapter.course.title)">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>

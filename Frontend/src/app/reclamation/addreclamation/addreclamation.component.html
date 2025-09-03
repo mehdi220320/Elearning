@@ -38,7 +38,7 @@
               type="radio"
               name="depends"
               value="hackathon"
-              (click)="toggleRadio('hackathon')"
+              (click)="toggleRadio('hackathon');loadHackathons()"
               [checked]="depends === 'hackathon'">
             <span>Hackathon</span>
           </label>
@@ -48,7 +48,8 @@
               type="radio"
               name="depends"
               value="course"
-              (click)="toggleRadio('course')"
+
+              (click)="toggleRadio('course');loadCourses()"
               [checked]="depends === 'course'">
             <span>Cours</span>
           </label>
@@ -58,7 +59,7 @@
               type="radio"
               name="depends"
               value="both"
-              (click)="toggleRadio('both')"
+              (click)="toggleRadio('both');loadHackathons();loadCourses()"
               [checked]="depends === 'both'">
             <span>Les deux</span>
           </label>
@@ -84,13 +85,15 @@
         <textarea id="description" class="form-control" placeholder="Décrivez votre problème de manière détaillée..." name="description" [(ngModel)]="description" required></textarea>
       </div>
 
+      <div style="display:flex; gap: 10px;">
+        <button type="submit" class="btn" [disabled]="addreclamationForm.invalid"><i class="fas fa-paper-plane"></i> Soumettre la réclamation</button>
+        <button *ngIf="isLoading" class="btn btn-outline d-flex justify-content-center my-1" style="border: none;font-family: 'Bold Italic Art';font-weight: bold" disabled>
+          <span style="margin-right: 10px">Chargement...</span>
+          <div class="spinner-border text-primary" role="status">
+          </div>
+        </button>
+      </div>
 
-      <button type="submit" class="btn" [disabled]="addreclamationForm.invalid"><i class="fas fa-paper-plane"></i> Soumettre la réclamation</button>
-      <button *ngIf="isLoading" class="btn btn-outline d-flex justify-content-center my-1" style="border: none;font-family: 'Bold Italic Art';font-weight: bold" disabled>
-        <span style="margin-right: 10px">Chargement...</span>
-        <div class="spinner-border text-primary" role="status">
-        </div>
-      </button>
     </form>
   </div>
 

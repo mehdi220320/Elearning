@@ -30,6 +30,7 @@ export class AddreclamationComponent {
   error=""
   userId:any=""
   isLoading:boolean=false;
+
   loadCourses(){
     this.courseService.getAll().subscribe({
       next: (response: Course[]) => {

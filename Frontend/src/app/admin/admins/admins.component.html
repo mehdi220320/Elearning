@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="admin-main">
+    <div class="page-header">
+      <h1 class="page-title">Gestion des Administrateurs</h1>
+      <button class="btn btn-primary" routerLink="/admin/admins/create">
+        <i class="fas fa-user-plus"></i> Nouvel Administrateur
+      </button>
+    </div>
+
+    <!-- Carte du tableau -->
+    <div class="form-card">
+      <div class="form-header">
+        <h2 class="form-title">Liste des Administrateurs</h2>
+        <p class="form-subtitle">Gérez les comptes administrateurs de votre plateforme</p>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-container">
+        <div class="custom-spinner"></div>
+        <p>Chargement des administrateurs...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage && !isLoading" class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+        <button class="btn-retry" (click)="loadAdmins()">Réessayer</button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="admins.length === 0 && !isLoading && !errorMessage" class="empty-state">
+        <i class="fas fa-users"></i>
+        <h3>Aucun administrateur trouvé</h3>
+        <p>Commencez par créer votre premier administrateur</p>
+        <button class="btn btn-primary" routerLink="/admin/admins/create">
+          <i class="fas fa-user-plus"></i> Créer un Administrateur
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div *ngIf="admins.length > 0 && !isLoading" class="table-container">
+        <table class="admin-table">
+          <thead>
+          <tr>
+            <th>Administrateur</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Date de Création</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let admin of admins">
+            <td class="user-info">
+              <div class="user-avatar" *ngIf="admin.picture; else initials">
+                <img [src]="admin.picture" alt="{{admin.firstname}} {{admin.lastname}}">
+              </div>
+              <ng-template #initials>
+                <div class="user-avatar initials">
+                  {{ getInitials(admin.firstname, admin.lastname) }}
+                </div>
+              </ng-template>
+              <div class="user-details">
+                <span class="user-name">{{ admin.firstname }} {{ admin.lastname }}</span>
+                <span class="user-role">Administrateur</span>
+              </div>
+            </td>
+            <td class="email">{{ admin.email }}</td>
+            <td class="phone">{{ admin.phone || 'Non renseigné' }}</td>
+            <td class="date">{{ admin.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td class="actions">
+              <button class="btn-icon btn-danger" (click)="openDeleteAlert(admin)" title="Supprimer">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alert de Suppression -->
+    <div *ngIf="showDeleteAlert" class="alert-overlay">
+      <div class="alert-modal">
+        <div class="alert-header">
+          <h3>Confirmer la suppression</h3>
+          <button class="btn-close" (click)="closeDeleteAlert()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="alert-body">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Êtes-vous sûr de vouloir supprimer l'administrateur <strong>{{ adminToDelete?.firstname }} {{ adminToDelete?.lastname }}</strong> ?</p>
+          <p class="warning-text">Cette action est irréversible.</p>
+        </div>
+        <div class="alert-actions">
+          <button class="btn btn-outline" (click)="closeDeleteAlert()">Annuler</button>
+          <button class="btn btn-danger" (click)="confirmDelete()">
+            <i class="fas fa-trash"></i> Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

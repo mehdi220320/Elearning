@@ -8,6 +8,14 @@ class ReclamationController{
             res.status(500).json({ error: error.message });
         }
     }
+    static async Newest(req,res){
+        try {
+            const recls= await ReclamationService.newest()
+            res.send(recls.slice(0,3));
+        }catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
     static async getById(req,res){
         try {
             const id=req.params.id

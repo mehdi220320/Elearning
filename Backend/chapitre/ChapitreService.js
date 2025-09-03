@@ -62,7 +62,11 @@ class ChapitreService {
         return await Chapitre.find({ course: id });
     }
     static async getById(id){
-        return await Chapitre.findById(id);
+        try {
+            return await Chapitre.findById(id).populate({ path: "course", select: "_id title" });
+         } catch (e) {
+        throw e;
+        }
     }
     static async VideoDuration(id) {
         const chapters = await Chapitre.find({ course: id });
@@ -100,6 +104,41 @@ class ChapitreService {
             throw e;
         }
     }
+    static async updateChapitre(id, updateData) {
+        try {
+            const chapitre = await Chapitre.findById(id);
+            if (!chapitre) throw new Error("Chapitre not found");
 
+            // Vérifier l'unicité du titre si on le modifie
+            if (updateData.title && updateData.title !== chapitre.title) {
+                const existing = await Chapitre.findOne({
+                    title: updateData.title,
+                    course: chapitre.course,
+                    _id: { $ne: id }
+                });
+                if (existing) throw new Error("Chapitre with this title already exists for this course");
+            }
+
+            // Mettre à jour les champs
+            if (updateData.title) chapitre.title = updateData.title;
+            if (updateData.description !== undefined) chapitre.description = updateData.description;
+
+            // Mettre à jour les sections si fournies
+            if (updateData.sections !== undefined) {
+                chapitre.section = updateData.sections;
+            }
+
+            return await chapitre.save();
+        } catch (e) {
+            throw e;
+        }
+    }
+    static async deleteChapterById(id){
+        try {
+            return Chapitre.findByIdAndDelete(id);
+        } catch (e) {
+            throw e;
+        }
+    }
 }
 module.exports=ChapitreService

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../models/environment';
 
@@ -29,7 +29,20 @@ export class AuthService {
   register(lastname: string, firstname: string, email: string, password: string, phone: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, { lastname, firstname, email, password, phone });
   }
-
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+  registerAdmin(lastname: string, firstname: string, email: string, password: string, phone: string): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.post(`${this.apiUrl}/register-admin`,
+      { lastname, firstname, email, password, phone },
+      { headers }
+    );
+  }
   // Login with email/password
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(

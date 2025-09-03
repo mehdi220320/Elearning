@@ -32,12 +32,12 @@ export class AdminComponent {
     }
 
     localStorage.clear();
-    console.log("aw wselna taw")
     this.router.navigate(['/login']).then(() => {
       window.location.reload();
     });
 
   }
+
   toggleSubmenu: boolean = false;
 
   toggleDropdown(menuId: string, event: Event) {

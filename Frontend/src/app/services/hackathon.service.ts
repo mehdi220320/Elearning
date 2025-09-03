@@ -28,10 +28,17 @@ export class HackathonService {
   getNextHackathons():Observable<Hackathon[]>{
     return this.http.get<Hackathon[]>(this.apiUrl+"next")
   }
+  getNextPaginationHackathons():Observable<Hackathon[]>{
+    return this.http.get<Hackathon[]>(this.apiUrl+"nextPagination")
+  }
+
   deleteHackathon(id:any){
     return this.http.delete(this.apiUrl+"delete/"+id)
   }
   updateHackathon(id: string, hackathonData: any): Observable<any> {
     return this.http.put(this.apiUrl + "update/" + id, hackathonData);
+  }
+  numberOfHackathons(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}numberOfHackathons`)
   }
 }

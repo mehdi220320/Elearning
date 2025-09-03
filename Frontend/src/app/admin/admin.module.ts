@@ -27,6 +27,8 @@ import { UpdateChapterComponent } from './chapitres/update-chapter/update-chapte
 import { UpdateInstructorComponent } from './instructors/update-instructor/update-instructor.component';
 import { UpdateHackathonComponent } from './hackathons/update-hackathon/update-hackathon.component';
 import { UpdateTestComponent } from './chapitres/update-test/update-test.component';
+import { AdminsComponent } from './admins/admins.component';
+import { CreateAdminComponent } from './admins/create-admin/create-admin.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,8 @@ import { UpdateTestComponent } from './chapitres/update-test/update-test.compone
     UpdateInstructorComponent,
     UpdateHackathonComponent,
     UpdateTestComponent,
+    AdminsComponent,
+    CreateAdminComponent,
   ],
   imports: [
     CommonModule,

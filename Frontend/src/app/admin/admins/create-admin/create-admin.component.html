@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="admin-main">
+    <div class="page-header">
+      <h1 class="page-title">Créer un Nouvel Administrateur</h1>
+    </div>
+
+    <div class="form-card">
+      <div class="form-header">
+        <h2 class="form-title">Informations Administrateur</h2>
+        <p class="form-subtitle">Remplissez les informations pour créer un nouveau compte administrateur</p>
+      </div>
+
+      <form [formGroup]="adminForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              Prénom <span>*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="firstname"
+              placeholder="Entrez le prénom"
+              [class.is-invalid]="adminForm.get('firstname')?.invalid && adminForm.get('firstname')?.touched">
+            <div *ngIf="adminForm.get('firstname')?.invalid && adminForm.get('firstname')?.touched" class="text-danger">
+              <small *ngIf="adminForm.get('firstname')?.errors?.['required']">Le prénom est requis</small>
+              <small *ngIf="adminForm.get('firstname')?.errors?.['minlength']">Minimum 2 caractères</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Nom <span>*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="lastname"
+              placeholder="Entrez le nom"
+              [class.is-invalid]="adminForm.get('lastname')?.invalid && adminForm.get('lastname')?.touched">
+            <div *ngIf="adminForm.get('lastname')?.invalid && adminForm.get('lastname')?.touched" class="text-danger">
+              <small *ngIf="adminForm.get('lastname')?.errors?.['required']">Le nom est requis</small>
+              <small *ngIf="adminForm.get('lastname')?.errors?.['minlength']">Minimum 2 caractères</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Email <span>*</span>
+            </label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="exemple@email.com"
+              [class.is-invalid]="adminForm.get('email')?.invalid && adminForm.get('email')?.touched">
+            <div *ngIf="adminForm.get('email')?.invalid && adminForm.get('email')?.touched" class="text-danger">
+              <small *ngIf="adminForm.get('email')?.errors?.['required']">L'email est requis</small>
+              <small *ngIf="adminForm.get('email')?.errors?.['email']">Format d'email invalide</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Téléphone <span>*</span>
+            </label>
+            <input
+              type="tel"
+              class="form-control"
+              formControlName="phone"
+              placeholder="0123456789"
+              [class.is-invalid]="adminForm.get('phone')?.invalid && adminForm.get('phone')?.touched">
+            <div *ngIf="adminForm.get('phone')?.invalid && adminForm.get('phone')?.touched" class="text-danger">
+              <small *ngIf="adminForm.get('phone')?.errors?.['required']">Le téléphone est requis</small>
+              <small *ngIf="adminForm.get('phone')?.errors?.['pattern']">10 chiffres requis</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Mot de passe <span>*</span>
+            </label>
+            <input
+              type="password"
+              class="form-control"
+              formControlName="password"
+              placeholder="Minimum 6 caractères"
+              [class.is-invalid]="adminForm.get('password')?.invalid && adminForm.get('password')?.touched">
+            <div *ngIf="adminForm.get('password')?.invalid && adminForm.get('password')?.touched" class="text-danger">
+              <small *ngIf="adminForm.get('password')?.errors?.['required']">Le mot de passe est requis</small>
+              <small *ngIf="adminForm.get('password')?.errors?.['minlength']">Minimum 6 caractères</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Confirmer le mot de passe <span>*</span>
+            </label>
+            <input
+              type="password"
+              class="form-control"
+              formControlName="confirmPassword"
+              placeholder="Confirmez le mot de passe"
+              [class.is-invalid]="(adminForm.get('confirmPassword')?.invalid || adminForm.errors?.['mismatch']) && adminForm.get('confirmPassword')?.touched">
+            <div *ngIf="adminForm.get('confirmPassword')?.touched && adminForm.errors?.['mismatch']" class="text-danger">
+              <small>Les mots de passe ne correspondent pas</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages d'alerte -->
+        <div *ngIf="successMessage" class="alert alert-success">
+          <i class="fas fa-check-circle"></i> {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" routerLink="/admin/users">
+            <i class="fas fa-arrow-left"></i> Retour
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!adminForm.valid || isLoading">
+            <i class="fas fa-user-plus"></i>
+            {{ isLoading ? 'Création en cours...' : 'Créer l\'Administrateur' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

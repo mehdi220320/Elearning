@@ -18,6 +18,32 @@ class CoursesService{
             throw e;
         }
     }
+    static async newestCourses() {
+        try {
+            return await Course.find()
+                .populate({
+                    path: "formateur",
+                    select: "_id firstname lastname"
+                })
+                .sort({ createdAt: -1 }); // ✅ -1 pour du plus récent au plus ancien
+        } catch (e) {
+            console.error("Error in getAll courses:", e.message);
+            throw e;
+        }
+    }
+    static async numberCourseActive() {
+        try {
+            return await Course.find({status:true})
+                .populate({
+                    path: "formateur",
+                    select: "_id firstname lastname"
+                })
+        } catch (e) {
+            console.error("Error in getAll courses:", e.message);
+            throw e;
+        }
+    }
+
     static async add(courseData){
         try {
             const formateurId=courseData.formateurId;

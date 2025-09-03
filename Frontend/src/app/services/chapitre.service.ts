@@ -29,7 +29,7 @@ export class ChapitreService {
     return this.http.get<Chapitre[]>(this.apiUrl+"course/"+id);
   }
   getChapterById(id:any):Observable<Chapitre>{
-    return this.http.get<Chapitre>(this.apiUrl+""+id);
+    return this.http.get<Chapitre>(this.apiUrl+"id/"+id);
   }
   getdureeVideosByCourse(id:any):Observable<number>{
     return this.http.get<number>(this.apiUrl+"course/dureeVideos/"+id);
@@ -51,5 +51,11 @@ export class ChapitreService {
   }
   deleteComment(commentId:any):Observable<any>{
     return this.http.delete(this.apiUrl+"comments/delete/"+commentId, )
+  }
+  update(id: string, form: any): Observable<Chapitre> {
+    return this.http.put<Chapitre>(this.apiUrl + "update/" + id, form);
+  }
+  deleteChapterId(chapterId:any):Observable<any>{
+    return this.http.delete<any>(this.apiUrl+"delete/"+chapterId);
   }
 }

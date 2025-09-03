@@ -85,6 +85,14 @@ class HackathonController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async getNextHackathonsPagination(req,res){
+        try {
+            const hacks= await HackathonService.nextHackathons()
+            res.send(hacks.slice(0, 3));
+        }catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
     static async updateHackathon(req, res) {
         try {
             const id = req.params.id;

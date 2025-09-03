@@ -1,6 +1,15 @@
 const path = require('path');
 const CourseService=require('./CoursesService');
 class CourseController{
+    static async numberCourseActive(req, res) {
+        try {
+            const courses = await CourseService.numberCourseActive();
+            res.status(200).send(courses.length);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
     static async getAll(req, res) {
         try {
             const courses = await CourseService.getAll();
@@ -12,6 +21,14 @@ class CourseController{
                 }
             }));
             res.status(200).send(coursesWithImageUrls);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+    static async newestCourses(req, res) {
+        try {
+            const courses = await CourseService.newestCourses();
+            res.status(200).send(courses.slice(0, 4));
         } catch (e) {
             res.status(500).json({ error: e.message });
         }

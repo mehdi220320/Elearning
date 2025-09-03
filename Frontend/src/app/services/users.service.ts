@@ -21,6 +21,19 @@ export class UsersService {
       catchError(this.handleError.bind(this))
     );
   }
+  getAdmins(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/admins`).pipe(
+      catchError(this.handleError.bind(this))
+    );
+  }
+  deleteAdmin(id:any):Observable<any>{
+    return this.http.delete(this.apiUrl+'/delete/'+id)
+  }
+  numberOfUsers(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/numberOfUsers`).pipe(
+      catchError(this.handleError.bind(this))
+    );
+  }
 
   getUserByEmail(email: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${email}`).pipe(
