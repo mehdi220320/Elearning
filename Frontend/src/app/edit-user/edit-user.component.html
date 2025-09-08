@@ -1,0 +1,121 @@
+<div class="edit-user-container">
+  <div class="edit-card">
+    <div class="card-header">
+      <h2>Modifier le Profil</h2>
+      <p>Mettez à jour vos informations personnelles</p>
+    </div>
+
+    <div class="card-body">
+      <!-- Photo de profil -->
+      <div class="profile-picture-section">
+        <div class="avatar-container">
+          <img [src]="previewImage" alt="Profile" class="profile-avatar">
+          <label for="fileInput" class="avatar-upload-btn">
+            <i class="fas fa-camera"></i>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              disabled
+              hidden>
+          </label>
+        </div>
+      </div>
+
+      <!-- Messages d'alerte -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        {{ successMessage }}
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Loading state -->
+      <div *ngIf="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Chargement...</p>
+      </div>
+
+      <!-- Formulaire -->
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="edit-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstname">Prénom</label>
+            <input
+              id="firstname"
+              type="text"
+              formControlName="firstname"
+              placeholder="Votre prénom"
+              [class.error]="isFieldInvalid('firstname')">
+            <div *ngIf="isFieldInvalid('firstname')" class="error-message">
+              {{ getFieldError('firstname') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastname">Nom</label>
+            <input
+              id="lastname"
+              type="text"
+              formControlName="lastname"
+              placeholder="Votre nom"
+              [class.error]="isFieldInvalid('lastname')">
+            <div *ngIf="isFieldInvalid('lastname')" class="error-message">
+              {{ getFieldError('lastname') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="votre@email.com"
+            [class.error]="isFieldInvalid('email')">
+          <div *ngIf="isFieldInvalid('email')" class="error-message">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Téléphone</label>
+          <input
+            id="phone"
+            type="tel"
+            formControlName="phone"
+            placeholder="+216 XX XXX XXX"
+            [class.error]="isFieldInvalid('phone')">
+          <div *ngIf="isFieldInvalid('phone')" class="error-message">
+            {{ getFieldError('phone') }}
+          </div>
+        </div>
+
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="goBackOrFallback()">
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="editForm.invalid || loading">
+            <span *ngIf="!loading">Mettre à jour</span>
+            <span *ngIf="loading" class="loading-spinner">
+              <i class="fas fa-spinner fa-spin"></i>
+              Mise à jour...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

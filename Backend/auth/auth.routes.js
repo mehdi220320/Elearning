@@ -149,7 +149,8 @@ router.post('/login', async (req, res) => {
             message: 'User logged in successfully',
             token,
             expiresIn,
-            role: user.role
+            role: user.role,
+            isActive:user.isActive
         });
     } catch (e) {
         res.status(500).send({ message: e.message });

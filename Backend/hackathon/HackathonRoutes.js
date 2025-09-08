@@ -6,10 +6,10 @@ const upload = require('../middlewares/uploadMiddleware');
 const Hackathon = require("./Hackathon");
 
 router.post('/add', [adminAuthorization, checkTokenExists,upload.single('coverImageFile')], HackathonController.addHackathon);
-router.get('/all', [adminAuthorization, checkTokenExists], HackathonController.getAll);
-router.get('/next', [adminAuthorization, checkTokenExists], HackathonController.getNextHackathons);
-router.get('/nextPagination', [adminAuthorization, checkTokenExists], HackathonController.getNextHackathonsPagination);
-router.get('/numberOfHackathons',[adminAuthorization,checkTokenExists],async (req,res)=>{
+router.get('/all', checkTokenExists, HackathonController.getAll);
+router.get('/next', checkTokenExists, HackathonController.getNextHackathons);
+router.get('/nextPagination', checkTokenExists, HackathonController.getNextHackathonsPagination);
+router.get('/numberOfHackathons',checkTokenExists,async (req,res)=>{
     try {
         const  hacks = await Hackathon.find({status:'ongoing'})
         res.send(hacks.length.toString())
@@ -18,7 +18,7 @@ router.get('/numberOfHackathons',[adminAuthorization,checkTokenExists],async (re
     }
 })
 
-router.get('/:id', [adminAuthorization, checkTokenExists], HackathonController.getById);
+router.get('/:id', checkTokenExists, HackathonController.getById);
 router.delete('/delete/:id', [adminAuthorization, checkTokenExists], HackathonController.deleteHackathonById);
 router.post("/:id/participants/:userId", [adminAuthorization, checkTokenExists], HackathonController.addParticipant);
 router.delete('/:id/participants/:userId', [adminAuthorization, checkTokenExists], HackathonController.removeParticipant);

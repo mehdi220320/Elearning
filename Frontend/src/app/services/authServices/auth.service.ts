@@ -8,6 +8,7 @@ interface DecodedToken {
   userId?: string;
   email?:string;
   role?: string;
+  isActive?:boolean;
   exp?: number;
   picture?:string;
   [key: string]: any;
@@ -92,7 +93,14 @@ export class AuthService {
     const decoded = this.getDecodedToken();
     return decoded?.role || null;
   }
+  isUserActive(): boolean {
+    const decoded = this.getDecodedToken();
+    return decoded?.isActive === true;
+  }
 
+  getisActive(): boolean {
+    return this.isUserActive();
+  }
   getUserId(): string | null {
     const decoded = this.getDecodedToken();
     return decoded?.userId || null;

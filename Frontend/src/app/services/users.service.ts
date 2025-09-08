@@ -15,7 +15,11 @@ export class UsersService {
     private http: HttpClient,
     private router: Router
   ) { }
-
+  updateUser(id: string, userData: any): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/edit/${id}`, userData).pipe(
+      catchError(this.handleError.bind(this))
+    );
+  }
   getAll(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/all`).pipe(
       catchError(this.handleError.bind(this))

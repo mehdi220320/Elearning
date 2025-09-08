@@ -17,6 +17,7 @@ import {TestDetailsComponent} from './chapters/test-details/test-details.compone
 import {HackthonsComponent} from './hackthons/hackthons.component';
 import {HackathonDetailsComponent} from './hackthons/hackathon-details/hackathon-details.component';
 import {AddreclamationComponent} from './reclamation/addreclamation/addreclamation.component';
+import {EditUserComponent} from './edit-user/edit-user.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,7 @@ const routes: Routes = [
       { path: 'instructors', component: InstructorsComponent },
       { path: 'instructors/:id', component: InstructorDetailsComponent },
       { path: 'addReclamation', component: AddreclamationComponent },
+      { path: 'parametre', component: EditUserComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

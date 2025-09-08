@@ -28,6 +28,7 @@ import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { AddreclamationComponent } from './reclamation/addreclamation/addreclamation.component';
 import { MyreclamationsComponent } from './reclamation/myreclamations/myreclamations.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 // 👇 Enregistre la locale française AVANT de bootstrap l'app
 registerLocaleData(localeFr);
@@ -51,7 +52,8 @@ registerLocaleData(localeFr);
         HackathonDetailsComponent,
         FirstLettersPipe,
         AddreclamationComponent,
-        MyreclamationsComponent
+        MyreclamationsComponent,
+        EditUserComponent
     ],
     imports: [
         BrowserModule,
