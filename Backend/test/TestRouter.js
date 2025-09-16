@@ -1,4 +1,4 @@
-const TestController = require('./testController');
+const TestController = require('./TestController');
 const express = require('express');
 const router = express.Router();
 const { adminAuthorization, checkTokenExists } = require('../middlewares/authMiddleware');
