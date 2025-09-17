@@ -69,7 +69,7 @@ class ChapitreController {
                 return chapterObj;
             });
 
-            res.status(200).send(chaptersWithUrls);
+            res.status(200).send(chapters);
         } catch (e) {
             res.status(500).json({ error: e.message });
         }
@@ -89,7 +89,7 @@ class ChapitreController {
                 return obj;
             });
 
-            res.status(200).send(chaptersWithUrls);
+            res.status(200).send(chapters);
         } catch (e) {
             res.status(500).json({ error: e.message });
         }
@@ -120,7 +120,7 @@ class ChapitreController {
                 return obj;
             });
 
-            res.status(200).send(chaptersWithUrls);
+            res.status(200).send(chapters);
         } catch (e) {
             res.status(500).json({ error: e.message });
         }

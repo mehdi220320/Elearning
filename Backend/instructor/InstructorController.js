@@ -48,7 +48,7 @@ class InstructorController{
 
             const instructor = await InstructorService.updateInstructorById(id, updatedData);
 
-            instructor.picture.path = `http://${req.get('host')}/uploads/${path.basename(instructor.picture.path)}`;
+            // instructor.picture.path = `http://${req.get('host')}/uploads/${path.basename(instructor.picture.path)}`;
 
             res.status(200).json({
                 message: "Instructor updated successfully",
@@ -70,7 +70,7 @@ class InstructorController{
                     path: `http://${req.get('host')}/uploads/${path.basename(instructor.picture.path)}`
                 }
             }));
-            res.status(201).send(instsWithImageUrls)
+            res.status(201).send(insts)
         }catch (e){
             res.status(500).json({ error: error.message });
 
@@ -80,7 +80,7 @@ class InstructorController{
         try {
             const id=req.params.id;
             let instructor= await InstructorService.getInstructorById(id)
-            instructor.picture.path=`http://${req.get('host')}/uploads/${path.basename(instructor.picture.path)}`
+            // instructor.picture.path=`http://${req.get('host')}/uploads/${path.basename(instructor.picture.path)}`
             res.status(201).send(instructor)
         }catch (e){
             res.status(500).json({ error: error.message });

@@ -20,7 +20,7 @@ class CourseController{
                     path: `http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`
                 }
             }));
-            res.status(200).send(coursesWithImageUrls);
+            res.status(200).send(courses);
         } catch (e) {
             res.status(500).json({ error: e.message });
         }
@@ -84,7 +84,7 @@ class CourseController{
                 return chapterObj;
             });
 
-            res.status(200).send(coursesWithImageUrls);
+            res.status(200).send(courses);
         }catch (e){
             res.status(500).json({ error: e.message });
         }
@@ -107,7 +107,7 @@ class CourseController{
                 return chapterObj;
             });
 
-            res.status(200).send(coursesWithImageUrls);
+            res.status(200).send(courses);
         }catch (e){
             res.status(500).json({ error: e.message });
         }
@@ -116,7 +116,7 @@ class CourseController{
         try {
             const id=req.params.id
             let course=await CourseService.getCourseId(id);
-            course.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`;
+            // course.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`;
             res.status(200).send(course);
         }catch (e){
             res.status(500).json({ error: e.message });

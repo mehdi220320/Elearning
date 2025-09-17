@@ -12,7 +12,7 @@ class HackathonController {
                     path: `http://${req.get('host')}/uploads/${path.basename(hack.coverImage.path)}`
                 }
             }));
-            res.send(hacksWithImageUrls);
+            res.send(hacks);
         }catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -44,11 +44,11 @@ class HackathonController {
         try {
             const id=req.params.id
             let hack= await HackathonService.getById(id)
-            hack.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(hack.coverImage.path)}`;
-            for(let course of hack.courses){
-                course.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`;
-
-            }
+            // hack.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(hack.coverImage.path)}`;
+            // for(let course of hack.courses){
+            //     course.coverImage.path=`http://${req.get('host')}/uploads/${path.basename(course.coverImage.path)}`;
+            //
+            // }
             res.send(hack);
         }catch (error) {
             res.status(500).json({ error: error.message });
@@ -80,7 +80,7 @@ class HackathonController {
                     path: `http://${req.get('host')}/uploads/${path.basename(hack.coverImage.path)}`
                 }
             }));
-            res.send(hacksWithImageUrls);
+            res.send(hacks);
         }catch (error) {
             res.status(500).json({ error: error.message });
         }
