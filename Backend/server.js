@@ -14,7 +14,7 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 app.use(cors({
-    origin: 'http://localhost:4200',
+    origin: 'https://famous-cranachan-ebf1d4.netlify.app',
     methods: ['GET', 'POST','PUT','DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
